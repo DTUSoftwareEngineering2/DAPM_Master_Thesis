@@ -11,10 +11,10 @@ using Microsoft.OpenApi.Models;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromPipelineOrchestrator;
 
 var builder = WebApplication.CreateBuilder(args);
-
 builder.AddServiceDefaults();
-
 builder.WebHost.UseKestrel(o => o.Limits.MaxRequestBodySize = null);
+
+var test = 0;
 
 builder.Services.Configure<FormOptions>(x =>
 {
