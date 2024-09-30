@@ -24,21 +24,32 @@ jobs:
 
       - name: Build and push Docker images
         run: |
-          services=(
-            "dapm.clientapi"
-            "dapm.peerapi"
-            "dapm.repositoryms.api"
-            "dapm.resourceregistryms.api"
-            "dapm.pipelineorchestratorms.api"
-            "dapm.orchestrator"
-            "dapm.operatorMS.api"
-          )
+          # Read docker-compose.yaml and extract service names and Dockerfile paths
+          services=$(yq e '.services | keys | .[]' docker-compose.yaml)
           
-          for service in "${services[@]}"; do
-            lowercase_service=$(echo $service | tr '[:upper:]' '[:lower:]')
-            docker build -t maximerochat/$lowercase_service:latest -t maximerochat/$lowercase_service:${{ github.ref_name }} -f ${service//./_}/Dockerfile .
-            docker push maximerochat/$lowercase_service:latest
-            docker push maximerochat/$lowercase_service:${{ github.ref_name }}
+          for service in $services; do
+            # Extract the Dockerfile path from docker-compose.yaml
+            dockerfile_path=$(yq e ".services.$service.build.dockerfile" docker-compose.yaml)
+            
+            # If Dockerfile path is not specified, use default "Dockerfile"
+            if [ "$dockerfile_path" = "null" ]; then
+              dockerfile_path="Dockerfile"
+            fi
+            
+            # Extract the build context from docker-compose.yaml
+            build_context=$(yq e ".services.$service.build.context" docker-compose.yaml)
+            
+            # If build context is not specified, use "."
+            if [ "$build_context" = "null" ]; then
+              build_context="."
+            fi
+            
+            echo "Building $service using $dockerfile_path in context $build_context"
+            
+            # Build and push the image
+            docker build -t maximerochat/$service:latest -t maximerochat/$service:${{ github.ref_name }} -f $build_context/$dockerfile_path $build_context
+            docker push maximerochat/$service:latest
+            docker push maximerochat/$service:${{ github.ref_name }}
           done
 
   deploy:
