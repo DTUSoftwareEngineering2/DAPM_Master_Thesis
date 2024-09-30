@@ -6,56 +6,56 @@ on:
       - 'v*'
 
 jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Log in to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_TOKEN }}
-
-      - name: Build and push Docker images
-        run: |
-          cd DAPM
-          # Read docker-compose.yaml and extract service names and Dockerfile paths
-          services=$(yq e '.services | keys | .[]' docker-compose.yml)
-          
-          for service in $services; do
-            # Extract the Dockerfile path from docker-compose.yaml
-            dockerfile_path=$(yq e ".services.\"$service\".build.dockerfile" docker-compose.yml)
-            
-            # If Dockerfile path is not specified, use default "Dockerfile"
-            if [ "$dockerfile_path" = "null" ]; then
-              continue
-            fi
-            
-            # Extract the build context from docker-compose.yaml
-            build_context=$(yq e ".services.\"$service\".build.context" docker-compose.yml)
-            
-            # If build context is not specified, use "."
-            if [ "$build_context" = "null" ]; then
-              build_context="."
-            fi
-            
-            echo "Building $service using $dockerfile_path in context $build_context"
-            
-            # Build and push the image
-            docker build -t maximerochat/$service:latest -t maximerochat/$service:${{ github.ref_name }} -f $build_context/$dockerfile_path $build_context
-            docker push maximerochat/$service:latest
-            docker push maximerochat/$service:${{ github.ref_name }}
-          done
+  # build-and-push:
+  #   runs-on: ubuntu-latest
+  #
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
+  #
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v2
+  #
+  #     - name: Log in to DockerHub
+  #       uses: docker/login-action@v2
+  #       with:
+  #         username: ${{ secrets.DOCKER_USERNAME }}
+  #         password: ${{ secrets.DOCKER_TOKEN }}
+  #
+  #     - name: Build and push Docker images
+  #       run: |
+  #         cd DAPM
+  #         # Read docker-compose.yaml and extract service names and Dockerfile paths
+  #         services=$(yq e '.services | keys | .[]' docker-compose.yml)
+  #
+  #         for service in $services; do
+  #           # Extract the Dockerfile path from docker-compose.yaml
+  #           dockerfile_path=$(yq e ".services.\"$service\".build.dockerfile" docker-compose.yml)
+  #
+  #           # If Dockerfile path is not specified, use default "Dockerfile"
+  #           if [ "$dockerfile_path" = "null" ]; then
+  #             continue
+  #           fi
+  #
+  #           # Extract the build context from docker-compose.yaml
+  #           build_context=$(yq e ".services.\"$service\".build.context" docker-compose.yml)
+  #
+  #           # If build context is not specified, use "."
+  #           if [ "$build_context" = "null" ]; then
+  #             build_context="."
+  #           fi
+  #
+  #           echo "Building $service using $dockerfile_path in context $build_context"
+  #
+  #           # Build and push the image
+  #           docker build -t maximerochat/$service:latest -t maximerochat/$service:${{ github.ref_name }} -f $build_context/$dockerfile_path $build_context
+  #           docker push maximerochat/$service:latest
+  #           docker push maximerochat/$service:${{ github.ref_name }}
+  #         done
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build-and-push
+    # needs: build-and-push
     steps:
       - name: Install OpenVPN
         run: sudo apt-get update && sudo apt-get install -y openvpn
@@ -101,7 +101,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd ~/home/backend
+            cd /home/backend
             docker compose down  # Stop all services
             git pull  # Pull the latest changes
             docker compose up -d  # Start services in detached mode
