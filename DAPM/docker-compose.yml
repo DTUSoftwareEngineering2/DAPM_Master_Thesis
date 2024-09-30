@@ -91,7 +91,7 @@ services:
     networks:
     - DAPM
 
-  dapm.operatorMS.api:
+  dapm.operatorms.api:
     image: ${DOCKER_REGISTRY-}dapmoperatormsapi
     build:
        context: .
