@@ -8,6 +8,18 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace DAPM.ClientApi.Controllers
 {
+
+    [ApiController]
+    [Route("[controller]")]
+    public class HelloController : ControllerBase
+    {
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return Ok("Hello");
+        }
+    }
+
     [ApiController]
     [EnableCors("AllowAll")]
     [Route("organizations")]
@@ -29,10 +41,10 @@ namespace DAPM.ClientApi.Controllers
         public async Task<ActionResult<Guid>> Get()
         {
             Guid id = _organizationService.GetOrganizations();
-            return Ok(new ApiResponse { RequestName = "GetAllOrganizations", TicketId = id});
+            return Ok(new ApiResponse { RequestName = "GetAllOrganizations", TicketId = id });
         }
 
-        
+
         [HttpGet("{organizationId}")]
         [SwaggerOperation(Description = "Gets an organization by id. You need to have a collaboration agreement to retrieve this information.")]
         public async Task<ActionResult<Guid>> GetById(Guid organizationId)
@@ -46,7 +58,7 @@ namespace DAPM.ClientApi.Controllers
         public async Task<ActionResult<Guid>> GetRepositoriesOfOrganization(Guid organizationId)
         {
             Guid id = _organizationService.GetRepositoriesOfOrganization(organizationId);
-            return Ok(new ApiResponse {RequestName = "GetRepositoriesOfOrganization", TicketId = id });
+            return Ok(new ApiResponse { RequestName = "GetRepositoriesOfOrganization", TicketId = id });
         }
 
         [HttpPost("{organizationId}/repositories")]
