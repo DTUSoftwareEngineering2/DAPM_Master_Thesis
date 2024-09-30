@@ -94,7 +94,7 @@ jobs:
           sleep 10  # Wait for VPN connection to establish
 
           echo "Checking VPN connection..."
-          ping -c 4 openvpn.compute.dtu.dk:1194  # Test VPN connection
+          ping -c 4 se2-c.compute.dtu.dk  # Test VPN connection
 
       - name: Deploy to remote server
         uses: appleboy/ssh-action@v0.1.8
