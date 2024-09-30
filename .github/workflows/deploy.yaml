@@ -25,29 +25,23 @@ jobs:
       - name: Build and push Docker images
         run: |
           cd DAPM
-          # Read docker-compose.yaml and extract service names and Dockerfile paths
-          services=$(yq e '.services | keys | .[]' docker-compose.yml)
+          services=$(yq e '.services | keys | .[]' docker-compose.yaml)
           
           for service in $services; do
-            # Extract the Dockerfile path from docker-compose.yaml
-            dockerfile_path=$(yq e ".services.\"$service\".build.dockerfile" docker-compose.yml)
+            dockerfile_path=$(yq e ".services.$service.build.dockerfile" docker-compose.yaml)
             
-            # If Dockerfile path is not specified, use default "Dockerfile"
             if [ "$dockerfile_path" = "null" ]; then
               dockerfile_path="Dockerfile"
             fi
             
-            # Extract the build context from docker-compose.yaml
-            build_context=$(yq e ".services.\"$service\".build.context" docker-compose.yml)
+            build_context=$(yq e ".services.$service.build.context" docker-compose.yaml)
             
-            # If build context is not specified, use "."
             if [ "$build_context" = "null" ]; then
               build_context="."
             fi
             
             echo "Building $service using $dockerfile_path in context $build_context"
             
-            # Build and push the image
             docker build -t maximerochat/$service:latest -t maximerochat/$service:${{ github.ref_name }} -f $build_context/$dockerfile_path $build_context
             docker push maximerochat/$service:latest
             docker push maximerochat/$service:${{ github.ref_name }}
@@ -101,5 +95,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            docker-compose pull
-            docker-compose up -d
+            cd ~/home/backend
+            docker compose down  # Stop all services
+            git pull  # Pull the latest changes
+            docker compose up -d  # Start services in detached mode
