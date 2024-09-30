@@ -25,11 +25,11 @@ jobs:
       - name: Build and push Docker images
         run: |
           # Read docker-compose.yaml and extract service names and Dockerfile paths
-          services=$(yq e '.services | keys | .[]' docker-compose.yaml)
+          services=$(yq e '.services | keys | .[]' docker-compose.yml)
           
           for service in $services; do
             # Extract the Dockerfile path from docker-compose.yaml
-            dockerfile_path=$(yq e ".services.$service.build.dockerfile" docker-compose.yaml)
+            dockerfile_path=$(yq e ".services.$service.build.dockerfile" docker-compose.yml)
             
             # If Dockerfile path is not specified, use default "Dockerfile"
             if [ "$dockerfile_path" = "null" ]; then
@@ -37,7 +37,7 @@ jobs:
             fi
             
             # Extract the build context from docker-compose.yaml
-            build_context=$(yq e ".services.$service.build.context" docker-compose.yaml)
+            build_context=$(yq e ".services.$service.build.context" docker-compose.yml)
             
             # If build context is not specified, use "."
             if [ "$build_context" = "null" ]; then
