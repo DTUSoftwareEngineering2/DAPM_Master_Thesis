@@ -11,12 +11,12 @@ namespace DAPM.ClientApi.Controllers
 
     [ApiController]
     [Route("[controller]")]
-    public class HelloController : ControllerBase
+    public class VersionController : ControllerBase
     {
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok("Hello");
+            return Ok("Version 0.0.0");
         }
     }
 

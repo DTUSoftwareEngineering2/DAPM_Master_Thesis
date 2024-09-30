@@ -107,6 +107,6 @@ jobs:
             echo "Connected to remote server."
             cd /home/backend
             docker compose down  # Stop all services
-            git pull  # Pull the latest changes
+            docker compose pull  # Pull the latest changes
             docker compose up -d  # Start services in detached mode
 
