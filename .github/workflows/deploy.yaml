@@ -1,4 +1,4 @@
-name: Build, Push, and Deploy Docker Image
+name: Build, Push, and Deploy Multi-Service Docker Images
 
 on:
   push:
@@ -22,12 +22,24 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: ./DAPM
-          push: true
-          tags: maximerochat/soft_eng_be:latest,maximerochat/soft_eng_be:${{ github.ref_name }}
+      - name: Build and push Docker images
+        run: |
+          services=(
+            "dapm.clientapi"
+            "dapm.peerapi"
+            "dapm.repositoryms.api"
+            "dapm.resourceregistryms.api"
+            "dapm.pipelineorchestratorms.api"
+            "dapm.orchestrator"
+            "dapm.operatorMS.api"
+          )
+          
+          for service in "${services[@]}"; do
+            lowercase_service=$(echo $service | tr '[:upper:]' '[:lower:]')
+            docker build -t maximerochat/$lowercase_service:latest -t maximerochat/$lowercase_service:${{ github.ref_name }} -f ${service//./_}/Dockerfile .
+            docker push maximerochat/$lowercase_service:latest
+            docker push maximerochat/$lowercase_service:${{ github.ref_name }}
+          done
 
   deploy:
     runs-on: ubuntu-latest
@@ -77,7 +89,5 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            docker pull maximerochat/soft_eng_be:latest
-            docker stop soft_eng_be || true
-            docker rm soft_eng_be || true
-            docker run -d -p 5000:5000 --name soft_eng_be maximerochat/soft_eng_be:latest
+            docker-compose pull
+            docker-compose up -d
