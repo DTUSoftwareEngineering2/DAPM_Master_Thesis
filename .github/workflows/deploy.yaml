@@ -24,6 +24,7 @@ jobs:
 
       - name: Build and push Docker images
         run: |
+          cd DAPM
           # Read docker-compose.yaml and extract service names and Dockerfile paths
           services=$(yq e '.services | keys | .[]' docker-compose.yml)
           
