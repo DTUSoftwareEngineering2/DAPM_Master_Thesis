@@ -1,10 +1,14 @@
 ﻿using DAPM.ClientApi.Models;
+using System.Security.Claims;
 using DAPM.ClientApi.Models.DTOs;
 using DAPM.ClientApi.Services;
 using DAPM.ClientApi.Services.Interfaces;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
+
 
 namespace DAPM.ClientApi.Controllers
 {
@@ -17,6 +21,29 @@ namespace DAPM.ClientApi.Controllers
         public IActionResult Get()
         {
             return Ok("Version 0.0.0");
+        }
+    }
+
+    [ApiController]
+    [Route("[controller]")]
+    public class SecureController : ControllerBase
+    {
+        [Authorize]
+        [HttpGet]
+        public IActionResult Get()
+        {
+            // Access the 'sub' claim (User's Email or ID)
+            var userEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            // Access the 'jti' claim (Unique token ID)
+            var tokenId = User.FindFirst(JwtRegisteredClaimNames.Jti)?.Value;
+
+
+            return Ok(new
+            {
+                Email = userEmail,
+                TokenId = tokenId,
+            });
         }
     }
 
