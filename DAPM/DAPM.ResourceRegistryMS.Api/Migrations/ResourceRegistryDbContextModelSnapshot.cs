@@ -40,6 +40,37 @@ namespace DAPM.ResourceRegistryMS.Api.Migrations
                     b.ToTable("Peers");
                 });
 
+            modelBuilder.Entity("DAPM.ResourceRegistryMS.Api.Models.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Mail")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("Organization")
+                        .IsRequired()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("HashPassword")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("DAPM.ResourceRegistryMS.Api.Models.Pipeline", b =>
                 {
                     b.Property<Guid>("PeerId")

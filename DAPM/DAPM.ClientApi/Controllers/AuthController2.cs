@@ -10,6 +10,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Linq;
+using DAPM.ClientApi.Services.Interfaces;
 
 namespace DAPM.ClientApi.Controllers
 {
@@ -29,9 +30,16 @@ namespace DAPM.ClientApi.Controllers
     public class LoginController : ControllerBase
     {
         private IConfiguration _config;
-        public LoginController(IConfiguration config)
+
+
+        private readonly ILogger<LoginController> _logger;
+        private readonly IAuthService _authService;
+
+        public LoginController(ILogger<LoginController> logger, IAuthService authService, IConfiguration config)
         {
+            _logger = logger;
             _config = config;
+            _authService = authService;
         }
 
         [HttpPost]
@@ -39,6 +47,8 @@ namespace DAPM.ClientApi.Controllers
         {
             //your logic for login process
             //If login usrename and password are correct then proceed to generate token
+
+            var tId = _authService.GetUserById(Guid.NewGuid());
 
             var claims = new[]
             {
@@ -60,7 +70,7 @@ namespace DAPM.ClientApi.Controllers
 
             var token = new JwtSecurityTokenHandler().WriteToken(Sectoken);
 
-            return Ok(token);
+            return Ok(tId);
         }
 
         [HttpGet("secure")]

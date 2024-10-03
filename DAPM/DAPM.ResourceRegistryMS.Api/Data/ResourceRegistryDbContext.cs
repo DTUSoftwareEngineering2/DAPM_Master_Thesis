@@ -4,7 +4,7 @@ using DAPM.ResourceRegistryMS.Api.Models;
 public class ResourceRegistryDbContext : DbContext
 {
     ILogger<ResourceRegistryDbContext> _logger;
-    public ResourceRegistryDbContext(DbContextOptions<ResourceRegistryDbContext> options, ILogger<ResourceRegistryDbContext> logger) 
+    public ResourceRegistryDbContext(DbContextOptions<ResourceRegistryDbContext> options, ILogger<ResourceRegistryDbContext> logger)
         : base(options)
     {
         _logger = logger;
@@ -15,6 +15,7 @@ public class ResourceRegistryDbContext : DbContext
     public DbSet<Pipeline> Pipelines { get; set; }
     public DbSet<Repository> Repositories { get; set; }
     public DbSet<Peer> Peers { get; set; }
+    public DbSet<User> Users { get; set; }
     public DbSet<ResourceType> ResourceTypes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -31,7 +32,7 @@ public class ResourceRegistryDbContext : DbContext
             Database.EnsureDeleted();
             Database.Migrate();
 
-     
+
             SaveChanges();
         }
     }
