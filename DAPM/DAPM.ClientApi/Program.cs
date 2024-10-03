@@ -9,6 +9,10 @@ using RabbitMQLibrary.Messages.ClientApi;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults;
 using Microsoft.OpenApi.Models;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromPipelineOrchestrator;
+using DAPM.ClientApi.Controllers;
+using RabbitMQLibrary.Models;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
@@ -72,6 +76,10 @@ builder.Services.AddScoped<IRepositoryService, RepositoryService>();
 builder.Services.AddScoped<IPipelineService, PipelineService>();
 builder.Services.AddSingleton<ITicketService, TicketService>();
 builder.Services.AddScoped<ISystemService, SystemService>();
+
+//For the PipelineResultsService
+//builder.Services.AddScoped<IPipelineResultsService, PipelineResultsService>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
