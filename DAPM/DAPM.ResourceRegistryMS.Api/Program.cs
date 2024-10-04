@@ -80,7 +80,7 @@ builder.Services.AddScoped<IPeerRepository, PeerRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPipelineRepository, PipelineRepository>();
 
-
+var connString = "Host=postgres;Port=5432;Username=postgres;Password=postgres;Database=DAPM_ResourceRegistry";
 builder.Services.AddDbContext<ResourceRegistryDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));

@@ -2,6 +2,7 @@
 using RabbitMQLibrary.Interfaces;
 using RabbitMQLibrary.Messages.Orchestrator.ProcessRequests;
 using RabbitMQLibrary.Messages.ResourceRegistry;
+using RabbitMQLibrary.Models;
 
 namespace DAPM.ClientApi.Services
 {
@@ -9,15 +10,18 @@ namespace DAPM.ClientApi.Services
     {
         private readonly ILogger<AuthService> _logger;
         private readonly IQueueProducer<GetUserMessage> _getUserRequest;
+        private readonly IQueueProducer<PostUserMessage> _postUserRequest;
         private readonly ITicketService _ticketService;
 
         public AuthService(ILogger<AuthService> logger,
             IQueueProducer<GetUserMessage> getUserRequest,
+            IQueueProducer<PostUserMessage> postUserRequest,
             ITicketService ticketService)
         {
             _logger = logger;
             _ticketService = ticketService;
             _getUserRequest = getUserRequest;
+            _postUserRequest = postUserRequest;
         }
 
         public Guid GetUserById(Guid id)
@@ -39,15 +43,49 @@ namespace DAPM.ClientApi.Services
 
             return ticketId;
         }
+
         public Guid GetUserByMail(String mail)
         {
             var ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
 
+            var message = new GetUserMessage
+            {
+                TimeToLive = TimeSpan.FromMinutes(1),
+                TicketId = ticketId,
+                mail = mail,
+                MessageId = Guid.NewGuid()
+            };
+
+
+            _getUserRequest.PublishMessage(message);
+
+            _logger.LogDebug("GetOrganizationByIdMessage Enqueued");
+
             return ticketId;
         }
+
         public Guid PostUserToRepository(Guid id, String firstName, String lastName, String mail, Guid org, String hashPassword)
         {
             var ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
+
+            var message = new PostUserMessage
+            {
+                TimeToLive = TimeSpan.FromMinutes(1),
+                MessageId = Guid.NewGuid(),
+                user = new UserDTO()
+                {
+                    Id = id,
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Mail = mail,
+                    Organization = org,
+                    HashPassword = hashPassword
+                }
+            };
+
+            _postUserRequest.PublishMessage(message);
+
+            _logger.LogDebug("PostUserToRepositoryEnqueued");
 
             return ticketId;
         }

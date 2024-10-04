@@ -16,7 +16,7 @@ namespace DAPM.ClientApi.Controllers
     {
         private readonly ILogger<PipelineController> _logger;
         private readonly IPipelineService _pipelineService;
-        
+
 
         public PipelineController(ILogger<PipelineController> logger, IPipelineService pipelineService, IQueueProducer<CreateInstanceExecutionMessage> createInstanceProducer)
         {

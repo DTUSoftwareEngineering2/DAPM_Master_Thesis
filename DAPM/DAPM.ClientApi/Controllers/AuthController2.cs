@@ -2,14 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
-using System.Linq;
 using DAPM.ClientApi.Services.Interfaces;
 
 namespace DAPM.ClientApi.Controllers
@@ -24,6 +19,27 @@ namespace DAPM.ClientApi.Controllers
         [Required]
         public string Password { get; set; }
     }
+
+    public class SignupRequest
+    {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        public string Surname { get; set; }
+
+        [Required]
+        public string Organization { get; set; }
+
+        [Required]
+        [MinLength(8)]
+        public string Password { get; set; }
+    }
+
 
     [Route("api2/[controller]")]
     [ApiController]
@@ -48,7 +64,7 @@ namespace DAPM.ClientApi.Controllers
             //your logic for login process
             //If login usrename and password are correct then proceed to generate token
 
-            var tId = _authService.GetUserById(Guid.NewGuid());
+            var tId = _authService.GetUserByMail(loginRequest.Email);
 
             var claims = new[]
             {
@@ -69,6 +85,21 @@ namespace DAPM.ClientApi.Controllers
 
 
             var token = new JwtSecurityTokenHandler().WriteToken(Sectoken);
+
+            return Ok(tId);
+        }
+
+        [HttpPost("signup")]
+        public IActionResult Signup([FromBody] SignupRequest signupRequest)
+        {
+            var tId = _authService.PostUserToRepository(
+                    Guid.NewGuid(),
+                    signupRequest.Name,
+                    signupRequest.Surname,
+                    signupRequest.Email,
+                    Guid.NewGuid(),
+                    BCrypt.Net.BCrypt.HashPassword(signupRequest.Password)
+                    );
 
             return Ok(tId);
         }

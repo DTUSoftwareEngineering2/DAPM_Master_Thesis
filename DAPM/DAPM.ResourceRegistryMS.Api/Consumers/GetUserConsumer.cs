@@ -2,7 +2,7 @@
 using RabbitMQLibrary.Interfaces;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromRegistry;
-
+using DAPM.ResourceRegistryMS.Api.Models;
 
 using RabbitMQLibrary.Messages.ClientApi;
 
@@ -31,33 +31,42 @@ namespace DAPM.ResourceRegistryMS.Api.Consumers
             _logger.LogInformation("GetUserMessage received");
 
             // var t = await _userService.GetUserByMail("test@gmail.com");
-            var u = new UserDTO();
-            /*foreach (var pipeline in pipelines)*/
-            /*{*/
-            /*    var r = new PipelineDTO*/
-            /*    {*/
-            /*        Id = pipeline.Id,*/
-            /*        Name = pipeline.Name,*/
-            /*        OrganizationId = pipeline.PeerId,*/
-            /*        RepositoryId = pipeline.RepositoryId,*/
-            /*    };*/
-            /**/
-            /*    pipelinesDTOs = pipelinesDTOs.Append(r);*/
-            /*}*/
-            /**/
-            /*var resultMessage = new GetPipelinesResultMessage*/
-            /*{*/
-            /*    TimeToLive = TimeSpan.FromMinutes(1),*/
-            /*    ProcessId = message.ProcessId,*/
-            /*    Pipelines = pipelinesDTOs*/
-            /*};*/
+            User? u;
+
+            if (message.userId.HasValue)
+            {
+                u = await _userService.GetUserById(message.userId.Value);
+            }
+            else if (!string.IsNullOrEmpty(message.mail))
+            {
+                u = await _userService.GetUserByMail(message.mail);
+            }
+            else
+            {
+                u = null;
+
+            }
+
+            UserDTO? userDTO = null;
+            if (u != null)
+            {
+                userDTO = new UserDTO
+                {
+                    Id = u.Id,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Mail = u.Mail,
+                    Organization = u.Organization,
+                    HashPassword = u.HashPassword
+                };
+            }
 
             var resultMessage = new GetUserResult
             {
                 MessageId = Guid.NewGuid(),
                 TicketId = message.TicketId,
                 TimeToLive = TimeSpan.FromMinutes(1),
-                user = u,
+                user = userDTO
             };
 
             _getUserResultQueueProducer.PublishMessage(resultMessage);
