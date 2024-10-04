@@ -4,9 +4,6 @@ using DAPM.PipelineOrchestratorMS.Api.Consumers;
 using RabbitMQLibrary.Messages.PipelineOrchestrator;
 using DAPM.PipelineOrchestratorMS.Api.Engine.Interfaces;
 using DAPM.PipelineOrchestratorMS.Api.Engine;
-using DAPM.PipelineOrchestratorMS.Api.Services; 
-using DAPM.PipelineOrchestratorMS.Api.Services.Interfaces; 
-using DAPM.PipelineOrchestratorMS.Api.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,8 +16,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Register the new PipelineResultsService
-builder.Services.AddScoped<IPipelineResultsService, PipelineResultsService>();
 
 builder.Services.AddCors(options =>
 {
