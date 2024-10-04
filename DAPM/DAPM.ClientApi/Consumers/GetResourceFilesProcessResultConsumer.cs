@@ -9,7 +9,7 @@ using RabbitMQLibrary.Interfaces;
 namespace DAPM.ClientApi.Consumers
 {
     public class GetResourceFilesProcessResultConsumer : IQueueConsumer<GetResourceFilesProcessResult>
-    {
+    { 
         private ILogger<GetResourceFilesProcessResultConsumer> _logger;
         private readonly ITicketService _ticketService;
         public GetResourceFilesProcessResultConsumer(ILogger<GetResourceFilesProcessResultConsumer> logger,
