@@ -23,6 +23,20 @@ public class ResourceRegistryDbContext : DbContext
         builder.Entity<Repository>().HasKey(r => new { r.PeerId, r.Id });
         builder.Entity<Resource>().HasKey(r => new { r.PeerId, r.RepositoryId, r.Id });
         builder.Entity<Pipeline>().HasKey(r => new { r.PeerId, r.RepositoryId, r.Id });
+        // builder.Entity<User>().HasKey(r => new { r.Id, r.FirstName, r.LastName, r.Mail, r.Organization, r.HashPassword });
+
+        var user = new User()
+        {
+            Id = Guid.NewGuid(),
+            Mail = "admin@email.ch",
+            FirstName = "admin",
+            LastName = "admin",
+            Organization = Guid.NewGuid(),
+            HashPassword = "$2a$12$Jligef.ByeRACdblRiMuDejgNYXlUBZWfCSD3wTZ029g5MF/x8cDa"
+        };
+        builder.Entity<User>().HasData(user);
+
+
     }
 
     public void InitializeDatabase()

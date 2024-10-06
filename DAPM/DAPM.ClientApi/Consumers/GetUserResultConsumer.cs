@@ -26,12 +26,18 @@ namespace DAPM.ClientApi.Consumers
             // Objects used for serialization
             JToken result = new JObject();
             JsonSerializer serializer = JsonSerializer.Create(new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
+            if (message.user != null)
+            {
+                JToken idsJSON = JToken.FromObject(message.user, serializer);
 
-            JToken idsJSON = JToken.FromObject(message.user, serializer);
+                //Serialization
+                result["user"] = idsJSON;
+            }
+            else
+            {
+                result["user"] = "not found";
+            }
 
-            //Serialization
-            result["user"] = idsJSON;
-            result["test_res"] = "Passed the whole processing";
             // Update resolution
             _ticketService.UpdateTicketResolution(message.TicketId, result);
 

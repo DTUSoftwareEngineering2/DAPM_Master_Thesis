@@ -32,7 +32,7 @@ namespace DAPM.ClientApi.Services
             {
                 TimeToLive = TimeSpan.FromMinutes(1),
                 TicketId = ticketId,
-                userId = Guid.NewGuid(),
+                userId = id,
                 MessageId = Guid.NewGuid()
             };
 
@@ -64,9 +64,8 @@ namespace DAPM.ClientApi.Services
             return ticketId;
         }
 
-        public Guid PostUserToRepository(Guid id, String firstName, String lastName, String mail, Guid org, String hashPassword)
+        public void PostUserToRepository(Guid id, String firstName, String lastName, String mail, Guid org, String hashPassword)
         {
-            var ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
 
             var message = new PostUserMessage
             {
@@ -87,7 +86,6 @@ namespace DAPM.ClientApi.Services
 
             _logger.LogDebug("PostUserToRepositoryEnqueued");
 
-            return ticketId;
         }
 
         /*public Guid GetOrganizationById(Guid organizationId)*/

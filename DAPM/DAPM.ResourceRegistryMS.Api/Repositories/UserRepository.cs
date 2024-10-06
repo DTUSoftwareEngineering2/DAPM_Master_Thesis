@@ -18,7 +18,7 @@ namespace DAPM.ResourceRegistryMS.Api.Repositories
         public async Task<User> AddUser(User user)
         {
 
-            if (_context.Peers.Any(p => p.Id == user.Id))
+            if (_context.Users.Any(p => p.Id == user.Id))
             {
                 return user;
             }
@@ -37,6 +37,10 @@ namespace DAPM.ResourceRegistryMS.Api.Repositories
 
         public async Task<User> GetUserById(Guid id)
         {
+            // await _context.Users
+            //    .Where(r => r.Id == id)
+            //   .FirstOrDefaultAsync();
+
             return await _context.Users.FindAsync(id);
         }
     }

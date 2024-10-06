@@ -1,205 +1,126 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
-using System.Linq;
+using DAPM.ClientApi.Services.Interfaces;
+using DAPM.ClientApi.Models.DTOs;
+using Newtonsoft.Json.Linq;
 
 namespace DAPM.ClientApi.Controllers
 {
-    public class User
-    {
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
-
-        [Required]
-        public string Name { get; set; }
-
-        [Required]
-        public string Surname { get; set; }
-
-        [Required]
-        public string Organization { get; set; }
-
-        [Required]
-        public string PasswordHash { get; set; }
-    }
-
-    public class SignupModel
-    {
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
-
-        [Required]
-        public string Name { get; set; }
-
-        [Required]
-        public string Surname { get; set; }
-
-        [Required]
-        public string Organization { get; set; }
-
-        [Required]
-        [MinLength(8)]
-        public string Password { get; set; }
-    }
-
-    public class LoginModel
-    {
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
-
-        [Required]
-        public string Password { get; set; }
-    }
-
-    public class RefreshTokenModel
-    {
-        [Required]
-        public string RefreshToken { get; set; }
-    }
-
-    public class TokenResponse
-    {
-        public string AccessToken { get; set; }
-        public string RefreshToken { get; set; }
-    }
-
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
-        private readonly Dictionary<string, string> _refreshTokens = new Dictionary<string, string>();
-        private readonly List<User> _users = new List<User>(); // In-memory user storage (replace with database in production)
+        private IConfiguration _config;
 
-        public AuthController(IConfiguration configuration)
+
+        private readonly ILogger<AuthController> _logger;
+        private readonly IAuthService _authService;
+        private readonly ITicketService _ticketService;
+
+        public AuthController(ILogger<AuthController> logger, IAuthService authService, ITicketService ticketService, IConfiguration config)
         {
-            _configuration = configuration;
-        }
-
-        [HttpPost("signup")]
-        public IActionResult Signup([FromBody] SignupModel model)
-        {
-            if (_users.Any(u => u.Email == model.Email))
-            {
-                return BadRequest("User with this email already exists");
-            }
-
-            var user = new User
-            {
-                Email = model.Email,
-                Name = model.Name,
-                Surname = model.Surname,
-                Organization = model.Organization,
-                PasswordHash = HashPassword(model.Password)
-            };
-
-            _users.Add(user);
-
-            return Ok("User registered successfully");
+            _logger = logger;
+            _config = config;
+            _authService = authService;
+            _ticketService = ticketService;
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginModel login)
+        public IActionResult Post([FromBody] LoginForm loginRequest)
         {
-            var user = _users.FirstOrDefault(u => u.Email == login.Email);
-            if (user != null && VerifyPassword(login.Password, user.PasswordHash))
+            //your logic for login process
+            //If login usrename and password are correct then proceed to generate token
+
+            var tId = _authService.GetUserByMail(loginRequest.Email);
+            JToken resolutionJSON = _ticketService.GetTicketResolution(tId);
+
+            while ((int)resolutionJSON["status"] != 1)
             {
-                var tokenResponse = GenerateTokens(user.Email);
-                return Ok(tokenResponse);
+                resolutionJSON = _ticketService.GetTicketResolution(tId);
             }
-            return Unauthorized();
+
+            if (resolutionJSON["result"]["user"].ToString() == "user not found")
+            {
+                return StatusCode(400, "User with the specified mail does not exists");
+            }
+
+            var hashPassword = resolutionJSON["result"]["user"]["hashPassword"].ToString();
+            if (!BCrypt.Net.BCrypt.Verify(loginRequest.Password, hashPassword))
+            {
+                return Unauthorized("The password and username does not match");
+            }
+
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier,
+                        resolutionJSON["result"]["user"]["id"].ToString()),  // Subject claim (email or user ID)
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())  // Unique token ID claim
+            };
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var Sectoken = new JwtSecurityToken(
+                issuer: _config["Jwt:Issuer"],
+                audience: _config["Jwt:Audience"],
+                claims: claims,  // Include the claims in the token
+                expires: DateTime.Now.AddMinutes(120),
+                signingCredentials: credentials
+            );
+
+
+            var token = new JwtSecurityTokenHandler().WriteToken(Sectoken);
+
+            return Ok(new { AccessToken = token, userId = resolutionJSON["result"]["user"]["id"].ToString() });
         }
 
-        [HttpPost("refresh")]
-        public IActionResult Refresh([FromBody] RefreshTokenModel model)
+        [HttpPost("signup")]
+        public IActionResult Signup([FromBody] SignupForm signupRequest)
         {
-            if (string.IsNullOrEmpty(model.RefreshToken))
-            {
-                return BadRequest("Refresh token is required");
-            }
+            var userId = Guid.NewGuid();
 
-            if (!_refreshTokens.TryGetValue(model.RefreshToken, out var email))
-            {
-                return Unauthorized("Invalid refresh token");
-            }
+            _authService.PostUserToRepository(
+                    userId,
+                    signupRequest.FirstName,
+                    signupRequest.LastName,
+                    signupRequest.Email,
+                    Guid.NewGuid(),
+                    BCrypt.Net.BCrypt.HashPassword(signupRequest.Password)
+                    );
 
-            var tokenResponse = GenerateTokens(email);
-            _refreshTokens.Remove(model.RefreshToken);
+            return Ok(new { userId = userId });
+        }
 
-            return Ok(tokenResponse);
+        [HttpGet("userinfo")]
+        [Authorize]
+        public IActionResult getUserInfo()
+        {
+            //your logic for login process
+            //If login usrename and password are correct then proceed to generate token
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var tId = _authService.GetUserById(Guid.Parse(userId));
+
+            return Ok(new { ticketId = tId });
         }
 
         [HttpGet("secure")]
         [Authorize]
         public IActionResult Get()
         {
-            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
-            return Ok($"This is a secure endpoint. Hello, {userEmail}!");
+
+            return Ok(_authService.GetUserByMail("user@example.com"));
         }
 
-        private TokenResponse GenerateTokens(string email)
-        {
-            var accessToken = GenerateAccessToken(email);
-            var refreshToken = GenerateRefreshToken();
-            _refreshTokens[refreshToken] = email;
-
-            return new TokenResponse
-            {
-                AccessToken = accessToken,
-                RefreshToken = refreshToken
-            };
-        }
-
-        private string GenerateAccessToken(string email)
-        {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.Email, email),
-                // Add more claims as needed
-            };
-
-            var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(15),
-                signingCredentials: credentials
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
-        private string GenerateRefreshToken()
-        {
-            var randomNumber = new byte[32];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(randomNumber);
-                return Convert.ToBase64String(randomNumber);
-            }
-        }
-
-        private string HashPassword(string password)
-        {
-            return BCrypt.Net.BCrypt.HashPassword(password);
-        }
-
-        private bool VerifyPassword(string password, string hash)
-        {
-            return BCrypt.Net.BCrypt.Verify(password, hash);
-        }
     }
+
+
+
+
 }

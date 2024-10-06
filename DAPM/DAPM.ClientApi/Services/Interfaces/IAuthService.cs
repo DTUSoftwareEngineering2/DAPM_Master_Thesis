@@ -5,8 +5,8 @@ namespace DAPM.ClientApi.Services.Interfaces
 {
     public interface IAuthService
     {
-        public Guid GetUserById(Guid organizationId);
+        public Guid GetUserById(Guid userId);
         public Guid GetUserByMail(String mail);
-        public Guid PostUserToRepository(Guid id, String firstName, String lastName, String mail, Guid org, String hashPassword);
+        public void PostUserToRepository(Guid id, String firstName, String lastName, String mail, Guid org, String hashPassword);
     }
 }
