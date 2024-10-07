@@ -8,10 +8,13 @@ using System.Text;
 using DAPM.ClientApi.Services.Interfaces;
 using DAPM.ClientApi.Models.DTOs;
 using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Cors;
+
 
 namespace DAPM.ClientApi.Controllers
 {
     [Route("[controller]")]
+    [EnableCors("AllowAll")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -44,7 +47,7 @@ namespace DAPM.ClientApi.Controllers
                 resolutionJSON = _ticketService.GetTicketResolution(tId);
             }
 
-            if (resolutionJSON["result"]["user"].ToString() == "user not found")
+            if (resolutionJSON["result"]["user"].ToString() == "not found")
             {
                 return StatusCode(400, "User with the specified mail does not exists");
             }
@@ -80,6 +83,7 @@ namespace DAPM.ClientApi.Controllers
         }
 
         [HttpPost("signup")]
+        [EnableCors("AllowAll")]
         public IActionResult Signup([FromBody] SignupForm signupRequest)
         {
             var userId = Guid.NewGuid();
