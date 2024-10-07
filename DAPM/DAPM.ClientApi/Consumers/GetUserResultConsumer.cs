@@ -30,6 +30,7 @@ namespace DAPM.ClientApi.Consumers
             {
                 JToken idsJSON = JToken.FromObject(message.user, serializer);
 
+                idsJSON["hashPassword"]?.Parent?.Remove();
                 //Serialization
                 result["user"] = idsJSON;
             }
