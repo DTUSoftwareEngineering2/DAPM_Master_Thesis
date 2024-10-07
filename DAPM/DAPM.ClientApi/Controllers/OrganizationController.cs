@@ -32,7 +32,14 @@ namespace DAPM.ClientApi.Controllers
             return Ok(new ApiResponse { RequestName = "GetAllOrganizations", TicketId = id});
         }
 
-        
+        //artur endpoints
+        [HttpGet("test")]
+        [SwaggerOperation(Description = "Gets an organization by id. You need to have a collaboration agreement to retrieve this information.")]
+        public async Task<ActionResult<Guid>> testEndpoint()
+        {
+            return Ok(new ApiResponse { RequestName = "gettest name", TicketId = Guid.NewGuid() });
+        }
+
         [HttpGet("{organizationId}")]
         [SwaggerOperation(Description = "Gets an organization by id. You need to have a collaboration agreement to retrieve this information.")]
         public async Task<ActionResult<Guid>> GetById(Guid organizationId)
