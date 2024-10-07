@@ -95,14 +95,29 @@ namespace DAPM.ClientApi.Controllers
 
             return Ok(new { userId = userId });
         }
+    }
 
-        [HttpGet("userinfo")]
+    [Route("[controller]")]
+    [ApiController]
+    public class UserController : ControllerBase
+    {
+        private IConfiguration _config;
+
+
+        private readonly ILogger<AuthController> _logger;
+        private readonly IAuthService _authService;
+
+        public UserController(ILogger<AuthController> logger, IAuthService authService, IConfiguration config)
+        {
+            _logger = logger;
+            _config = config;
+            _authService = authService;
+        }
+
+        [HttpGet("info")]
         [Authorize]
         public IActionResult getUserInfo()
         {
-            //your logic for login process
-            //If login usrename and password are correct then proceed to generate token
-
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             var tId = _authService.GetUserById(Guid.Parse(userId));
@@ -110,17 +125,5 @@ namespace DAPM.ClientApi.Controllers
             return Ok(new { ticketId = tId });
         }
 
-        [HttpGet("secure")]
-        [Authorize]
-        public IActionResult Get()
-        {
-
-            return Ok(_authService.GetUserByMail("user@example.com"));
-        }
-
     }
-
-
-
-
 }
