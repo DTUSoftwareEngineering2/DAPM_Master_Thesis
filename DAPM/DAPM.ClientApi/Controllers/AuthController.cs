@@ -8,6 +8,8 @@ using System.Text;
 using DAPM.ClientApi.Services.Interfaces;
 using DAPM.ClientApi.Models.DTOs;
 using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Cors;
+
 
 namespace DAPM.ClientApi.Controllers
 {
@@ -45,7 +47,7 @@ namespace DAPM.ClientApi.Controllers
                 resolutionJSON = _ticketService.GetTicketResolution(tId);
             }
 
-            if (resolutionJSON["result"]["user"].ToString() == "user not found")
+            if (resolutionJSON["result"]["user"].ToString() == "not found")
             {
                 return StatusCode(400, "User with the specified mail does not exists");
             }
