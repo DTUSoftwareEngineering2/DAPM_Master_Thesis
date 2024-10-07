@@ -12,6 +12,7 @@ using Newtonsoft.Json.Linq;
 namespace DAPM.ClientApi.Controllers
 {
     [Route("[controller]")]
+    [EnableCors("AllowAll")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -80,6 +81,7 @@ namespace DAPM.ClientApi.Controllers
         }
 
         [HttpPost("signup")]
+        [EnableCors("AllowAll")]
         public IActionResult Signup([FromBody] SignupForm signupRequest)
         {
             var userId = Guid.NewGuid();
