@@ -18,7 +18,7 @@ namespace DAPM.ResourceRegistryMS.Api.Repositories
         public async Task<Peer> AddPeer(Peer peer)
         {
 
-            if(_context.Peers.Any(p => p.Id == peer.Id))
+            if (_context.Peers.Any(p => p.Id == peer.Id))
             {
                 return peer;
             }

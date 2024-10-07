@@ -120,6 +120,47 @@ namespace DAPM.ResourceRegistryMS.Api.Migrations
                     b.ToTable("ResourceTypes");
                 });
 
+            modelBuilder.Entity("DAPM.ResourceRegistryMS.Api.Models.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("HashPassword")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Mail")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("Organization")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("4d67e82d-6a7e-4a0d-bd0f-58fc665b8e0a"),
+                            FirstName = "admin",
+                            HashPassword = "$2a$12$Jligef.ByeRACdblRiMuDejgNYXlUBZWfCSD3wTZ029g5MF/x8cDa",
+                            LastName = "admin",
+                            Mail = "admin@email.ch",
+                            Organization = new Guid("4b5b5523-2215-4c05-8549-274b3bb050d9")
+                        });
+                });
+
             modelBuilder.Entity("DAPM.ResourceRegistryMS.Api.Models.Pipeline", b =>
                 {
                     b.HasOne("DAPM.ResourceRegistryMS.Api.Models.Peer", "Peer")

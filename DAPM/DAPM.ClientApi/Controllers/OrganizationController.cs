@@ -1,13 +1,52 @@
 ﻿using DAPM.ClientApi.Models;
+using System.Security.Claims;
 using DAPM.ClientApi.Models.DTOs;
 using DAPM.ClientApi.Services;
 using DAPM.ClientApi.Services.Interfaces;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
+
 
 namespace DAPM.ClientApi.Controllers
 {
+
+    [ApiController]
+    [Route("[controller]")]
+    public class VersionController : ControllerBase
+    {
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return Ok("Version 0.0.0");
+        }
+    }
+
+    [ApiController]
+    [Route("[controller]")]
+    public class SecureController : ControllerBase
+    {
+        [Authorize]
+        [HttpGet]
+        public IActionResult Get()
+        {
+            // Access the 'sub' claim (User's Email or ID)
+            var userEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            // Access the 'jti' claim (Unique token ID)
+            var tokenId = User.FindFirst(JwtRegisteredClaimNames.Jti)?.Value;
+
+
+            return Ok(new
+            {
+                Email = userEmail,
+                TokenId = tokenId,
+            });
+        }
+    }
+
     [ApiController]
     [EnableCors("AllowAll")]
     [Route("organizations")]
@@ -29,10 +68,10 @@ namespace DAPM.ClientApi.Controllers
         public async Task<ActionResult<Guid>> Get()
         {
             Guid id = _organizationService.GetOrganizations();
-            return Ok(new ApiResponse { RequestName = "GetAllOrganizations", TicketId = id});
+            return Ok(new ApiResponse { RequestName = "GetAllOrganizations", TicketId = id });
         }
 
-        
+
         [HttpGet("{organizationId}")]
         [SwaggerOperation(Description = "Gets an organization by id. You need to have a collaboration agreement to retrieve this information.")]
         public async Task<ActionResult<Guid>> GetById(Guid organizationId)
@@ -46,7 +85,7 @@ namespace DAPM.ClientApi.Controllers
         public async Task<ActionResult<Guid>> GetRepositoriesOfOrganization(Guid organizationId)
         {
             Guid id = _organizationService.GetRepositoriesOfOrganization(organizationId);
-            return Ok(new ApiResponse {RequestName = "GetRepositoriesOfOrganization", TicketId = id });
+            return Ok(new ApiResponse { RequestName = "GetRepositoriesOfOrganization", TicketId = id });
         }
 
         [HttpPost("{organizationId}/repositories")]

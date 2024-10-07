@@ -9,12 +9,31 @@ using RabbitMQLibrary.Messages.ClientApi;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults;
 using Microsoft.OpenApi.Models;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromPipelineOrchestrator;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 builder.WebHost.UseKestrel(o => o.Limits.MaxRequestBodySize = null);
 
-var test = 0;
+
+// Configure JWT authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+    });
+//Jwt configuration ends here
 
 builder.Services.Configure<FormOptions>(x =>
 {
@@ -60,7 +79,7 @@ builder.Services.AddQueueMessageConsumer<GetResourceFilesProcessResultConsumer, 
 builder.Services.AddQueueMessageConsumer<CollabHandshakeProcessResultConsumer, CollabHandshakeProcessResult>();
 builder.Services.AddQueueMessageConsumer<PostPipelineCommandProcessResultConsumer, PostPipelineCommandProcessResult>();
 builder.Services.AddQueueMessageConsumer<GetPipelineExecutionStatusProcessResultConsumer, GetPipelineExecutionStatusRequestResult>();
-
+builder.Services.AddQueueMessageConsumer<GetUserResultConsumer, GetUserResult>();
 
 
 // Add services to the container.
@@ -72,6 +91,7 @@ builder.Services.AddScoped<IRepositoryService, RepositoryService>();
 builder.Services.AddScoped<IPipelineService, PipelineService>();
 builder.Services.AddSingleton<ITicketService, TicketService>();
 builder.Services.AddScoped<ISystemService, SystemService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -92,6 +112,7 @@ app.UseHttpsRedirection();
 app.UseCors("AllowAll");
 
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
