@@ -30,16 +30,71 @@ namespace DAPM.ClientApi.Controllers
         {
             Guid id = _organizationService.GetOrganizations();
             return Ok(new ApiResponse { RequestName = "GetAllOrganizations", TicketId = id});
-        }
-
-        //artur endpoints
-        [HttpGet("test")]
-        [SwaggerOperation(Description = "Gets an organization by id. You need to have a collaboration agreement to retrieve this information.")]
-        public async Task<ActionResult<Guid>> testEndpoint()
+        }        
+        
+        // ApiResponse class remains the same
+        public class ApiResponse
         {
-            return Ok(new ApiResponse { RequestName = "gettest name", TicketId = Guid.NewGuid() });
+            public string RequestName { get; set; }
+            public Guid TicketId { get; set; }
+            public string TicketTitle { get; set; }
+            public string TicketStatus { get; set; }
+            public DateTime CreatedAt { get; set; }
         }
 
+        [HttpGet("tickets/{ticketId}")]
+        [SwaggerOperation(Description = "Retrieves details of a ticket by its ID.")]
+        public async Task<ActionResult<ApiResponse>> GetTicketById(Guid ticketId)
+        {
+            // Simulate fetching the ticket by its ID from a data store
+            var demoTicket = new ApiResponse
+            {
+                RequestName = "GetTicketById",
+                TicketId = ticketId, // Returning the input ID as part of the response
+                TicketTitle = "Demo Ticket",
+                TicketStatus = "Open",
+                CreatedAt = DateTime.UtcNow
+            };
+
+            return Ok(demoTicket);
+        }
+
+        // Corrected 'testEndpoint'
+        [HttpGet("endpoint/{ticketId}")]
+        [SwaggerOperation(Description = "Endpoint getter of the backend.")]
+        public async Task<ActionResult<ApiResponse>> TestEndpoint(Guid ticketId)
+        {
+            // Simulating a response similar to the one returned in GetTicketById
+            var response = new ApiResponse
+            {
+                RequestName = "TestEndpoint",
+                TicketId = Guid.NewGuid(), // Generate a new ticket ID
+                TicketTitle = "Test Ticket", // You can set an appropriate value here
+                TicketStatus = "In Progress", // Set a status for the ticket
+                CreatedAt = DateTime.UtcNow // Set the current time
+            };
+
+            return Ok(response);
+        }
+
+
+                //artur endpoints
+        //proper name, proper args, return demi point(some values)
+        // [HttpGet("Endpoint")]
+        // [SwaggerOperation(Description = "Endpoint getter of the backend.")]
+        // public async Task<ActionResult<Guid>> testEndpoint(Guid ticketId)
+        // {
+        //     return Ok(new ApiResponse { RequestName = "name of endpoint", TicketId = Guid.NewGuid(), TicketTitle = GetTicketById(Guid.NewGuid()), TicketStatus =   });
+        // }
+
+        //test pipeline status tokenization
+        // [HttpGet("")]
+        // [SwaggerOperation(Description = "pipeline status")]
+        // public async Task<ActionResult<Guid>> testPipelineStatus()
+        // {
+        //     return Ok(new ApiResponse { RequestName = "pipeline status", TicketId = Guid.NewGuid()});
+        // }
+        
         [HttpGet("{organizationId}")]
         [SwaggerOperation(Description = "Gets an organization by id. You need to have a collaboration agreement to retrieve this information.")]
         public async Task<ActionResult<Guid>> GetById(Guid organizationId)
