@@ -7,6 +7,7 @@ using RabbitMQLibrary.Interfaces;
 using RabbitMQLibrary.Messages.PipelineOrchestrator;
 using Swashbuckle.AspNetCore.Annotations;
 using RabbitMQLibrary.Models;
+using System.Threading.Tasks;
 
 namespace DAPM.ClientApi.Controllers
 {
@@ -14,11 +15,11 @@ namespace DAPM.ClientApi.Controllers
     [Route("api/[controller]")]
     public class PipelineResultsController : ControllerBase
     {
-        //private readonly IPipelineResultsService _pipelineResultsService;
+        private readonly IPipelineResultsService _pipelineResultsService;
 
-        public PipelineResultsController()
+        public PipelineResultsController(IPipelineResultsService pipelineResultsService)
         {
-            //_pipelineResultsService = pipelineResultsService;
+            _pipelineResultsService = pipelineResultsService;
         }
 
         [HttpGet("GetAllResults")]
@@ -31,11 +32,10 @@ namespace DAPM.ClientApi.Controllers
         public async Task<IActionResult> GetAllPipelineResults()
         {
 
-            return Ok("Version 0.0.0");
-            /**
+            //return Ok("Version 0.0.0");
             var results = await _pipelineResultsService.GetAllPipelineResultsAsync();
             return Ok(results);
-            **/
+        
         }
 
         [HttpGet("{id}")]
@@ -48,15 +48,13 @@ namespace DAPM.ClientApi.Controllers
         public async Task<IActionResult> GetPipelineResultById(string id)
         {
 
-            return Ok("Version 0.0.0");
-            /*
+            //return Ok("Version 0.0.0");
             var result = await _pipelineResultsService.GetPipelineResultByIdAsync(id);
             if (result == null)
             {
                 return NotFound();
             }
             return Ok(result);
-            */
         }
 
         [HttpGet("ByExecution/{executionId}")]
@@ -69,15 +67,35 @@ namespace DAPM.ClientApi.Controllers
         public async Task<IActionResult> GetPipelineResultByExecutionId(string executionId)
         {
 
-            return Ok("Version 0.0.0");
-            /*
+            //return Ok("Version 0.0.0");
             var result = await _pipelineResultsService.GetPipelineResultByExecutionIdAsync(executionId);
             if (result == null)
             {
                 return NotFound();
             }
             return Ok(result);
-            */
         }
+
+        [HttpGet("GetResultText/{id}")]
+        [SwaggerOperation(
+            Summary = "Get pipeline result in text format",
+            Description = "Retrieves the pipeline result as a plain text format using its unique identifier.",
+            OperationId = "GetPipelineResultTextById",
+            Tags = new[] { "PipelineResults" }
+        )]
+        public async Task<IActionResult> GetPipelineResultTextById(string id)
+        {
+            var result = await _pipelineResultsService.GetPipelineResultTextByIdAsync(id);
+            //var result = "Placeholder pipeline output in text format"; // Placeholder response
+
+            if (string.IsNullOrEmpty(result))
+            {
+                return NotFound();
+            }
+
+            return Content(result, "text/plain");
+        }
+
+        
     }
 }
