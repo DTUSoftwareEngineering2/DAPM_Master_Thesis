@@ -17,5 +17,11 @@ namespace DAPM.ResourceRegistryMS.Api.Services
         {
             return await _pipelineRepository.GetPipelineById(organizationId, repositoryId, resourceId);
         }
+
+        public async Task<string> GetPipelineStatus(Guid pipelineId)
+        {
+            var pipeline = await _pipelineRepository.GetPipelineById(pipelineId);
+            return pipeline?.Status;
+        }
     }
 }
