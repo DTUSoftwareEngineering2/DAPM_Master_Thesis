@@ -1,25 +1,37 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
+# Base image with .NET 8.0 runtime
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER app
 WORKDIR /app
-EXPOSE 8080
+EXPOSE 80
 
+# Build image with .NET 8.0 SDK
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["DAPM.ResourceRegistryMS.Api/DAPM.ResourceRegistryMS.Api.csproj", "DAPM.ResourceRegistryMS.Api/"]
-RUN dotnet restore "./DAPM.ResourceRegistryMS.Api/DAPM.ResourceRegistryMS.Api.csproj"
+
+# Restore dependencies
+RUN dotnet restore "DAPM.ResourceRegistryMS.Api/DAPM.ResourceRegistryMS.Api.csproj"
+
+# Copy the rest of the source code and build
 COPY . .
 WORKDIR "/src/DAPM.ResourceRegistryMS.Api"
-RUN dotnet build "./DAPM.ResourceRegistryMS.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "DAPM.ResourceRegistryMS.Api.csproj" -c Release -o /app/build
 
+# Publish the build
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./DAPM.ResourceRegistryMS.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "DAPM.ResourceRegistryMS.Api.csproj" -c Release -o /app/publish
 
+# Final runtime image
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+# Install dockerize (using root permissions)
+USER root
+RUN apt-get update && apt-get install -y wget && \
+	wget https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz && \
+	tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.6.1.tar.gz
+
+# Start the application
 ENTRYPOINT ["dotnet", "DAPM.ResourceRegistryMS.Api.dll"]
 

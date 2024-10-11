@@ -56,8 +56,8 @@ builder.Services.AddQueueMessageConsumer<PostPipelineToRegistryConsumer, PostPip
 builder.Services.AddQueueMessageConsumer<ApplyRegistryUpdateConsumer, ApplyRegistryUpdateMessage>();
 builder.Services.AddQueueMessageConsumer<GetEntriesFromOrgConsumer, GetEntriesFromOrgMessage>();
 builder.Services.AddQueueMessageConsumer<PostPeerConsumer, PostPeerMessage>();
-
-
+builder.Services.AddQueueMessageConsumer<GetUserConsumer, GetUserMessage>();
+builder.Services.AddQueueMessageConsumer<PostUserConsumer, PostUserMessage>();
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -70,20 +70,21 @@ builder.Services.AddScoped<IResourceService, ResourceService>();
 builder.Services.AddScoped<IPeerService, PeerService>();
 builder.Services.AddScoped<IRepositoryService, RepositoryService>();
 builder.Services.AddScoped<IPipelineService, PipelineService>();
-
+builder.Services.AddScoped<IUserService, UserService>();
 
 // Add Scoped ResourceRegistry
 builder.Services.AddScoped<IResourceRepository, ResourceRepository>();
 builder.Services.AddScoped<IRepositoryRepository, RepositoryRepository>();
 builder.Services.AddScoped<IResourceTypeRepository, ResourceTypeRepository>();
 builder.Services.AddScoped<IPeerRepository, PeerRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPipelineRepository, PipelineRepository>();
 
-
-
+var connString = "Host=postgres;Port=5432;Username=postgres;Password=postgres;Database=DAPM_ResourceRegistry";
 builder.Services.AddDbContext<ResourceRegistryDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")); }
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+}
 );
 
 

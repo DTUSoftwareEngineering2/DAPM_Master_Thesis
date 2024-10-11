@@ -8,7 +8,7 @@ namespace DAPM.RepositoryMS.Api.Data
 
         ILogger<RepositoryDbContext> _logger;
 
-        public RepositoryDbContext(DbContextOptions<RepositoryDbContext> options, ILogger<RepositoryDbContext> logger) : base (options)
+        public RepositoryDbContext(DbContextOptions<RepositoryDbContext> options, ILogger<RepositoryDbContext> logger) : base(options)
         {
             _logger = logger;
             InitializeDatabase();
@@ -16,7 +16,7 @@ namespace DAPM.RepositoryMS.Api.Data
 
         public DbSet<Resource> Resources { get; set; }
         public DbSet<Repository> Repositories { get; set; }
-        public DbSet<Models.PostgreSQL.File>  Files { get; set; }
+        public DbSet<Models.PostgreSQL.File> Files { get; set; }
         public DbSet<Pipeline> Pipelines { get; set; }
         public DbSet<Operator> Operators { get; set; }
 

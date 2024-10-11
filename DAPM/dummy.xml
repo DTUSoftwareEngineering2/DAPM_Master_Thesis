@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<log xes.version="2.0" xmlns="http://www.xes-standard.org/">
+    <!-- Log level attributes -->
+    <global scope="trace">
+        <string key="concept:name" value="case" />
+    </global>
+    <global scope="event">
+        <string key="concept:name" value="activity" />
+        <date key="time:timestamp" value="1970-01-01T00:00:00.000+00:00" />
+    </global>
+
+    <!-- Trace 1: Process instance -->
+    <trace>
+        <string key="concept:name" value="Case1" />
+
+        <!-- Event 1 -->
+        <event>
+            <string key="concept:name" value="Start Process" />
+            <date key="time:timestamp" value="2024-09-23T09:00:00.000+00:00" />
+            <string key="org:resource" value="UserA" />
+        </event>
+
+        <!-- Event 2 -->
+        <event>
+            <string key="concept:name" value="Submit Form" />
+            <date key="time:timestamp" value="2024-09-23T09:15:00.000+00:00" />
+            <string key="org:resource" value="UserB" />
+        </event>
+    </trace>
+
+    <!-- Trace 2: Another process instance -->
+    <trace>
+        <string key="concept:name" value="Case2" />
+
+        <!-- Event 1 -->
+        <event>
+            <string key="concept:name" value="Start Process" />
+            <date key="time:timestamp" value="2024-09-23T09:05:00.000+00:00" />
+            <string key="org:resource" value="UserC" />
+        </event>
+
+        <!-- Event 2 -->
+        <event>
+            <string key="concept:name" value="Approve Request" />
+            <date key="time:timestamp" value="2024-09-23T09:20:00.000+00:00" />
+            <string key="org:resource" value="ManagerD" />
+        </event>
+    </trace>
+</log>
