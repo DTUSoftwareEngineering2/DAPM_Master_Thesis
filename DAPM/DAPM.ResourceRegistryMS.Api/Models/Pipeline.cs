@@ -11,6 +11,7 @@ namespace DAPM.ResourceRegistryMS.Api.Models
         public Guid Id { get; set; }
         [Required]
         public string Name { get; set; }
+        public string Status { get; set; }
         public Guid PeerId { get; set; }
         public Guid RepositoryId { get; set; }
         public Guid CompanyAId {get; set; }

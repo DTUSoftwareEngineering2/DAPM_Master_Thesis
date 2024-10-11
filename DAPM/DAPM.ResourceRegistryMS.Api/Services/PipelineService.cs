@@ -21,7 +21,13 @@ namespace DAPM.ResourceRegistryMS.Api.Services
         public async Task<string> GetPipelineStatus(Guid pipelineId)
         {
             var pipeline = await _pipelineRepository.GetPipelineById(pipelineId);
-            return pipeline?.Status;
+            if (pipeline == null)
+            {
+                throw new Exception("Pipeline not found");
+            }
+
+            return pipeline.Status;  // Assuming `Status` is a string property
         }
+
     }
 }
