@@ -57,7 +57,7 @@ namespace DAPM.ResourceRegistryMS.Api.Consumers
                     LastName = u.LastName,
                     Mail = u.Mail,
                     Organization = u.Organization,
-                    HashPassword = u.HashPassword
+                    HashPassword = message.needHash ? u.HashPassword : ""
                 };
             }
 

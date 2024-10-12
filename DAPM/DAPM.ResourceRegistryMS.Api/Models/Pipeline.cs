@@ -22,5 +22,4 @@ namespace DAPM.ResourceRegistryMS.Api.Models
         [ForeignKey("PeerId, RepositoryId")]
         public virtual Repository Repository { get; set; }
     }
-
 }

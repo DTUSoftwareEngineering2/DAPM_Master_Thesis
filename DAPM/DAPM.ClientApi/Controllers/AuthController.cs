@@ -9,7 +9,7 @@ using DAPM.ClientApi.Services.Interfaces;
 using DAPM.ClientApi.Models.DTOs;
 using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Cors;
-
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace DAPM.ClientApi.Controllers
 {
@@ -34,7 +34,8 @@ namespace DAPM.ClientApi.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Post([FromBody] LoginForm loginRequest)
+        [SwaggerOperation(Description = "Login a user")]
+        public IActionResult Login([FromBody] LoginForm loginRequest)
         {
             //your logic for login process
             //If login usrename and password are correct then proceed to generate token
@@ -84,6 +85,7 @@ namespace DAPM.ClientApi.Controllers
 
         [HttpPost("signup")]
         [EnableCors("AllowAll")]
+        [SwaggerOperation(Description = "Signup a new user")]
         public IActionResult Signup([FromBody] SignupForm signupRequest)
         {
             var userId = Guid.NewGuid();
@@ -120,11 +122,12 @@ namespace DAPM.ClientApi.Controllers
 
         [HttpGet("info")]
         [Authorize]
+        [SwaggerOperation(Description = "Get the information of the currently logged in user")]
         public IActionResult getUserInfo()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var tId = _authService.GetUserById(Guid.Parse(userId));
+            var tId = _authService.GetUserById(Guid.Parse(userId), false);
 
             return Ok(new { ticketId = tId });
         }
