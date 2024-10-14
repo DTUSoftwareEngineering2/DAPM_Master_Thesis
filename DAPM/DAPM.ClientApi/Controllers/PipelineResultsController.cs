@@ -12,14 +12,19 @@ using System.Threading.Tasks;
 namespace DAPM.ClientApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [EnableCors("AllowAll")]
+    [Route("organizations/")]
+    
     public class PipelineResultsController : ControllerBase
     {
+
+        private readonly ILogger<PipelineResultsController> _logger;
         private readonly IPipelineResultsService _pipelineResultsService;
 
-        public PipelineResultsController(IPipelineResultsService pipelineResultsService)
+        public PipelineResultsController(ILogger<PipelineResultsController> logger, IPipelineResultsService pipelineResultsService)
         {
             _pipelineResultsService = pipelineResultsService;
+            _logger = logger;
         }
 
         [HttpGet("GetAllResults")]
@@ -29,13 +34,15 @@ namespace DAPM.ClientApi.Controllers
             OperationId = "GetAllPipelineResults",
             Tags = new[] { "PipelineResults" }
         )]
-        public async Task<IActionResult> GetAllPipelineResults()
+        public async Task<ActionResult<Guid>> GetAllPipelineResults()
         {
 
             //return Ok("Version 0.0.0");
-            var results = await _pipelineResultsService.GetAllPipelineResultsAsync();
-            return Ok(results);
-        
+            // var results = await _pipelineResultsService.GetAllPipelineResultsAsync();
+            // return Ok(results);
+
+            Guid id = _pipelineResultsService.GetAllPipelineResultsAsync(); ;
+            return Ok(new ApiResponse { RequestName = "GetAllPipelineResults", TicketId = id });
         }
 
         [HttpGet("{id}")]
@@ -45,16 +52,19 @@ namespace DAPM.ClientApi.Controllers
             OperationId = "GetPipelineResultById",
             Tags = new[] { "PipelineResults" }
         )]
-        public async Task<IActionResult> GetPipelineResultById(string id)
+        public async Task<ActionResult<Guid>> GetPipelineResultById(string id)
         {
 
             //return Ok("Version 0.0.0");
-            var result = await _pipelineResultsService.GetPipelineResultByIdAsync(id);
-            if (result == null)
-            {
-                return NotFound();
-            }
-            return Ok(result);
+            // var result = await _pipelineResultsService.GetPipelineResultByIdAsync(id);
+            // if (result == null)
+            // {
+            //     return NotFound();
+            // }
+            // return Ok(result);
+
+            Guid idd = _pipelineResultsService.GetPipelineResultByIdAsync(id);
+            return Ok(new ApiResponse { RequestName = "GetPipelineResultById", TicketId = idd });
         }
 
         [HttpGet("ByExecution/{executionId}")]
@@ -64,38 +74,19 @@ namespace DAPM.ClientApi.Controllers
             OperationId = "GetPipelineResultByExecutionId",
             Tags = new[] { "PipelineResults" }
         )]
-        public async Task<IActionResult> GetPipelineResultByExecutionId(string executionId)
+        public async Task<ActionResult<Guid>> GetPipelineResultByExecutionId(string executionId)
         {
 
             //return Ok("Version 0.0.0");
-            var result = await _pipelineResultsService.GetPipelineResultByExecutionIdAsync(executionId);
-            if (result == null)
-            {
-                return NotFound();
-            }
-            return Ok(result);
+            // var result = await _pipelineResultsService.GetPipelineResultByExecutionIdAsync(executionId);
+            // if (result == null)
+            // {
+            //     return NotFound();
+            // }
+            // return Ok(result);
+
+            Guid id = _pipelineResultsService.GetPipelineResultByExecutionIdAsync(executionId);
+            return Ok(new ApiResponse { RequestName = "GetPipelineResultByExecutionId", TicketId = id });
         }
-
-        [HttpGet("GetResultText/{id}")]
-        [SwaggerOperation(
-            Summary = "Get pipeline result in text format",
-            Description = "Retrieves the pipeline result as a plain text format using its unique identifier.",
-            OperationId = "GetPipelineResultTextById",
-            Tags = new[] { "PipelineResults" }
-        )]
-        public async Task<IActionResult> GetPipelineResultTextById(string id)
-        {
-            var result = await _pipelineResultsService.GetPipelineResultTextByIdAsync(id);
-            //var result = "Placeholder pipeline output in text format"; // Placeholder response
-
-            if (string.IsNullOrEmpty(result))
-            {
-                return NotFound();
-            }
-
-            return Content(result, "text/plain");
-        }
-
-        
     }
 }

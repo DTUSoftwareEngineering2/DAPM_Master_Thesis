@@ -1,63 +1,85 @@
-using System.Threading.Tasks;
 using DAPM.ClientApi.Services.Interfaces;
+using RabbitMQLibrary.Interfaces;
+using RabbitMQLibrary.Messages.PipelineOrchestrator;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
+using RabbitMQLibrary.Messages.Orchestrator.ProcessRequests;
+using RabbitMQLibrary.Messages.ResourceRegistry;
+
 
 namespace DAPM.ClientApi.Services
 {
     public class PipelineResultsService : IPipelineResultsService
     {
+        private readonly ILogger<PipelineResultsService> _logger;
+        private readonly ITicketService _ticketService;
+        private readonly IQueueProducer<GetAllPipelineResultsRequest> _getAllPipelineResultsProducer;
+        private readonly IQueueProducer<GetPipelineResultByIdRequest> _getPipelineResultByIdProducer;
+        private readonly IQueueProducer<GetPipelineResultByExecutionIdRequest> _getPipelineResultByExecutionIdProducer;
 
-        // Simulated in-memory storage of pipeline results
-        private readonly List<PipelineResultDto> _pipelineResults;
-
-        public PipelineResultsService()
+        public PipelineResultsService(
+            ILogger<PipelineResultsService> logger,
+            ITicketService ticketService,
+            IQueueProducer<GetAllPipelineResultsRequest> getAllPipelineResultsProducer,
+            IQueueProducer<GetPipelineResultByIdRequest> getPipelineResultByIdProducer,
+            IQueueProducer<GetPipelineResultByExecutionIdRequest> getPipelineResultByExecutionIdProducer)
         {
-            // Initializing with sample data for demonstration 
-            _pipelineResults = new List<PipelineResultDto>
+            _logger = logger;
+            _ticketService = ticketService;
+            _getAllPipelineResultsProducer = getAllPipelineResultsProducer;
+            _getPipelineResultByIdProducer = getPipelineResultByIdProducer;
+            _getPipelineResultByExecutionIdProducer = getPipelineResultByExecutionIdProducer;
+        }
+
+        public Guid GetAllPipelineResultsAsync()
+        {
+            Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
+
+            var message = new GetAllPipelineResultsRequest
             {
-                new PipelineResultDto { Id = "1", ExecutionId = "EXE-001", ResultText = "Pipeline 1 completed successfully." },
-                new PipelineResultDto { Id = "2", ExecutionId = "EXE-002", ResultText = "Pipeline 2 failed due to missing resources." },
-                new PipelineResultDto { Id = "3", ExecutionId = "EXE-003", ResultText = "Pipeline 3 completed with warnings." }
+                TicketId = ticketId,
+                TimeToLive = TimeSpan.FromMinutes(1)
             };
+
+            _getAllPipelineResultsProducer.PublishMessage(message);
+            _logger.LogDebug("GetAllPipelineResultsRequest Enqueued");
+
+            return ticketId;
         }
 
-        public async Task<string> GetAllPipelineResultsAsync()
+        public Guid GetPipelineResultByIdAsync(string id)
         {
-            // Retrieve all pipeline results and return as a formatted string
-            var results = _pipelineResults
-                .Select(r => $"ID: {r.Id}, Execution ID: {r.ExecutionId}, Result: {r.ResultText}")
-                .ToList();
-            
-            // Convert to a single string for easier viewing
-            return await Task.FromResult(string.Join("\n", results));
+            Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
+
+            var message = new GetPipelineResultByIdRequest
+            {
+                TicketId = ticketId,
+                TimeToLive = TimeSpan.FromMinutes(1),
+                ResultId = id
+            };
+
+            _getPipelineResultByIdProducer.PublishMessage(message);
+            _logger.LogDebug("GetPipelineResultByIdRequest Enqueued");
+
+            return ticketId;
         }
 
-        public async Task<string> GetPipelineResultByIdAsync(string id)
+        public Guid GetPipelineResultByExecutionIdAsync(string executionId)
         {
-            // Find the pipeline result with the specified ID
-            var result = _pipelineResults.FirstOrDefault(r => r.Id == id);
-            return await Task.FromResult(result?.ResultText ?? $"No pipeline result found with ID: {id}");
-        }
+            Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
 
-        public async Task<string> GetPipelineResultByExecutionIdAsync(string executionId)
-        {
-            // Find the pipeline result with the specified Execution ID
-            var result = _pipelineResults.FirstOrDefault(r => r.ExecutionId == executionId);
-            return await Task.FromResult(result?.ResultText ?? $"No pipeline result found with Execution ID: {executionId}");
-        }
+            var message = new GetPipelineResultByExecutionIdRequest
+            {
+                TicketId = ticketId,
+                TimeToLive = TimeSpan.FromMinutes(1),
+                ExecutionId = executionId
+            };
 
-        public async Task<string> GetPipelineResultTextByIdAsync(string id)
-        {
-            // Return the plain text result of a specific pipeline by ID
-            var result = _pipelineResults.FirstOrDefault(r => r.Id == id);
-            return await Task.FromResult(result?.ResultText ?? $"No pipeline result found with ID: {id}");
-        }
-    }
+            _getPipelineResultByExecutionIdProducer.PublishMessage(message);
+            _logger.LogDebug("GetPipelineResultByExecutionIdRequest Enqueued");
 
-     // Data Transfer Object for Pipeline Results
-    public class PipelineResultDto
-    {
-        public string Id { get; set; }
-        public string ExecutionId { get; set; }
-        public string ResultText { get; set; }
+            return ticketId;
+        }
     }
 }
