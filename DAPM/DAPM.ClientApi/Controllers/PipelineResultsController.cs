@@ -34,14 +34,14 @@ namespace DAPM.ClientApi.Controllers
             OperationId = "GetAllPipelineResults",
             Tags = new[] { "PipelineResults" }
         )]
-        public async Task<ActionResult<Guid>> GetAllPipelineResults()
+        public async Task<ActionResult<Guid>> GetAllPipelineResults(Guid organizationId, Guid repositoryId, Guid resourceId)
         {
 
             //return Ok("Version 0.0.0");
             // var results = await _pipelineResultsService.GetAllPipelineResultsAsync();
             // return Ok(results);
 
-            Guid id = _pipelineResultsService.GetAllPipelineResultsAsync(); ;
+            Guid id = _pipelineResultsService.GetAllPipelineResultsAsync(organizationId, repositoryId, resourceId); ;
             return Ok(new ApiResponse { RequestName = "GetAllPipelineResults", TicketId = id });
         }
 
@@ -52,7 +52,7 @@ namespace DAPM.ClientApi.Controllers
             OperationId = "GetPipelineResultById",
             Tags = new[] { "PipelineResults" }
         )]
-        public async Task<ActionResult<Guid>> GetPipelineResultById(string id)
+        public async Task<ActionResult<Guid>> GetPipelineResultById(Guid organizationId, Guid repositoryId, Guid resourceId, Guid PipelineId)
         {
 
             //return Ok("Version 0.0.0");
@@ -63,30 +63,8 @@ namespace DAPM.ClientApi.Controllers
             // }
             // return Ok(result);
 
-            Guid idd = _pipelineResultsService.GetPipelineResultByIdAsync(id);
-            return Ok(new ApiResponse { RequestName = "GetPipelineResultById", TicketId = idd });
-        }
-
-        [HttpGet("ByExecution/{executionId}")]
-        [SwaggerOperation(
-            Summary = "Get pipeline result by execution ID",
-            Description = "Retrieves the details of a pipeline result using its execution ID.",
-            OperationId = "GetPipelineResultByExecutionId",
-            Tags = new[] { "PipelineResults" }
-        )]
-        public async Task<ActionResult<Guid>> GetPipelineResultByExecutionId(string executionId)
-        {
-
-            //return Ok("Version 0.0.0");
-            // var result = await _pipelineResultsService.GetPipelineResultByExecutionIdAsync(executionId);
-            // if (result == null)
-            // {
-            //     return NotFound();
-            // }
-            // return Ok(result);
-
-            Guid id = _pipelineResultsService.GetPipelineResultByExecutionIdAsync(executionId);
-            return Ok(new ApiResponse { RequestName = "GetPipelineResultByExecutionId", TicketId = id });
+            Guid id = _pipelineResultsService.GetPipelineResultByIdAsync(organizationId, repositoryId, resourceId, PipelineId);
+            return Ok(new ApiResponse { RequestName = "GetPipelineResultById", TicketId = id });
         }
     }
 }

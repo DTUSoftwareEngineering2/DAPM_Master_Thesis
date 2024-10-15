@@ -76,6 +76,7 @@ builder.Services.AddScoped<IRepositoryService, RepositoryService>();
 builder.Services.AddScoped<IPipelineService, PipelineService>();
 builder.Services.AddSingleton<ITicketService, TicketService>();
 builder.Services.AddScoped<ISystemService, SystemService>();
+builder.Services.AddScoped<IPipelineResultsService, PipelineResultsService>();
 
 //For the PipelineResultsService
 //builder.Services.AddScoped<IPipelineResultsService, PipelineResultsService>();

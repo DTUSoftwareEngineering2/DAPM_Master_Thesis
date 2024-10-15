@@ -4,8 +4,7 @@ namespace DAPM.ClientApi.Services.Interfaces
 {
     public interface IPipelineResultsService
     {
-        Guid GetAllPipelineResultsAsync();
-        Guid GetPipelineResultByIdAsync(string id);
-        Guid GetPipelineResultByExecutionIdAsync(string executionId);
+        Guid GetAllPipelineResultsAsync(Guid organizationId, Guid repositoryId, Guid resourceId);
+        Guid GetPipelineResultByIdAsync(Guid pipelineId, Guid organizationId, Guid repositoryId, Guid resourceId);
     }
 }

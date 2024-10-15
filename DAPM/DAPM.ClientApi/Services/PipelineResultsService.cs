@@ -14,70 +14,52 @@ namespace DAPM.ClientApi.Services
     {
         private readonly ILogger<PipelineResultsService> _logger;
         private readonly ITicketService _ticketService;
-        private readonly IQueueProducer<GetAllPipelineResultsRequest> _getAllPipelineResultsProducer;
-        private readonly IQueueProducer<GetPipelineResultByIdRequest> _getPipelineResultByIdProducer;
-        private readonly IQueueProducer<GetPipelineResultByExecutionIdRequest> _getPipelineResultByExecutionIdProducer;
-
+        private IQueueProducer<GetResourceFilesRequest> _getAllPipelinesResultRequestProducer;
         public PipelineResultsService(
             ILogger<PipelineResultsService> logger,
             ITicketService ticketService,
-            IQueueProducer<GetAllPipelineResultsRequest> getAllPipelineResultsProducer,
-            IQueueProducer<GetPipelineResultByIdRequest> getPipelineResultByIdProducer,
-            IQueueProducer<GetPipelineResultByExecutionIdRequest> getPipelineResultByExecutionIdProducer)
+            IQueueProducer<GetResourceFilesRequest> getAllPipelinesResultRequestProducer
+        )
         {
             _logger = logger;
             _ticketService = ticketService;
-            _getAllPipelineResultsProducer = getAllPipelineResultsProducer;
-            _getPipelineResultByIdProducer = getPipelineResultByIdProducer;
-            _getPipelineResultByExecutionIdProducer = getPipelineResultByExecutionIdProducer;
+            _getAllPipelinesResultRequestProducer = getAllPipelinesResultRequestProducer;
         }
 
-        public Guid GetAllPipelineResultsAsync()
+        public Guid GetAllPipelineResultsAsync(Guid organizationId, Guid repositoryId, Guid resourceId)
         {
             Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
 
-            var message = new GetAllPipelineResultsRequest
+            var message = new GetResourceFilesRequest
             {
                 TicketId = ticketId,
-                TimeToLive = TimeSpan.FromMinutes(1)
+                TimeToLive = TimeSpan.FromMinutes(1),
+                OrganizationId = organizationId,
+                RepositoryId = repositoryId,
+                ResourceId = resourceId
             };
 
-            _getAllPipelineResultsProducer.PublishMessage(message);
+            _getAllPipelinesResultRequestProducer.PublishMessage(message);
             _logger.LogDebug("GetAllPipelineResultsRequest Enqueued");
 
             return ticketId;
         }
 
-        public Guid GetPipelineResultByIdAsync(string id)
+        public Guid GetPipelineResultByIdAsync(Guid organizationId, Guid repositoryId, Guid resourceId, Guid pipelineId)
         {
             Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
 
-            var message = new GetPipelineResultByIdRequest
+            var message = new GetResourceFilesRequest
             {
                 TicketId = ticketId,
                 TimeToLive = TimeSpan.FromMinutes(1),
-                ResultId = id
+                OrganizationId = organizationId,
+                RepositoryId = repositoryId,
+                ResourceId = resourceId
             };
 
-            _getPipelineResultByIdProducer.PublishMessage(message);
+            _getAllPipelinesResultRequestProducer.PublishMessage(message);
             _logger.LogDebug("GetPipelineResultByIdRequest Enqueued");
-
-            return ticketId;
-        }
-
-        public Guid GetPipelineResultByExecutionIdAsync(string executionId)
-        {
-            Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
-
-            var message = new GetPipelineResultByExecutionIdRequest
-            {
-                TicketId = ticketId,
-                TimeToLive = TimeSpan.FromMinutes(1),
-                ExecutionId = executionId
-            };
-
-            _getPipelineResultByExecutionIdProducer.PublishMessage(message);
-            _logger.LogDebug("GetPipelineResultByExecutionIdRequest Enqueued");
 
             return ticketId;
         }
