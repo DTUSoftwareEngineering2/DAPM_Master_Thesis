@@ -1,6 +1,7 @@
 ﻿using DAPM.ResourceRegistryMS.Api.Models;
 using DAPM.ResourceRegistryMS.Api.Repositories.Interfaces;
 using DAPM.ResourceRegistryMS.Api.Services.Interfaces;
+using DAPM.ResourceRegistryMS.Api.Repositories;
 
 namespace DAPM.ResourceRegistryMS.Api.Services
 {

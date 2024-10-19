@@ -2,7 +2,9 @@
 using RabbitMQLibrary.Interfaces;
 using RabbitMQLibrary.Messages.Orchestrator.ProcessRequests;
 using RabbitMQLibrary.Messages.PipelineOrchestrator;
+using RabbitMQLibrary.Messages.Repository;
 using RabbitMQLibrary.Messages.ResourceRegistry;
+using RabbitMQLibrary.Models;
 
 namespace DAPM.ClientApi.Services
 {
@@ -14,6 +16,8 @@ namespace DAPM.ClientApi.Services
         private readonly IQueueProducer<CreatePipelineExecutionRequest> _createInstanceProducer;
         private readonly IQueueProducer<PipelineStartCommandRequest> _pipelineStartCommandProducer;
         private readonly IQueueProducer<GetPipelineExecutionStatusRequest> _getPipelineExecutionStatusProducer;
+        private readonly IQueueProducer<GetPipelineExecutionStatusMessage> _pipelineRepository;
+
         public PipelineService(
             ILogger<PipelineService> logger,
             ITicketService ticketService,
@@ -87,6 +91,20 @@ namespace DAPM.ClientApi.Services
 
             return ticketId;
         }
+
+    
+        public async Task<Pipeline> GetPipelineStatus(Guid pipelineId)
+        {
+            var pipeline = await _pipelineRepository.GetPipelineById(pipelineId);
+            if (pipeline == null)
+            {
+                throw new Exception("Pipeline not found");
+            }
+
+            return pipeline; // Return the entire Pipeline object
+        }
+
+
 
         public Guid PostStartCommand(Guid organizationId, Guid repositoryId, Guid pipelineId, Guid executionId)
         {

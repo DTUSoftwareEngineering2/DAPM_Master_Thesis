@@ -1,6 +1,6 @@
 ﻿using DAPM.ResourceRegistryMS.Api.Models;
 using DAPM.ResourceRegistryMS.Api.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
+//using Microsoft.EntityFrameworkCore;
 
 namespace DAPM.ResourceRegistryMS.Api.Repositories
 {
@@ -24,7 +24,7 @@ namespace DAPM.ResourceRegistryMS.Api.Repositories
             }
 
             await _context.Peers.AddAsync(peer);
-            _context.SaveChanges();
+            //_context.SaveChanges();
             return peer;
         }
 

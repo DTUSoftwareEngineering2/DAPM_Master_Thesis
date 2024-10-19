@@ -17,7 +17,7 @@ namespace DAPM.ResourceRegistryMS.Api.Repositories
         public async Task<Pipeline> AddPipeline(Pipeline pipeline)
         {
             await _context.Pipelines.AddAsync(pipeline);
-            _context.SaveChanges();
+           // _context.SaveChanges();
             return pipeline;
         }
 
@@ -28,7 +28,26 @@ namespace DAPM.ResourceRegistryMS.Api.Repositories
 
         public async Task<IEnumerable<Pipeline>> GetPipelinesFromRepository(Guid organizationId, Guid repositoryId)
         {
-            return _context.Pipelines.Where(r => r.PeerId == organizationId && r.RepositoryId == repositoryId);
+            return (Pipeline)_context.Pipelines.Where(r => r.PeerId == organizationId && r.RepositoryId == repositoryId);
         }
+
+        public async Task<IEnumerable<Pipeline>> GetSharedPipelines(Guid organizationId)
+        {
+            return (Pipeline)_context.Pipelines.Where(r => r.OrganizationId == organizationId);
+        }
+        public async Task<IEnumerable<Pipeline>> GetPipelineStatus(Guid pipelineId)
+        {
+            return (Pipeline)_context.Pipelines.Where(r => r.PipelineId == pipelineId);
+        }
+        
+        /*
+        public Task<Pipeline> AddPipeline(Pipeline pipeline);
+        public Task<IEnumerable<Pipeline>> GetPipelinesFromRepository(Guid organizationId, Guid repositoryId);
+        public Task<Pipeline> GetPipelineById(Guid organizationId, Guid repositoryId, Guid pipelineId);
+        Task<IEnumerable<Pipeline>> GetSharedPipelines(Guid organizationId);
+        Task<IEnumerable<Pipeline>> GetPipelineStatus(Guid pipelineId);
+        Task<Pipeline> GetPipelineById(Guid pipelineId);
+        */
+
     }
 }
