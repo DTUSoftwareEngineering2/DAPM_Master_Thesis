@@ -7,6 +7,6 @@ namespace DAPM.ClientApi.Services.Interfaces
         public Guid CreatePipelineExecution(Guid organizationId, Guid repositoryId, Guid pipelineId);
         public Guid PostStartCommand(Guid organizationId, Guid repositoryId, Guid pipelineId, Guid executionId);
         public Guid GetExecutionStatus(Guid organizationId, Guid repositoryId, Guid pipelineId, Guid executionId);
-        public Guid GetPipelineStatus(Guid pipelineId);
+        public Guid GetPipelineStatus(Guid organizationId, Guid repositoryId, Guid pipelineId);
     }
 }

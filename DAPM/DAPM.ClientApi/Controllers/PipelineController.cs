@@ -60,14 +60,14 @@ namespace DAPM.ClientApi.Controllers
         [Route("api/[controller]")]
         [HttpGet("pipeline-status/{pipelineId}")]
         [SwaggerOperation(Description = "Gets the sattus of running pipeline")]
-        public async Task<ActionResult<string>> GetPipelineStatus(Guid pipelineId)
+        public Guid GetPipelineStatus(Guid organizationId, Guid repositoryId, Guid pipelineId)
         {
-            var status = _pipelineService.GetPipelineStatus(pipelineId);
+            Guid status = _pipelineService.GetPipelineStatus(organizationId, repositoryId, pipelineId);
             if (status == null)
             {
-                return NotFound("Pipeline status not found ");
+                return NotFound(new ApiResponse { RequestName = "Pipeline status not found ", TicketId = status });
             }
-            return Ok(status);
+            return Ok(new ApiResponse { RequestName = "GetExecutionStatus", TicketId = status });
         }
     }
 }

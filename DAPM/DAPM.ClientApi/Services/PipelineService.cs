@@ -93,9 +93,9 @@ namespace DAPM.ClientApi.Services
         }
 
     
-        public async Task<Pipeline> GetPipelineStatus(Guid pipelineId)
+        public Guid GetPipelineStatus(Guid organizationId, Guid repositoryId, Guid pipelineId)
         {
-            var pipeline = await _pipelineRepository.GetPipelineById(pipelineId);
+            var pipeline = GetPipelineById(organizationId, repositoryId, pipelineId);
             if (pipeline == null)
             {
                 throw new Exception("Pipeline not found");
