@@ -52,7 +52,7 @@ namespace DAPM.ClientApi.Controllers
             OperationId = "GetPipelineResultById",
             Tags = new[] { "PipelineResults" }
         )]
-        public async Task<ActionResult<Guid>> GetPipelineResultById(Guid organizationId, Guid repositoryId, Guid resourceId, Guid PipelineId)
+        public async Task<ActionResult<Guid>> GetPipelineResultById(Guid organizationId, Guid repositoryId, Guid resourceId)
         {
 
             //return Ok("Version 0.0.0");
@@ -63,7 +63,7 @@ namespace DAPM.ClientApi.Controllers
             // }
             // return Ok(result);
 
-            Guid id = _pipelineResultsService.GetPipelineResultByIdAsync(organizationId, repositoryId, resourceId, PipelineId);
+            Guid id = _pipelineResultsService.GetPipelineResultByIdAsync(organizationId, repositoryId, resourceId);
             return Ok(new ApiResponse { RequestName = "GetPipelineResultById", TicketId = id });
         }
     }

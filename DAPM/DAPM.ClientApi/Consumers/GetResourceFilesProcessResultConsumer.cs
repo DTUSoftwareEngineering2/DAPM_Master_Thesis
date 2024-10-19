@@ -44,7 +44,7 @@ namespace DAPM.ClientApi.Consumers
                 result["filePath"] = filePath;
                 result["fileName"] = firstFile.Name;
                 result["fileFormat"] = firstFile.Extension;
-
+                result["fileContent"] = firstFile.Content;
 
                 // Update resolution
                 _ticketService.UpdateTicketResolution(message.TicketId, result);

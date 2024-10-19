@@ -45,7 +45,7 @@ namespace DAPM.ClientApi.Services
             return ticketId;
         }
 
-        public Guid GetPipelineResultByIdAsync(Guid organizationId, Guid repositoryId, Guid resourceId, Guid pipelineId)
+        public Guid GetPipelineResultByIdAsync(Guid organizationId, Guid repositoryId, Guid resourceId)
         {
             Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
 
