@@ -57,22 +57,12 @@ namespace DAPM.ClientApi.Controllers
             return Ok(new ApiResponse { RequestName = "GetExecutionStatus", TicketId = id });
         }
 
-
         [Route("api/[controller]")]
-        [ApiController]
-        public class PipelineController : ControllerBase
-        {
-        private readonly IPipelineService _pipelineService;
-
-        public PipelineController(IPipelineService pipelineService)
-        {
-            _pipelineService = pipelineService;
-        }
-        }
         [HttpGet("pipeline-status/{pipelineId}")]
+        [SwaggerOperation(Description = "Gets the sattus of running pipeline")]
         public async Task<ActionResult<string>> GetPipelineStatus(Guid pipelineId)
         {
-            var status = await _pipelineService.GetPipelineStatus(pipelineId);
+            var status = _pipelineService.GetPipelineStatus(pipelineId);
             if (status == null)
             {
                 return NotFound("Pipeline status not found ");
