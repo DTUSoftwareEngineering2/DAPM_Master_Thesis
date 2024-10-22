@@ -36,7 +36,7 @@ namespace DAPM.ClientApi.Controllers
         [HttpPost("{organizationId}/repositories/{repositoryId}/pipelines/{pipelineId}/executions")]
         [SwaggerOperation(Description = "Creates a new execution instance for a pipeline previously saved in the system. The execution is created but not started")]
         public async Task<ActionResult<Guid>> CreatePipelineExecutionInstance(Guid organizationId, Guid repositoryId, Guid pipelineId)
-        {
+        { 
             Guid id = _pipelineService.CreatePipelineExecution(organizationId, repositoryId, pipelineId);
             return Ok(new ApiResponse { RequestName = "CreatePipelineExecutionInstance", TicketId = id });
         }
@@ -60,7 +60,7 @@ namespace DAPM.ClientApi.Controllers
         [Route("api/[controller]")]
         [HttpGet("pipeline-status/{pipelineId}")]
         [SwaggerOperation(Description = "Gets the sattus of running pipeline")]
-        public Guid GetPipelineStatus(Guid organizationId, Guid repositoryId, Guid pipelineId)
+        public async Task<ActionResult<Guid>> GetPipelineStatus(Guid organizationId, Guid repositoryId, Guid pipelineId)
         {
             Guid status = _pipelineService.GetPipelineStatus(organizationId, repositoryId, pipelineId);
             if (status == null)
