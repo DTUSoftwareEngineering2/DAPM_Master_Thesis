@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DAPM.ResourceRegistryMS.Api.Migrations
 {
     [DbContext(typeof(ResourceRegistryDbContext))]
-    [Migration("20240607165303_Pipelines")]
-    partial class Pipelines
+    [Migration("20241005094026_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -95,12 +95,11 @@ namespace DAPM.ResourceRegistryMS.Api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("ResourceTypeId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ResourceType")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("PeerId", "RepositoryId", "Id");
-
-                    b.HasIndex("ResourceTypeId");
 
                     b.ToTable("Resources");
                 });
@@ -122,6 +121,36 @@ namespace DAPM.ResourceRegistryMS.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ResourceTypes");
+                });
+
+            modelBuilder.Entity("DAPM.ResourceRegistryMS.Api.Models.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("HashPassword")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Mail")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("Organization")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("DAPM.ResourceRegistryMS.Api.Models.Pipeline", b =>
@@ -162,12 +191,6 @@ namespace DAPM.ResourceRegistryMS.Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DAPM.ResourceRegistryMS.Api.Models.ResourceType", "ResourceType")
-                        .WithMany()
-                        .HasForeignKey("ResourceTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("DAPM.ResourceRegistryMS.Api.Models.Repository", "Repository")
                         .WithMany()
                         .HasForeignKey("PeerId", "RepositoryId")
@@ -177,8 +200,6 @@ namespace DAPM.ResourceRegistryMS.Api.Migrations
                     b.Navigation("Peer");
 
                     b.Navigation("Repository");
-
-                    b.Navigation("ResourceType");
                 });
 #pragma warning restore 612, 618
         }
