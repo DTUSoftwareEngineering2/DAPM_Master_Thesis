@@ -57,8 +57,7 @@ namespace DAPM.ClientApi.Controllers
             return Ok(new ApiResponse { RequestName = "GetExecutionStatus", TicketId = id });
         }
 
-        [Route("api/[controller]")]
-        [HttpGet("pipeline-status/{pipelineId}")]
+        [HttpGet("{organizationId}/repositories/{repositoryId}/pipelines/{pipelineId}/status")]
         [SwaggerOperation(Description = "Gets the sattus of running pipeline")]
         public async Task<ActionResult<Guid>> GetPipelineStatus(Guid organizationId, Guid repositoryId, Guid pipelineId)
         {

@@ -1,4 +1,5 @@
-﻿using DAPM.ResourceRegistryMS.Api.Models;
+﻿using System.IO.Pipelines;
+using DAPM.ResourceRegistryMS.Api.Models;
 
 namespace DAPM.ResourceRegistryMS.Api.Repositories.Interfaces
 {
@@ -8,6 +9,6 @@ namespace DAPM.ResourceRegistryMS.Api.Repositories.Interfaces
         public Task<Pipeline> GetPipelineById(Guid organizationId, Guid repositoryId, Guid pipelineId);
         public Task<IEnumerable<Pipeline>> GetPipelinesFromRepository(Guid organizationId, Guid repositoryId);
         public Task<IEnumerable<Pipeline>> GetSharedPipelines(Guid organizationId);
-        public Task<IEnumerable<Pipeline>> GetPipelineStatus(Guid pipelineId);
+        public Task<IEnumerable<Pipeline>> GetPipelineStatus(Guid organizationId, Guid repositoryId, Guid pipelineId);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DAPM.ResourceRegistryMS.Api.Models;
 using DAPM.ResourceRegistryMS.Api.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAPM.ResourceRegistryMS.Api.Repositories
 {
@@ -17,7 +18,7 @@ namespace DAPM.ResourceRegistryMS.Api.Repositories
         public async Task<Pipeline> AddPipeline(Pipeline pipeline)
         {
             await _context.Pipelines.AddAsync(pipeline);
-           // _context.SaveChanges();
+            _context.SaveChanges();
             return pipeline;
         }
 
@@ -28,17 +29,26 @@ namespace DAPM.ResourceRegistryMS.Api.Repositories
 
         public async Task<IEnumerable<Pipeline>> GetPipelinesFromRepository(Guid organizationId, Guid repositoryId)
         {
-            return (Pipeline)_context.Pipelines.Where(r => r.PeerId == organizationId && r.RepositoryId == repositoryId);
+            return await _context.Pipelines
+                .Where(r => r.PeerId == organizationId && r.RepositoryId == repositoryId)
+                .ToListAsync();  // Return a list instead of casting
         }
 
         public async Task<IEnumerable<Pipeline>> GetSharedPipelines(Guid organizationId)
         {
-            return (Pipeline)_context.Pipelines.Where(r => r.OrganizationId == organizationId);
+            return await _context.Pipelines
+                .Where(r => r.PeerId == organizationId)
+                .ToListAsync();  // Return a list
         }
-        public async Task<IEnumerable<Pipeline>> GetPipelineStatus(Guid pipelineId)
+
+        public async Task<IEnumerable<Pipeline>> GetPipelineStatus(Guid organizationId, Guid repositoryId, Guid pipelineId)
         {
-            return (Pipeline)_context.Pipelines.Where(r => r.PipelineId == pipelineId);
+            return (IEnumerable<Pipeline>)await _context.Pipelines
+                .Where(r => r.PeerId == organizationId && r.RepositoryId == repositoryId && r.Id == pipelineId)
+                .FirstOrDefaultAsync();
         }
+
+
         
         /*
         public Task<Pipeline> AddPipeline(Pipeline pipeline);

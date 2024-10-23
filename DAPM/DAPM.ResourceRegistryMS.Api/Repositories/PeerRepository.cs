@@ -1,5 +1,7 @@
 ﻿using DAPM.ResourceRegistryMS.Api.Models;
 using DAPM.ResourceRegistryMS.Api.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
+
 //using Microsoft.EntityFrameworkCore;
 
 namespace DAPM.ResourceRegistryMS.Api.Repositories
