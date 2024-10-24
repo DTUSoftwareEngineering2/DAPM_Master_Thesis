@@ -20,7 +20,7 @@ namespace DAPM.ClientApi.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok("Version 0.0.0");
+            return Ok("Version 1.0.0");
         }
     }
 
