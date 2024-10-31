@@ -57,6 +57,7 @@ builder.Services.AddQueueMessageConsumer<ApplyRegistryUpdateConsumer, ApplyRegis
 builder.Services.AddQueueMessageConsumer<GetEntriesFromOrgConsumer, GetEntriesFromOrgMessage>();
 builder.Services.AddQueueMessageConsumer<PostPeerConsumer, PostPeerMessage>();
 builder.Services.AddQueueMessageConsumer<GetUserConsumer, GetUserMessage>();
+builder.Services.AddQueueMessageConsumer<GetAllUserConsumer, GetAllUserMessage>();
 builder.Services.AddQueueMessageConsumer<PostUserConsumer, PostUserMessage>();
 // Add services to the container.
 

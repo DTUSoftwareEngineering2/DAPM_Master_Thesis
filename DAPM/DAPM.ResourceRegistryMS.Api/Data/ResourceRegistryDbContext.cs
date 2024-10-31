@@ -32,7 +32,9 @@ public class ResourceRegistryDbContext : DbContext
             FirstName = "admin",
             LastName = "admin",
             Organization = Guid.NewGuid(),
-            HashPassword = "$2a$12$Jligef.ByeRACdblRiMuDejgNYXlUBZWfCSD3wTZ029g5MF/x8cDa"
+            HashPassword = "$2a$12$Jligef.ByeRACdblRiMuDejgNYXlUBZWfCSD3wTZ029g5MF/x8cDa",
+            UserRole = (int)UserRole.Admin,
+            accepted = 1,
         };
         builder.Entity<User>().HasData(user);
 

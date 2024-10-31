@@ -108,10 +108,10 @@ namespace DAPM.ClientApi.Controllers
         private IConfiguration _config;
 
 
-        private readonly ILogger<AuthController> _logger;
+        private readonly ILogger<UserController> _logger;
         private readonly IAuthService _authService;
 
-        public UserController(ILogger<AuthController> logger, IAuthService authService, IConfiguration config)
+        public UserController(ILogger<UserController> logger, IAuthService authService, IConfiguration config)
         {
             _logger = logger;
             _config = config;
@@ -125,6 +125,36 @@ namespace DAPM.ClientApi.Controllers
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             var tId = _authService.GetUserById(Guid.Parse(userId));
+
+            return Ok(new { ticketId = tId });
+        }
+
+    }
+
+    [Route("[controller]")]
+    [ApiController]
+    public class UsersController : ControllerBase
+    {
+        private IConfiguration _config;
+
+
+        private readonly ILogger<UsersController> _logger;
+        private readonly IUsersService _userService;
+
+        public UsersController(ILogger<UsersController> logger, IUsersService userService, IConfiguration config)
+        {
+            _logger = logger;
+            _config = config;
+            _userService = userService;
+        }
+
+        [HttpGet("all")]
+        [Authorize]
+        public IActionResult getUserInfo()
+        {
+            var managerId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var tId = _userService.GetAllUsers(Guid.Parse(managerId));
 
             return Ok(new { ticketId = tId });
         }
