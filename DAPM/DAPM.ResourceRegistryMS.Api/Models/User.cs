@@ -17,5 +17,16 @@ namespace DAPM.ResourceRegistryMS.Api.Models
         public Guid Organization { get; set; }
         [Required]
         public string HashPassword { get; set; }
+        [Required]
+        public int UserRole { get; set; }
+        [Required]
+        public int accepted { get; set; }
+    }
+
+    enum UserRole
+    {
+        Custom = 0,
+        Admin,
+        User
     }
 }

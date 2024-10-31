@@ -9,6 +9,8 @@ using RabbitMQLibrary.Messages.ClientApi;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults;
 using Microsoft.OpenApi.Models;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromPipelineOrchestrator;
+using DAPM.ClientApi.Controllers;
+using RabbitMQLibrary.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -80,7 +82,7 @@ builder.Services.AddQueueMessageConsumer<CollabHandshakeProcessResultConsumer, C
 builder.Services.AddQueueMessageConsumer<PostPipelineCommandProcessResultConsumer, PostPipelineCommandProcessResult>();
 builder.Services.AddQueueMessageConsumer<GetPipelineExecutionStatusProcessResultConsumer, GetPipelineExecutionStatusRequestResult>();
 builder.Services.AddQueueMessageConsumer<GetUserResultConsumer, GetUserResult>();
-
+builder.Services.AddQueueMessageConsumer<GetAllUserResultConsumer, GetAllUserResult>();
 
 // Add services to the container.
 
@@ -91,7 +93,13 @@ builder.Services.AddScoped<IRepositoryService, RepositoryService>();
 builder.Services.AddScoped<IPipelineService, PipelineService>();
 builder.Services.AddSingleton<ITicketService, TicketService>();
 builder.Services.AddScoped<ISystemService, SystemService>();
+builder.Services.AddScoped<IPipelineResultsService, PipelineResultsService>();
+
+//For the PipelineResultsService
+//builder.Services.AddScoped<IPipelineResultsService, PipelineResultsService>();
+
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUsersService, UsersService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

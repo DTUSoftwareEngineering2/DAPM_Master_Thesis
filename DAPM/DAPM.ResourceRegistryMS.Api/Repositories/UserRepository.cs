@@ -9,7 +9,6 @@ namespace DAPM.ResourceRegistryMS.Api.Repositories
 
         private readonly ILogger<IUserRepository> _logger;
         private readonly ResourceRegistryDbContext _context;
-
         public UserRepository(ILogger<IUserRepository> logger, ResourceRegistryDbContext context)
         {
             _logger = logger;
@@ -43,5 +42,11 @@ namespace DAPM.ResourceRegistryMS.Api.Repositories
 
             return await _context.Users.FindAsync(id);
         }
+
+        public async Task<List<User>> GetAllUsers()
+        {
+            return await _context.Users.ToListAsync();
+        }
+
     }
 }
