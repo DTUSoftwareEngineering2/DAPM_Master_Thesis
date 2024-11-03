@@ -50,7 +50,6 @@ namespace DAPM.ResourceRegistryMS.Api.Consumers
                         LastName = u[i].LastName,
                         Mail = u[i].Mail,
                         Organization = u[i].Organization,
-                        HashPassword = u[i].HashPassword,
                         UserRole = u[i].UserRole,
                         accepted = u[i].accepted,
                     });

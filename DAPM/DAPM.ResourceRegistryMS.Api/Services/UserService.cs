@@ -39,6 +39,19 @@ namespace DAPM.ResourceRegistryMS.Api.Services
             return users;
         }
 
+        public async Task<User?> UpdateAcceptStatus(Guid managerId, Guid userId, int newStatus)
+        {
+            User manager = await _userRepository.GetUserById(managerId);
+            if (manager.UserRole != (int)UserRole.Admin)
+            {
+                return null;
+            }
+
+            User? user = await _userRepository.UpdateAcceptStatus(userId, newStatus);
+
+            return user;
+        }
+
         public async Task<User> PostUser(UserDTO user)
         {
             var u = new User()
