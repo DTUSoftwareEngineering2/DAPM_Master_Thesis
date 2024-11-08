@@ -48,6 +48,20 @@ namespace DAPM.ResourceRegistryMS.Api.Repositories
             return await _context.Users.ToListAsync();
         }
 
+
+        public async Task<User?> DeleteUser(Guid id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return null;
+            }
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return user;
+        }
+
         public async Task<User?> UpdateAcceptStatus(Guid id, int newStatus)
         {
 

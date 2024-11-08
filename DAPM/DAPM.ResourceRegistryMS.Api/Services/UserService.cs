@@ -52,6 +52,19 @@ namespace DAPM.ResourceRegistryMS.Api.Services
             return user;
         }
 
+        public async Task<User?> DeleteUser(Guid managerId, Guid userId)
+        {
+            User manager = await _userRepository.GetUserById(managerId);
+            if (manager.UserRole != (int)UserRole.Admin)
+            {
+                return null;
+            }
+
+            User? user = await _userRepository.DeleteUser(userId);
+
+            return user;
+        }
+
         public async Task<User> PostUser(UserDTO user)
         {
             var u = new User()

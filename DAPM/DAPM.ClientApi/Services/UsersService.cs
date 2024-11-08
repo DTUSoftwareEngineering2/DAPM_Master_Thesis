@@ -11,6 +11,7 @@ namespace DAPM.ClientApi.Services
         private readonly ILogger<UsersService> _logger;
         private readonly IQueueProducer<GetAllUserMessage> _getAllUserRequest;
         private readonly IQueueProducer<UpdateAcceptStatusMessage> _updateStatus;
+        private readonly IQueueProducer<DeleteUserMessage> _deleteUserMessage;
 
         private readonly IQueueProducer<PostUserMessage> _postUserRequest;
         private readonly ITicketService _ticketService;
@@ -19,6 +20,7 @@ namespace DAPM.ClientApi.Services
             IQueueProducer<GetAllUserMessage> getAllUserRequest,
             IQueueProducer<PostUserMessage> postUserRequest,
             IQueueProducer<UpdateAcceptStatusMessage> updateStatus,
+            IQueueProducer<DeleteUserMessage> deleteUserMessage,
             ITicketService ticketService)
         {
             _logger = logger;
@@ -26,6 +28,7 @@ namespace DAPM.ClientApi.Services
             _getAllUserRequest = getAllUserRequest;
             _postUserRequest = postUserRequest;
             _updateStatus = updateStatus;
+            _deleteUserMessage = deleteUserMessage;
         }
 
         public Guid GetAllUsers(Guid managerId)
@@ -69,10 +72,24 @@ namespace DAPM.ClientApi.Services
             return ticketId;
         }
 
-        public Guid RemoveUser(Guid ManagerId, Guid userId)
+        public Guid RemoveUser(Guid managerId, Guid userId)
         {
-            return Guid.Empty;
+            var ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
 
+            var message = new DeleteUserMessage
+            {
+                TimeToLive = TimeSpan.FromMinutes(1),
+                TicketId = ticketId,
+                managerId = managerId,
+                MessageId = Guid.NewGuid(),
+                userId = userId,
+            };
+
+            _deleteUserMessage.PublishMessage(message);
+
+            _logger.LogDebug("DeleteUserMessage Enqueued");
+
+            return ticketId;
         }
 
 

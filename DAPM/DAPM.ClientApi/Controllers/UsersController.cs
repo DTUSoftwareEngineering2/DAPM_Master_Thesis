@@ -58,5 +58,16 @@ namespace DAPM.ClientApi.Controllers
             return Ok(new { ticketId = tId });
         }
 
+        [HttpGet("delete/{userId}")]
+        [Authorize]
+        public IActionResult validateUser(Guid userId)
+        {
+            var managerId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var tId = _userService.RemoveUser(Guid.Parse(managerId), userId);
+
+            return Ok(new { ticketId = tId });
+        }
+
     }
 }
