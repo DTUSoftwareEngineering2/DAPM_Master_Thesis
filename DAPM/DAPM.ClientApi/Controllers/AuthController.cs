@@ -54,9 +54,10 @@ namespace DAPM.ClientApi.Controllers
             }
 
             var hashPassword = resolutionJSON["result"]["user"]["hashPassword"].ToString();
-            if (!BCrypt.Net.BCrypt.Verify(loginRequest.Password, hashPassword))
+            var accepted = (int)resolutionJSON["result"]["user"]["accepted"];
+            if (!BCrypt.Net.BCrypt.Verify(loginRequest.Password, hashPassword) || accepted != 1)
             {
-                return Unauthorized("The password and username does not match");
+                return Unauthorized($"The password and username does not match or the user was not accepted by an admin");
             }
 
             var claims = new[]

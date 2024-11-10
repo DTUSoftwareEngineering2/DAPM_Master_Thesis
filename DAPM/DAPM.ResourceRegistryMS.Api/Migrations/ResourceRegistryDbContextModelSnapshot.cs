@@ -158,12 +158,12 @@ namespace DAPM.ResourceRegistryMS.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("5dbcf6fe-6d6f-4cb0-b7b8-b660eba84487"),
+                            Id = new Guid("b336b79e-4b33-4ab3-a1c3-d0687b6cdb0f"),
                             FirstName = "admin",
                             HashPassword = "$2a$12$Jligef.ByeRACdblRiMuDejgNYXlUBZWfCSD3wTZ029g5MF/x8cDa",
                             LastName = "admin",
                             Mail = "admin@email.ch",
-                            Organization = new Guid("3f2b671c-2b54-4160-ae45-11c03fb0771b"),
+                            Organization = new Guid("d5605255-3474-4ba4-a4bd-8229d835b27e"),
                             UserRole = 1,
                             accepted = 1
                         });
