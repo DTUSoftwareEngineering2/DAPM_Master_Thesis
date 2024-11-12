@@ -81,7 +81,11 @@ namespace DAPM.ClientApi.Controllers
 
             var token = new JwtSecurityTokenHandler().WriteToken(Sectoken);
 
-            return Ok(new { AccessToken = token, userId = resolutionJSON["result"]["user"]["id"].ToString() });
+            resolutionJSON["result"]["user"]["hashPassword"] = "";
+            resolutionJSON["result"]["accessToken"] = token;
+            return Ok(resolutionJSON["result"].ToString());
+
+            return Ok(new { AccessToken = token, user = resolutionJSON["result"]["user"].ToString() });
         }
 
         [HttpPost("signup")]
