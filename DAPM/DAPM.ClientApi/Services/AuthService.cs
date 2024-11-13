@@ -24,7 +24,7 @@ namespace DAPM.ClientApi.Services
             _postUserRequest = postUserRequest;
         }
 
-        public Guid GetUserById(Guid id)
+        public Guid GetUserById(Guid id, Boolean needHash = true)
         {
             var ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
 
@@ -33,6 +33,7 @@ namespace DAPM.ClientApi.Services
                 TimeToLive = TimeSpan.FromMinutes(1),
                 TicketId = ticketId,
                 userId = id,
+                needHash = needHash,
                 MessageId = Guid.NewGuid()
             };
 
@@ -44,7 +45,7 @@ namespace DAPM.ClientApi.Services
             return ticketId;
         }
 
-        public Guid GetUserByMail(String mail)
+        public Guid GetUserByMail(String mail, bool needHash = true)
         {
             var ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
 
@@ -53,6 +54,7 @@ namespace DAPM.ClientApi.Services
                 TimeToLive = TimeSpan.FromMinutes(1),
                 TicketId = ticketId,
                 mail = mail,
+                needHash = needHash,
                 MessageId = Guid.NewGuid()
             };
 

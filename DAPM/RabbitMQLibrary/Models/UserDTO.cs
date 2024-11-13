@@ -15,5 +15,7 @@ namespace RabbitMQLibrary.Models
         public string Mail { get; set; }
         public Guid Organization { get; set; }
         public string HashPassword { get; set; }
+        public int UserRole { get; set; }
+        public int accepted { get; set; }
     }
 }

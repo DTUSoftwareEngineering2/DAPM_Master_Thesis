@@ -12,12 +12,12 @@ using RabbitMQLibrary.Models;
 
 namespace DAPM.ResourceRegistryMS.Api.Consumers
 {
-    public class GetUserConsumer : IQueueConsumer<GetUserMessage>
+    public class UpdateAcceptStatusConsumer : IQueueConsumer<UpdateAcceptStatusMessage>
     {
-        private ILogger<GetUserConsumer> _logger;
+        private ILogger<UpdateAcceptStatusConsumer> _logger;
         private IQueueProducer<GetUserResult> _getUserResultQueueProducer;
         private IUserService _userService;
-        public GetUserConsumer(ILogger<GetUserConsumer> logger,
+        public UpdateAcceptStatusConsumer(ILogger<UpdateAcceptStatusConsumer> logger,
             IQueueProducer<GetUserResult> getUserResultQueueProducer,
             IUserService userService)
         {
@@ -26,41 +26,28 @@ namespace DAPM.ResourceRegistryMS.Api.Consumers
             _userService = userService;
         }
 
-        public async Task ConsumeAsync(GetUserMessage message)
+        public async Task ConsumeAsync(UpdateAcceptStatusMessage message)
         {
-            _logger.LogInformation("GetUserMessage received");
+            _logger.LogInformation("UpdateAcceptStatusMessage received");
 
             // var t = await _userService.GetUserByMail("test@gmail.com");
-            User? u;
+            var u = await _userService.UpdateAcceptStatus(message.managerId, message.userId, message.accept);
 
-            if (message.userId.HasValue)
-            {
-                u = await _userService.GetUserById(message.userId.Value);
-            }
-            else if (!string.IsNullOrEmpty(message.mail))
-            {
-                u = await _userService.GetUserByMail(message.mail);
-            }
-            else
-            {
-                u = null;
-
-            }
-
-            UserDTO? userDTO = null;
+            UserDTO? user = null;
             if (u != null)
             {
-                userDTO = new UserDTO
+
+                user = new UserDTO
                 {
                     Id = u.Id,
                     FirstName = u.FirstName,
                     LastName = u.LastName,
                     Mail = u.Mail,
                     Organization = u.Organization,
-                    HashPassword = message.needHash ? u.HashPassword : "",
-                    accepted = u.accepted,
                     UserRole = u.UserRole,
+                    accepted = u.accepted,
                 };
+
             }
 
             var resultMessage = new GetUserResult
@@ -68,11 +55,11 @@ namespace DAPM.ResourceRegistryMS.Api.Consumers
                 MessageId = Guid.NewGuid(),
                 TicketId = message.TicketId,
                 TimeToLive = TimeSpan.FromMinutes(1),
-                user = userDTO
+                user = user
             };
 
-            _getUserResultQueueProducer.PublishMessage(resultMessage);
 
+            _getUserResultQueueProducer.PublishMessage(resultMessage);
             return;
         }
     }

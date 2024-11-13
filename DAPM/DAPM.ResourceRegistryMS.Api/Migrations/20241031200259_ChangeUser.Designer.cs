@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DAPM.ResourceRegistryMS.Api.Migrations
 {
     [DbContext(typeof(ResourceRegistryDbContext))]
-    [Migration("20241006181516_SeedDefaultUser")]
-    partial class SeedDefaultUser
+    [Migration("20241031200259_ChangeUser")]
+    partial class ChangeUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -148,6 +148,12 @@ namespace DAPM.ResourceRegistryMS.Api.Migrations
                     b.Property<Guid>("Organization")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("UserRole")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("accepted")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
@@ -155,12 +161,14 @@ namespace DAPM.ResourceRegistryMS.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4d67e82d-6a7e-4a0d-bd0f-58fc665b8e0a"),
+                            Id = new Guid("42d22ce6-5d8f-4f0a-8d37-8a65081a479a"),
                             FirstName = "admin",
                             HashPassword = "$2a$12$Jligef.ByeRACdblRiMuDejgNYXlUBZWfCSD3wTZ029g5MF/x8cDa",
                             LastName = "admin",
                             Mail = "admin@email.ch",
-                            Organization = new Guid("4b5b5523-2215-4c05-8549-274b3bb050d9")
+                            Organization = new Guid("1bb895a2-bee9-4c50-949a-e395c05bd9d0"),
+                            UserRole = 0,
+                            accepted = 0
                         });
                 });
 

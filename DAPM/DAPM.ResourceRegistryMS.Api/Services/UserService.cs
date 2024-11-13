@@ -26,6 +26,45 @@ namespace DAPM.ResourceRegistryMS.Api.Services
             return await _userRepository.GetUserByMail(mail);
         }
 
+        public async Task<List<User>?> GetAllUsers(Guid managerId)
+        {
+            User manager = await _userRepository.GetUserById(managerId);
+            if (manager.UserRole != (int)UserRole.Admin)
+            {
+                return null;
+            }
+
+            List<User> users = await _userRepository.GetAllUsers();
+            users.RemoveAll(user => user.Id == managerId);
+            return users;
+        }
+
+        public async Task<User?> UpdateAcceptStatus(Guid managerId, Guid userId, int newStatus)
+        {
+            User manager = await _userRepository.GetUserById(managerId);
+            if (manager.UserRole != (int)UserRole.Admin)
+            {
+                return null;
+            }
+
+            User? user = await _userRepository.UpdateAcceptStatus(userId, newStatus);
+
+            return user;
+        }
+
+        public async Task<User?> DeleteUser(Guid managerId, Guid userId)
+        {
+            User manager = await _userRepository.GetUserById(managerId);
+            if (manager.UserRole != (int)UserRole.Admin)
+            {
+                return null;
+            }
+
+            User? user = await _userRepository.DeleteUser(userId);
+
+            return user;
+        }
+
         public async Task<User> PostUser(UserDTO user)
         {
             var u = new User()
@@ -35,7 +74,9 @@ namespace DAPM.ResourceRegistryMS.Api.Services
                 LastName = user.LastName,
                 Mail = user.Mail,
                 HashPassword = user.HashPassword,
-                Organization = user.Organization
+                Organization = user.Organization,
+                UserRole = (int)UserRole.User,
+                accepted = 0,
             };
             return await _userRepository.AddUser(u);
         }

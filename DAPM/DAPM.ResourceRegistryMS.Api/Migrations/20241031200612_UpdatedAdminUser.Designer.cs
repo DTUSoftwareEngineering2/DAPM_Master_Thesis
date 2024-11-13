@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DAPM.ResourceRegistryMS.Api.Migrations
 {
     [DbContext(typeof(ResourceRegistryDbContext))]
-    partial class ResourceRegistryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241031200612_UpdatedAdminUser")]
+    partial class UpdatedAdminUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -158,12 +161,12 @@ namespace DAPM.ResourceRegistryMS.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b336b79e-4b33-4ab3-a1c3-d0687b6cdb0f"),
+                            Id = new Guid("5dbcf6fe-6d6f-4cb0-b7b8-b660eba84487"),
                             FirstName = "admin",
                             HashPassword = "$2a$12$Jligef.ByeRACdblRiMuDejgNYXlUBZWfCSD3wTZ029g5MF/x8cDa",
                             LastName = "admin",
                             Mail = "admin@email.ch",
-                            Organization = new Guid("d5605255-3474-4ba4-a4bd-8229d835b27e"),
+                            Organization = new Guid("3f2b671c-2b54-4160-ae45-11c03fb0771b"),
                             UserRole = 1,
                             accepted = 1
                         });

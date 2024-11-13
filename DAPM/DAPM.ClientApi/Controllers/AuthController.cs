@@ -9,7 +9,7 @@ using DAPM.ClientApi.Services.Interfaces;
 using DAPM.ClientApi.Models.DTOs;
 using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Cors;
-
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace DAPM.ClientApi.Controllers
 {
@@ -34,7 +34,8 @@ namespace DAPM.ClientApi.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Post([FromBody] LoginForm loginRequest)
+        [SwaggerOperation(Description = "Login a user")]
+        public IActionResult Login([FromBody] LoginForm loginRequest)
         {
             //your logic for login process
             //If login usrename and password are correct then proceed to generate token
@@ -53,9 +54,10 @@ namespace DAPM.ClientApi.Controllers
             }
 
             var hashPassword = resolutionJSON["result"]["user"]["hashPassword"].ToString();
-            if (!BCrypt.Net.BCrypt.Verify(loginRequest.Password, hashPassword))
+            var accepted = (int)resolutionJSON["result"]["user"]["accepted"];
+            if (!BCrypt.Net.BCrypt.Verify(loginRequest.Password, hashPassword) || accepted != 1)
             {
-                return Unauthorized("The password and username does not match");
+                return Unauthorized($"The password and username does not match or the user was not accepted by an admin");
             }
 
             var claims = new[]
@@ -79,11 +81,16 @@ namespace DAPM.ClientApi.Controllers
 
             var token = new JwtSecurityTokenHandler().WriteToken(Sectoken);
 
-            return Ok(new { AccessToken = token, userId = resolutionJSON["result"]["user"]["id"].ToString() });
+            resolutionJSON["result"]["user"]["hashPassword"] = "";
+            resolutionJSON["result"]["accessToken"] = token;
+            return Ok(resolutionJSON["result"].ToString());
+
+            return Ok(new { AccessToken = token, user = resolutionJSON["result"]["user"].ToString() });
         }
 
         [HttpPost("signup")]
         [EnableCors("AllowAll")]
+        [SwaggerOperation(Description = "Signup a new user")]
         public IActionResult Signup([FromBody] SignupForm signupRequest)
         {
             var userId = Guid.NewGuid();
@@ -108,10 +115,10 @@ namespace DAPM.ClientApi.Controllers
         private IConfiguration _config;
 
 
-        private readonly ILogger<AuthController> _logger;
+        private readonly ILogger<UserController> _logger;
         private readonly IAuthService _authService;
 
-        public UserController(ILogger<AuthController> logger, IAuthService authService, IConfiguration config)
+        public UserController(ILogger<UserController> logger, IAuthService authService, IConfiguration config)
         {
             _logger = logger;
             _config = config;
@@ -120,14 +127,16 @@ namespace DAPM.ClientApi.Controllers
 
         [HttpGet("info")]
         [Authorize]
+        [SwaggerOperation(Description = "Get the information of the currently logged in user")]
         public IActionResult getUserInfo()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var tId = _authService.GetUserById(Guid.Parse(userId));
+            var tId = _authService.GetUserById(Guid.Parse(userId), false);
 
             return Ok(new { ticketId = tId });
         }
 
     }
+
 }
