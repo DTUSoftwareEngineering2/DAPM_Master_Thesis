@@ -5,7 +5,7 @@ namespace DAPM.Orchestrator.Consumers.StartProcessConsumers
 {
     public class PostPipelineRequestConsumer : IQueueConsumer<PostPipelineRequest>
     {
-        
+
         private IOrchestratorEngine _engine;
 
         public PostPipelineRequestConsumer(IOrchestratorEngine engine)

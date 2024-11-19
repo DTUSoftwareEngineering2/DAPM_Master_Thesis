@@ -10,7 +10,7 @@ namespace DAPM.RepositoryMS.Api.Repositories
         private ILogger<PipelineRepository> _logger;
         private readonly RepositoryDbContext _repositoryDbContext;
 
-        public PipelineRepository(ILogger<PipelineRepository> logger,  RepositoryDbContext repositoryDbContext)
+        public PipelineRepository(ILogger<PipelineRepository> logger, RepositoryDbContext repositoryDbContext)
         {
             _logger = logger;
             _repositoryDbContext = repositoryDbContext;
@@ -27,5 +27,11 @@ namespace DAPM.RepositoryMS.Api.Repositories
         {
             return await _repositoryDbContext.Pipelines.FirstOrDefaultAsync(p => p.Id == pipelineId && p.RepositoryId == repositoryId);
         }
+
+        public async Task<List<Pipeline>?> GetAvailablePipelines(Guid repositoryId)
+        {
+            return await _repositoryDbContext.Pipelines.Where(p => p.RepositoryId == repositoryId && p.visibility == 1).ToListAsync();
+        }
+
     }
 }

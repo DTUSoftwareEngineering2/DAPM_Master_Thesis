@@ -40,7 +40,9 @@ namespace DAPM.RepositoryMS.Api.Services
             {
                 Name = name,
                 RepositoryId = repositoryId,
-                PipelineJson = pipelineJsonString
+                PipelineJson = pipelineJsonString,
+                visibility = pipeline.visibility,
+                userId = pipeline.userId,
             };
 
             var createdPipeline = await _pipelineRepository.AddPipeline(pipelineObject);
@@ -49,16 +51,22 @@ namespace DAPM.RepositoryMS.Api.Services
 
         }
 
+        public async Task<List<Models.PostgreSQL.Pipeline>?> GetAllAvailablePipelines(Guid repositoryId)
+        {
+            return await _pipelineRepository.GetAvailablePipelines(repositoryId);
+        }
+
+
         public async Task<Models.PostgreSQL.Resource> CreateNewResource(Guid repositoryId, string name, string resourceType, FileDTO fileDto)
         {
             _logger.LogInformation($"THE REPO ID IS {repositoryId}");
             var repository = await _repositoryRepository.GetRepositoryById(repositoryId);
 
-            if(repository != null)
+            if (repository != null)
             {
                 string objectId = await _fileRepository.AddFile(new MongoFile { Name = fileDto.Name, File = fileDto.Content });
 
-                if(objectId != null)
+                if (objectId != null)
                 {
                     var file = new Models.PostgreSQL.File
                     {

@@ -28,7 +28,7 @@ namespace DAPM.ClientApi.Controllers
         public async Task<ActionResult<Guid>> GetRepositoryById(Guid organizationId, Guid repositoryId)
         {
             Guid id = _repositoryService.GetRepositoryById(organizationId, repositoryId);
-            return Ok(new ApiResponse { RequestName = "GetRepositoryById", TicketId = id});
+            return Ok(new ApiResponse { RequestName = "GetRepositoryById", TicketId = id });
         }
 
         [HttpGet("{organizationId}/repositories/{repositoryId}/resources")]
@@ -37,7 +37,7 @@ namespace DAPM.ClientApi.Controllers
         public async Task<ActionResult<Guid>> GetResourcesOfRepository(Guid organizationId, Guid repositoryId)
         {
             Guid id = _repositoryService.GetResourcesOfRepository(organizationId, repositoryId);
-            return Ok(new ApiResponse { RequestName = "GetResourcesOfRepository", TicketId = id});
+            return Ok(new ApiResponse { RequestName = "GetResourcesOfRepository", TicketId = id });
         }
 
         [HttpGet("{organizationId}/repositories/{repositoryId}/pipelines")]
@@ -49,9 +49,18 @@ namespace DAPM.ClientApi.Controllers
             return Ok(new ApiResponse { RequestName = "GetPipelinesOfRepository", TicketId = id });
         }
 
+        [HttpGet("{organizationId}/repositories/{repositoryId}/all_pipelines")]
+        [SwaggerOperation(Description = "Gets all the pipelines of a repository that are available. " +
+            "You need to have a collaboration agreement to retrieve this information.")]
+        public async Task<ActionResult<Guid>> GetAllPipelinesOfRepository(Guid organizationId, Guid repositoryId)
+        {
+            Guid id = _repositoryService.GetAllPipelinesOfRepository(organizationId, repositoryId);
+            return Ok(new ApiResponse { RequestName = "GetPipelinesOfRepository", TicketId = id });
+        }
+
         [HttpPost("{organizationId}/repositories/{repositoryId}/resources")]
         [SwaggerOperation(Description = "Posts a new resource into a repository by id.")]
-        public async Task<ActionResult<Guid>> PostResourceToRepository(Guid organizationId, Guid repositoryId, [FromForm]ResourceForm resourceForm)
+        public async Task<ActionResult<Guid>> PostResourceToRepository(Guid organizationId, Guid repositoryId, [FromForm] ResourceForm resourceForm)
         {
             if (resourceForm.Name == null || resourceForm.ResourceFile == null)
                 return BadRequest();
@@ -68,7 +77,7 @@ namespace DAPM.ClientApi.Controllers
             if (resourceForm.Name == null || resourceForm.SourceCodeFile == null)
                 return BadRequest();
 
-            Guid id = _repositoryService.PostOperatorToRepository(organizationId, repositoryId, resourceForm.Name, 
+            Guid id = _repositoryService.PostOperatorToRepository(organizationId, repositoryId, resourceForm.Name,
                 resourceForm.SourceCodeFile, resourceForm.DockerfileFile, resourceForm.ResourceType);
             return Ok(new ApiResponse { RequestName = "PostOperatorToRepository", TicketId = id });
         }
@@ -76,7 +85,7 @@ namespace DAPM.ClientApi.Controllers
         [HttpPost("{organizationId}/repositories/{repositoryId}/pipelines")]
         [SwaggerOperation(Description = "Posts a new pipeline into a repository by id. In this endpoint you have to provide the JSON model of the pipeline based on the model" +
             " we agreed on.")]
-        public async Task<ActionResult<Guid>> PostPipelineToRepository(Guid organizationId, Guid repositoryId, [FromBody]PipelineApiDto pipelineApiDto)
+        public async Task<ActionResult<Guid>> PostPipelineToRepository(Guid organizationId, Guid repositoryId, [FromBody] PipelineApiDto pipelineApiDto)
         {
             Guid id = _repositoryService.PostPipelineToRepository(organizationId, repositoryId, pipelineApiDto);
             return Ok(new ApiResponse { RequestName = "PostPipelineToRepository", TicketId = id });

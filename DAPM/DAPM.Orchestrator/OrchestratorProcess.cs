@@ -91,6 +91,11 @@ namespace DAPM.Orchestrator
             return;
         }
 
+        public virtual void OnGetAvailablePipelinesFromRepoResult(GetAvailablesPipelinesFromRepoResultMessage message)
+        {
+            return;
+        }
+
         public virtual void OnGetPipelinesFromRegistryResult(GetPipelinesResultMessage message)
         {
             return;

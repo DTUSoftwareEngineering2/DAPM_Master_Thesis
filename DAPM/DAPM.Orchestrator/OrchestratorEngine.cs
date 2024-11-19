@@ -75,6 +75,14 @@ namespace DAPM.Orchestrator
             getPipelinesProcess.StartProcess();
         }
 
+        public void StartGetAvailablePipelinesProcess(Guid ticketId, Guid organizationId, Guid repositoryId, Guid? userId)
+        {
+            var processId = Guid.NewGuid();
+            var getPipelinesProcess = new GetAvailablePipelinesProcess(this, _serviceProvider, ticketId, processId, organizationId, repositoryId, userId);
+            _processes[processId] = getPipelinesProcess;
+            getPipelinesProcess.StartProcess();
+        }
+
         public void StartGetRepositoriesProcess(Guid apiTicketId, Guid organizationId, Guid? repositoryId)
         {
             var processId = Guid.NewGuid();
@@ -109,6 +117,8 @@ namespace DAPM.Orchestrator
 
         public void StartPostPipelineProcess(Guid apiTicketId, Guid organizationId, Guid repositoryId, Pipeline pipeline, string name)
         {
+            pipeline.userId = Guid.Empty;
+            pipeline.visibility = 1;
             var processId = Guid.NewGuid();
             var postPipelineProcess = new PostPipelineProcess(this, _serviceProvider, apiTicketId, processId, organizationId, repositoryId, pipeline, name);
             _processes[processId] = postPipelineProcess;
@@ -153,7 +163,7 @@ namespace DAPM.Orchestrator
             registerPeerProcess.StartProcess();
         }
 
-        
+
 
         public void StartExecuteOperatorActionProcess(Guid? senderProcessId, IdentityDTO orchestratorIdentity, ExecuteOperatorActionDTO data)
         {
@@ -163,7 +173,7 @@ namespace DAPM.Orchestrator
             executeOperatorActionProcess.StartProcess();
         }
 
-        
+
 
         public void StartTransferDataActionProcess(Guid? senderProcessId, IdentityDTO orchestratorIdentity, TransferDataActionDTO data)
         {
@@ -183,7 +193,7 @@ namespace DAPM.Orchestrator
 
         public void StartPostResourceFromPeerProcess(Guid senderProcessId, ResourceDTO resource, int storageMode, Guid executionId, IdentityDTO senderIdentity)
         {
-            var processId = Guid.NewGuid(); 
+            var processId = Guid.NewGuid();
             var postResourceProcess = new PostResourceFromPeerProcess(this, _serviceProvider, processId, senderProcessId, resource, storageMode, executionId, senderIdentity);
             _processes[processId] = postResourceProcess;
             postResourceProcess.StartProcess();

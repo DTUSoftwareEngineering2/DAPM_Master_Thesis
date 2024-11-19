@@ -18,6 +18,12 @@ namespace DAPM.RepositoryMS.Api.Models.PostgreSQL
         [Required]
         public string PipelineJson { get; set; }
 
+        [Required]
+        public int visibility { get; set; }
+
+        [Required]
+        public Guid userId { get; set; }
+
         // Navigation Attributes (Foreign Keys)
         [ForeignKey("RepositoryId")]
         public virtual Repository Repository { get; set; }

@@ -6,5 +6,6 @@ namespace DAPM.RepositoryMS.Api.Repositories.Interfaces
     {
         Task<Pipeline> AddPipeline(Pipeline pipeline);
         Task<Pipeline> GetPipelineById(Guid repositoryId, Guid pipelineId);
+        Task<List<Pipeline>?> GetAvailablePipelines(Guid repositoryId);
     }
 }

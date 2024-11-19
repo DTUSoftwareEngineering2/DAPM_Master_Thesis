@@ -57,6 +57,8 @@ builder.Services.AddQueueMessageConsumer<PostOperatorRequestConsumer, PostOperat
 builder.Services.AddQueueMessageConsumer<PostRepositoryRequestConsumer, PostRepositoryRequest>();
 builder.Services.AddQueueMessageConsumer<PostPipelineRequestConsumer, PostPipelineRequest>();
 builder.Services.AddQueueMessageConsumer<GetResourceFilesRequestConsumer, GetResourceFilesRequest>();
+builder.Services.AddQueueMessageConsumer<GetAvailablePipelinesFromRepoResultConsumer, GetAvailablesPipelinesFromRepoResultMessage>();
+builder.Services.AddQueueMessageConsumer<GetAvailablePipelinesRequestConsumer, GetAvailablePipelinesRequest>();
 
 //Handshake
 builder.Services.AddQueueMessageConsumer<CollabHandshakeRequestConsumer, CollabHandshakeRequest>();

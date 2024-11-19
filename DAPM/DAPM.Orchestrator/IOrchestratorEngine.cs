@@ -23,6 +23,7 @@ namespace DAPM.Orchestrator
         // Pipeline Processes
         public void StartPostPipelineProcess(Guid ticketId, Guid organizationId, Guid repositoryId, Pipeline pipeline, string name);
         public void StartGetPipelinesProcess(Guid ticketId, Guid organizationId, Guid repositoryId, Guid? pipelineId);
+        public void StartGetAvailablePipelinesProcess(Guid ticketId, Guid organizationId, Guid repositoryId, Guid? userId);
         public void StartCreatePipelineExecutionProcess(Guid ticketId, Guid organizationId, Guid repositoryId, Guid pipelineId);
         public void StartTransferDataActionProcess(Guid? senderProcessId, IdentityDTO orchestratorIdentity, TransferDataActionDTO data);
         public void StartSendTransferDataActionProcess(TransferDataActionDTO data);
