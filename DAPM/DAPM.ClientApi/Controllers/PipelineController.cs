@@ -16,7 +16,7 @@ namespace DAPM.ClientApi.Controllers
     {
         private readonly ILogger<PipelineController> _logger;
         private readonly IPipelineService _pipelineService;
-
+        
 
         public PipelineController(ILogger<PipelineController> logger, IPipelineService pipelineService, IQueueProducer<CreateInstanceExecutionMessage> createInstanceProducer)
         {
@@ -36,7 +36,7 @@ namespace DAPM.ClientApi.Controllers
         [HttpPost("{organizationId}/repositories/{repositoryId}/pipelines/{pipelineId}/executions")]
         [SwaggerOperation(Description = "Creates a new execution instance for a pipeline previously saved in the system. The execution is created but not started")]
         public async Task<ActionResult<Guid>> CreatePipelineExecutionInstance(Guid organizationId, Guid repositoryId, Guid pipelineId)
-        {
+        { 
             Guid id = _pipelineService.CreatePipelineExecution(organizationId, repositoryId, pipelineId);
             return Ok(new ApiResponse { RequestName = "CreatePipelineExecutionInstance", TicketId = id });
         }
@@ -55,6 +55,18 @@ namespace DAPM.ClientApi.Controllers
         {
             Guid id = _pipelineService.GetExecutionStatus(organizationId, repositoryId, pipelineId, executionId);
             return Ok(new ApiResponse { RequestName = "GetExecutionStatus", TicketId = id });
+        }
+
+        [HttpGet("{organizationId}/repositories/{repositoryId}/pipelines/{pipelineId}/status")]
+        [SwaggerOperation(Description = "Gets the status of running pipeline")]
+        public async Task<ActionResult<Guid>> GetPipelineStatus(Guid organizationId, Guid repositoryId, Guid pipelineId)
+        {
+            Guid status = _pipelineService.GetPipelineStatus(organizationId, repositoryId, pipelineId);
+            if (status == null) 
+            {
+                return NotFound(new ApiResponse { RequestName = "Pipeline status not found ", TicketId = status });
+            }
+            return Ok(new ApiResponse { RequestName = "GetExecutionStatus", TicketId = status });
         }
     }
 }

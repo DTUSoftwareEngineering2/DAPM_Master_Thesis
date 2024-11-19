@@ -11,10 +11,12 @@ namespace DAPM.ResourceRegistryMS.Api.Models
         public Guid Id { get; set; }
         [Required]
         public string Name { get; set; }
+        public List<Guid> ExecutionIds { get; set; }
         public Guid PeerId { get; set; }
         public Guid RepositoryId { get; set; }
-
-
+        public Guid CompanyAId {get; set; }
+        public Guid CompanyBId {get; set;}
+        public Guid SharedProcessDetails { get; set; }
         // Navigation Attributes (Foreign Keys)
 
         [ForeignKey("PeerId")]
@@ -22,5 +24,4 @@ namespace DAPM.ResourceRegistryMS.Api.Models
         [ForeignKey("PeerId, RepositoryId")]
         public virtual Repository Repository { get; set; }
     }
-
 }

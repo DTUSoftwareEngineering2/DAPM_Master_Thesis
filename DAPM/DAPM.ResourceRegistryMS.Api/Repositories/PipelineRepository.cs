@@ -1,5 +1,6 @@
 ﻿using DAPM.ResourceRegistryMS.Api.Models;
 using DAPM.ResourceRegistryMS.Api.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAPM.ResourceRegistryMS.Api.Repositories
 {
@@ -28,7 +29,35 @@ namespace DAPM.ResourceRegistryMS.Api.Repositories
 
         public async Task<IEnumerable<Pipeline>> GetPipelinesFromRepository(Guid organizationId, Guid repositoryId)
         {
-            return _context.Pipelines.Where(r => r.PeerId == organizationId && r.RepositoryId == repositoryId);
+            return await _context.Pipelines
+                .Where(r => r.PeerId == organizationId && r.RepositoryId == repositoryId)
+                .ToListAsync();  // Return a list instead of casting
         }
+
+        public async Task<IEnumerable<Pipeline>> GetSharedPipelines(Guid organizationId)
+        {
+            return await _context.Pipelines
+                .Where(r => r.PeerId == organizationId)
+                .ToListAsync();  // Return a list
+        }
+
+        public async Task<IEnumerable<Pipeline>> GetPipelineStatus(Guid organizationId, Guid repositoryId, Guid pipelineId)
+        {
+            return (IEnumerable<Pipeline>)await _context.Pipelines
+                .Where(r => r.PeerId == organizationId && r.RepositoryId == repositoryId && r.Id == pipelineId)
+                .FirstOrDefaultAsync();
+        }
+
+
+        
+        /*
+        public Task<Pipeline> AddPipeline(Pipeline pipeline);
+        public Task<IEnumerable<Pipeline>> GetPipelinesFromRepository(Guid organizationId, Guid repositoryId);
+        public Task<Pipeline> GetPipelineById(Guid organizationId, Guid repositoryId, Guid pipelineId);
+        Task<IEnumerable<Pipeline>> GetSharedPipelines(Guid organizationId);
+        Task<IEnumerable<Pipeline>> GetPipelineStatus(Guid pipelineId);
+        Task<Pipeline> GetPipelineById(Guid pipelineId);
+        */
+
     }
 }
