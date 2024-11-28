@@ -6,5 +6,6 @@ namespace DAPM.ClientApi.Models.DTOs
     {
         public string Name { get; set; }
         public Pipeline Pipeline { get; set; }
+        public Guid? pipelineId { get; set; }
     }
 }

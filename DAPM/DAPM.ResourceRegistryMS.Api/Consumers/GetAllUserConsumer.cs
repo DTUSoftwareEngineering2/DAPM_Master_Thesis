@@ -34,7 +34,6 @@ namespace DAPM.ResourceRegistryMS.Api.Consumers
             List<User>? u;
             u = await _userService.GetAllUsers(message.managerId);
 
-
             List<UserDTO>? userDTO = null;
             if (u != null)
             {

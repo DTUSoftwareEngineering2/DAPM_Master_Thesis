@@ -28,6 +28,20 @@ namespace DAPM.RepositoryMS.Api.Repositories
             return await _repositoryDbContext.Pipelines.FirstOrDefaultAsync(p => p.Id == pipelineId && p.RepositoryId == repositoryId);
         }
 
+        public async Task<Pipeline> ModifyPipelineById(Guid repositoryId, Guid pipelineId, Pipeline newPipeline)
+        {
+            var pipeline = await _repositoryDbContext.Pipelines.FirstOrDefaultAsync(p => p.Id == pipelineId && p.RepositoryId == repositoryId);
+            if (pipeline == null)
+            {
+                return null;
+            }
+            pipeline.Name = newPipeline.Name;
+            pipeline.PipelineJson = newPipeline.PipelineJson;
+            _repositoryDbContext.SaveChanges();
+            return pipeline;
+        }
+
+
         public async Task<List<Pipeline>?> GetAvailablePipelines(Guid repositoryId)
         {
             return await _repositoryDbContext.Pipelines.Where(p => p.RepositoryId == repositoryId && p.visibility == 1).ToListAsync();

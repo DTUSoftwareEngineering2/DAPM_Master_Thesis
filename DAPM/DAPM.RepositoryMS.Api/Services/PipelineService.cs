@@ -2,12 +2,13 @@
 using DAPM.RepositoryMS.Api.Repositories.Interfaces;
 using DAPM.RepositoryMS.Api.Services.Interfaces;
 
+
 namespace DAPM.RepositoryMS.Api.Services
 {
     public class PipelineService : IPipelineService
     {
         private IPipelineRepository _pipelineRepository;
-        public PipelineService(IPipelineRepository pipelineRepository) 
+        public PipelineService(IPipelineRepository pipelineRepository)
         {
             _pipelineRepository = pipelineRepository;
         }
@@ -15,5 +16,12 @@ namespace DAPM.RepositoryMS.Api.Services
         {
             return _pipelineRepository.GetPipelineById(repositoryId, pipelineId);
         }
+        public Task<Pipeline> ModifyPipelineById(Guid repositoryId, Guid pipelineId, Pipeline newPipeline, string name)
+        {
+
+            return _pipelineRepository.ModifyPipelineById
+                (repositoryId, pipelineId, newPipeline);
+        }
+
     }
 }

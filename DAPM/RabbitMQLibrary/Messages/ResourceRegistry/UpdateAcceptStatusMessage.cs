@@ -15,5 +15,6 @@ namespace RabbitMQLibrary.Messages.ResourceRegistry
         public Guid managerId { get; set; }
         public Guid userId { get; set; }
         public int accept { get; set; }
+        public int role { get; set; }
     }
 }

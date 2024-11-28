@@ -29,7 +29,7 @@ namespace DAPM.ResourceRegistryMS.Api.Services
         public async Task<List<User>?> GetAllUsers(Guid managerId)
         {
             User manager = await _userRepository.GetUserById(managerId);
-            if (manager.UserRole != (int)UserRole.Admin)
+            if (manager.UserRole > (int)UserRole.Manager)
             {
                 return null;
             }
@@ -39,15 +39,18 @@ namespace DAPM.ResourceRegistryMS.Api.Services
             return users;
         }
 
-        public async Task<User?> UpdateAcceptStatus(Guid managerId, Guid userId, int newStatus)
+        public async Task<User?> UpdateAcceptStatus(Guid managerId, Guid userId, int newStatus, int role)
         {
             User manager = await _userRepository.GetUserById(managerId);
-            if (manager.UserRole != (int)UserRole.Admin)
+            User changedUser = await _userRepository.GetUserById(userId);
+
+
+            if (manager.UserRole >= changedUser.UserRole)
             {
                 return null;
             }
 
-            User? user = await _userRepository.UpdateAcceptStatus(userId, newStatus);
+            User? user = await _userRepository.UpdateAcceptStatus(userId, newStatus, role);
 
             return user;
         }

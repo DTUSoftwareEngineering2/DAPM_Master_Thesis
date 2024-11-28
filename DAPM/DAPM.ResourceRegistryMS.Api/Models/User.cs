@@ -27,6 +27,7 @@ namespace DAPM.ResourceRegistryMS.Api.Models
     {
         Custom = 0,
         Admin,
-        User
+        Manager,
+        User,
     }
 }

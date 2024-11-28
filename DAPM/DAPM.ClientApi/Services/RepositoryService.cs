@@ -136,7 +136,7 @@ namespace DAPM.ClientApi.Services
                 RepositoryId = repositoryId,
                 Name = pipeline.Name,
                 Pipeline = pipeline.Pipeline,
-
+                pipelineId = pipeline.pipelineId,
             };
 
             _postPipelineRequestProducer.PublishMessage(message);

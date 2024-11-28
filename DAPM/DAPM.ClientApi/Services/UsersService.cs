@@ -51,7 +51,7 @@ namespace DAPM.ClientApi.Services
             return ticketId;
         }
 
-        public Guid AcceptUser(Guid managerId, Guid userId, int newStatus)
+        public Guid AcceptUser(Guid managerId, Guid userId, int newStatus, int role)
         {
             var ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
 
@@ -62,7 +62,8 @@ namespace DAPM.ClientApi.Services
                 managerId = managerId,
                 MessageId = Guid.NewGuid(),
                 userId = userId,
-                accept = newStatus
+                accept = newStatus,
+                role = role
             };
 
             _updateStatus.PublishMessage(message);

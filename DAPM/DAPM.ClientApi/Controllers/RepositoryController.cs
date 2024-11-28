@@ -55,7 +55,7 @@ namespace DAPM.ClientApi.Controllers
         public async Task<ActionResult<Guid>> GetAllPipelinesOfRepository(Guid organizationId, Guid repositoryId)
         {
             Guid id = _repositoryService.GetAllPipelinesOfRepository(organizationId, repositoryId);
-            return Ok(new ApiResponse { RequestName = "GetPipelinesOfRepository", TicketId = id });
+            return Ok(new ApiResponse { RequestName = "GetAllAvailablePipelinesOfRepository", TicketId = id });
         }
 
         [HttpPost("{organizationId}/repositories/{repositoryId}/resources")]
@@ -89,6 +89,15 @@ namespace DAPM.ClientApi.Controllers
         {
             Guid id = _repositoryService.PostPipelineToRepository(organizationId, repositoryId, pipelineApiDto);
             return Ok(new ApiResponse { RequestName = "PostPipelineToRepository", TicketId = id });
+        }
+
+        [HttpGet("{organizationId}/repositories/{repositoryId}/{pipelineId}")]
+        [SwaggerOperation(Description = "Gets all the pipelines of a repository that are available. " +
+            "You need to have a collaboration agreement to retrieve this information.")]
+        public async Task<ActionResult<Guid>> GetAllPipelinesOfRepository(Guid organizationId, Guid repositoryId, Guid pipelineId)
+        {
+            Guid id = _repositoryService.GetAllPipelinesOfRepository(organizationId, repositoryId);
+            return Ok(new ApiResponse { RequestName = "GetAllAvailablePipelinesOfRepository", TicketId = id });
         }
 
     }
