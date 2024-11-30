@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using RabbitMQLibrary.Models;
 using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace DAPM.ClientApi.Controllers
 {
@@ -102,12 +104,22 @@ namespace DAPM.ClientApi.Controllers
 
 
         [HttpGet("{organizationId}/repositories/{repositoryId}/{pipelineId}/visibility")]
-        [SwaggerOperation(Description = "Gets all the pipelines of a repository that are available. " +
-            "You need to have a collaboration agreement to retrieve this information.")]
+        [SwaggerOperation(Description = "Gets the visibility field of a pipeline ")]
         public async Task<ActionResult<Guid>> GetPipelineVisibility(Guid organizationId, Guid repositoryId, Guid pipelineId)
         {
             Guid id = _repositoryService.GetPipelineVisibility(organizationId, repositoryId, pipelineId);
             return Ok(new ApiResponse { RequestName = "GetPipelineVisibility", TicketId = id });
+        }
+
+        [Authorize]
+        [HttpGet("{organizationId}/repositories/{repositoryId}/{pipelineId}/delete")]
+        [SwaggerOperation(Description = "Delete a pipeline from the repository")]
+        public async Task<ActionResult<Guid>> PostDeletePipeline(Guid organizationId, Guid repositoryId, Guid pipelineId)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            Guid id = _repositoryService.PostDeletePipeline(organizationId, repositoryId, pipelineId, Guid.Parse(userId));
+            return Ok(new ApiResponse { RequestName = "PostDeletePipeline", TicketId = id });
         }
     }
 }

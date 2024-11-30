@@ -32,6 +32,12 @@ namespace DAPM.RepositoryMS.Api.Services
             _operatorRepository = operatorRepository;
         }
 
+        public async Task<Models.PostgreSQL.Pipeline> DeletePipelineById(Guid repositoryId, Guid pipelineId, Guid userId)
+        {
+            return await _pipelineRepository.DeletePipelineById(repositoryId, pipelineId, userId);
+        }
+
+
         public async Task<Models.PostgreSQL.Pipeline> CreateNewPipeline(Guid repositoryId, string name, RabbitMQLibrary.Models.Pipeline pipeline)
         {
             var pipelineJsonString = Newtonsoft.Json.JsonConvert.SerializeObject(pipeline);

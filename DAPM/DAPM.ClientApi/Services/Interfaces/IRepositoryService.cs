@@ -13,5 +13,6 @@ namespace DAPM.ClientApi.Services.Interfaces
         public Guid PostOperatorToRepository(Guid organizationId, Guid repositoryId, string name, IFormFile sourceCodeFile, IFormFile dockerfileFile, string resourceType);
         public Guid PostPipelineToRepository(Guid organizationId, Guid repositoryId, PipelineApiDto pipeline);
         public Guid GetPipelineVisibility(Guid organizationId, Guid repositoryId, Guid pipelineId);
+        public Guid PostDeletePipeline(Guid organizationId, Guid repositoryId, Guid pipelineId, Guid userId);
     }
 }

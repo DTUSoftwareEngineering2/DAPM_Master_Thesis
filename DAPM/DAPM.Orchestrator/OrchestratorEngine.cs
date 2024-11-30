@@ -103,6 +103,14 @@ namespace DAPM.Orchestrator
         }
 
 
+        public void StartPostPipelineDeleteProcess(Guid ticketId, Guid organizationId, Guid repositoryId, Guid pipelineId, Guid userId)
+        {
+            var processId = Guid.NewGuid();
+            var postPipelineDeleteProcess = new PostPipelineDeleteProcess(this, _serviceProvider, ticketId, processId, organizationId, repositoryId, pipelineId, userId);
+            _processes[processId] = postPipelineDeleteProcess;
+            postPipelineDeleteProcess.StartProcess();
+        }
+
         public void StartGetResourceFilesProcess(Guid apiTicketId, Guid organizationId, Guid repositoryId, Guid resourceId)
         {
             var processId = Guid.NewGuid();

@@ -11,8 +11,7 @@ using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromRepo;
 
 namespace DAPM.Orchestrator
 {
-    public abstract class OrchestratorProcess :
-        IOrchestratorProcess
+    public abstract class OrchestratorProcess : IOrchestratorProcess
     {
         private IServiceProvider _serviceProvider;
         protected IServiceScope _serviceScope;

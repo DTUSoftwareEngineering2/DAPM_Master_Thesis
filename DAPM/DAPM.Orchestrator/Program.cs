@@ -58,6 +58,7 @@ builder.Services.AddQueueMessageConsumer<PostRepositoryRequestConsumer, PostRepo
 builder.Services.AddQueueMessageConsumer<PostPipelineRequestConsumer, PostPipelineRequest>();
 builder.Services.AddQueueMessageConsumer<GetResourceFilesRequestConsumer, GetResourceFilesRequest>();
 builder.Services.AddQueueMessageConsumer<GetAvailablePipelinesFromRepoResultConsumer, GetAvailablesPipelinesFromRepoResultMessage>();
+builder.Services.AddQueueMessageConsumer<PostPipelineDeleteRequestConsumer, PostPipelineDeleteRequest>();
 builder.Services.AddQueueMessageConsumer<GetAvailablePipelinesRequestConsumer, GetAvailablePipelinesRequest>();
 builder.Services.AddQueueMessageConsumer<GetPipelineVisibilityRequestConsumer, GetPipelineVisibilityRequest>();
 

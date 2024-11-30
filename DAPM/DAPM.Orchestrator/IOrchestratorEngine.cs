@@ -10,6 +10,7 @@ namespace DAPM.Orchestrator
         public void StartGetOrganizationProcess(Guid ticketId, Guid? organizationId);
         public void StartGetRepositoriesProcess(Guid ticketId, Guid organizationId, Guid? repositoryId);
         public void StartGetPipelineVisibility(Guid ticketId, Guid organizationId, Guid repositoryId, Guid pipelineId);
+        public void StartPostPipelineDeleteProcess(Guid ticketId, Guid organizationId, Guid repositoryId, Guid pipelineId, Guid userId);
         public void StartCreateRepositoryProcess(Guid ticketId, Guid organizationId, string name);
         public void StartGetResourcesProcess(Guid ticketId, Guid organizationId, Guid repositoryId, Guid? resourceId);
         public void StartGetResourceFilesProcess(Guid ticketId, Guid organizationId, Guid repositoryId, Guid resourceId);

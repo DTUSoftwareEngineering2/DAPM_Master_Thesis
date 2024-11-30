@@ -149,6 +149,27 @@ namespace DAPM.ClientApi.Services
 
         }
 
+        public Guid PostDeletePipeline(Guid organizationId, Guid repositoryId, Guid pipelineId, Guid userId)
+        {
+            Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
+
+            var message = new GetPipelineVisibilityRequest
+            {
+                TimeToLive = TimeSpan.FromMinutes(1),
+                TicketId = ticketId,
+                OrganizationId = organizationId,
+                RepositoryId = repositoryId,
+                PipelineId = pipelineId,
+            };
+
+            _getPipelineVisibilityRequestProducer.PublishMessage(message);
+
+            _logger.LogDebug("GetPipelineVisibilityRequest Enqueued");
+
+
+            return ticketId;
+        }
+
         public Guid PostPipelineToRepository(Guid organizationId, Guid repositoryId, PipelineApiDto pipeline)
         {
             Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
