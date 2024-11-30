@@ -8,7 +8,8 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DAPM.Orchestrator
 {
-    public class OrchestratorEngine : IOrchestratorEngine
+    public class OrchestratorEngine :
+        IOrchestratorEngine
     {
         private ILogger<OrchestratorEngine> _logger;
         private Dictionary<Guid, OrchestratorProcess> _processes;
@@ -90,6 +91,17 @@ namespace DAPM.Orchestrator
             _processes[processId] = getRepositoriesProcess;
             getRepositoriesProcess.StartProcess();
         }
+
+        public void StartGetPipelineVisibility(Guid ticketId, Guid organizationId, Guid repositoryId, Guid pipelineId)
+        {
+            var processId = Guid.NewGuid();
+            var getPipelineVisibilityProcess = new GetPipelineVisibilityProcess(this, _serviceProvider, ticketId, processId,
+                    organizationId, repositoryId, pipelineId);
+            _processes[processId] = getPipelineVisibilityProcess;
+            getPipelineVisibilityProcess.StartProcess();
+
+        }
+
 
         public void StartGetResourceFilesProcess(Guid apiTicketId, Guid organizationId, Guid repositoryId, Guid resourceId)
         {

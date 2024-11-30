@@ -21,6 +21,7 @@ namespace DAPM.ClientApi.Services
         IQueueProducer<PostPipelineRequest> _postPipelineRequestProducer;
         IQueueProducer<GetPipelinesRequest> _getPipelinesRequestProducer;
         IQueueProducer<GetAvailablePipelinesRequest> _getAvailablePipelinesRequestProducer;
+        IQueueProducer<GetPipelineVisibilityRequest> _getPipelineVisibilityRequestProducer;
 
         public RepositoryService(
             ILogger<RepositoryService> logger,
@@ -31,6 +32,7 @@ namespace DAPM.ClientApi.Services
             IQueueProducer<PostPipelineRequest> postPipelineRequestProducer,
             IQueueProducer<GetPipelinesRequest> getPipelinesRequestProducer,
             IQueueProducer<PostOperatorRequest> postOperatorRequestProducer,
+            IQueueProducer<GetPipelineVisibilityRequest> getPipelineVisibilityRequestProducer,
             IQueueProducer<GetAvailablePipelinesRequest> getAvailablePipelinesRequestProducer)
         {
             _ticketService = ticketService;
@@ -42,6 +44,7 @@ namespace DAPM.ClientApi.Services
             _getPipelinesRequestProducer = getPipelinesRequestProducer;
             _postOperatorRequestProducer = postOperatorRequestProducer;
             _getAvailablePipelinesRequestProducer = getAvailablePipelinesRequestProducer;
+            _getPipelineVisibilityRequestProducer = getPipelineVisibilityRequestProducer;
         }
 
         public Guid GetRepositoryById(Guid organizationId, Guid repositoryId)
@@ -122,6 +125,28 @@ namespace DAPM.ClientApi.Services
             _logger.LogDebug("GetAvailablePipelinesRequest Enqueued");
 
             return ticketId;
+        }
+
+        public Guid GetPipelineVisibility(Guid organizationId, Guid repositoryId, Guid pipelineId)
+        {
+            Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
+
+            var message = new GetPipelineVisibilityRequest
+            {
+                TimeToLive = TimeSpan.FromMinutes(1),
+                TicketId = ticketId,
+                OrganizationId = organizationId,
+                RepositoryId = repositoryId,
+                PipelineId = pipelineId,
+            };
+
+            _getPipelineVisibilityRequestProducer.PublishMessage(message);
+
+            _logger.LogDebug("GetPipelineVisibilityRequest Enqueued");
+
+
+            return ticketId;
+
         }
 
         public Guid PostPipelineToRepository(Guid organizationId, Guid repositoryId, PipelineApiDto pipeline)

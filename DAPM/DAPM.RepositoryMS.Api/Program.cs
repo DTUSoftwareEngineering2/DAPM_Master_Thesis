@@ -55,6 +55,7 @@ builder.Services.AddQueueMessageConsumer<GetPipelinesFromRepoConsumer, GetPipeli
 builder.Services.AddQueueMessageConsumer<GetResourceFilesFromRepoConsumer, GetResourceFilesFromRepoMessage>();
 builder.Services.AddQueueMessageConsumer<GetOperatorFilesFromRepoConsumer, GetOperatorFilesFromRepoMessage>();
 builder.Services.AddQueueMessageConsumer<GetAvailablePipelinesFromRepoProducer, GetAvailablePipelinesFromRepoMessage>();
+builder.Services.AddQueueMessageConsumer<GetPipelineVisibilityFromRepoConsumer, GetPipelineVisibilityFromRepoMessage>();
 
 
 builder.Services.AddDbContext<RepositoryDbContext>(options =>

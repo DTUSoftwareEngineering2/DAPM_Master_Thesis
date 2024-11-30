@@ -19,6 +19,7 @@ namespace DAPM.Orchestrator
         public void OnGetRepositoriesFromRegistryResult(GetRepositoriesResultMessage message);
         public void OnGetResourcesFromRegistryResult(GetResourcesResultMessage message);
         public void OnGetPipelinesFromRegistryResult(GetPipelinesResultMessage message);
+        public void OnGetPipelineVisibilityFromRepoResult(GetPipelineVisibilityFromRepoResult message);
         public void OnGetPipelinesFromRepoResult(GetPipelinesFromRepoResultMessage message);
         public void OnGetAvailablePipelinesFromRepoResult(GetAvailablesPipelinesFromRepoResultMessage message);
         public void OnPostResourceToRepoResult(PostResourceToRepoResultMessage message);

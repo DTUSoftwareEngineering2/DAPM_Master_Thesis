@@ -8,9 +8,11 @@ using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromPipelineOrchestra
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromRegistry;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromRepo;
 
+
 namespace DAPM.Orchestrator
 {
-    public abstract class OrchestratorProcess : IOrchestratorProcess
+    public abstract class OrchestratorProcess :
+        IOrchestratorProcess
     {
         private IServiceProvider _serviceProvider;
         protected IServiceScope _serviceScope;
@@ -65,6 +67,12 @@ namespace DAPM.Orchestrator
         {
             return;
         }
+
+        public virtual void OnGetPipelineVisibilityFromRepoResult(GetPipelineVisibilityFromRepoResult message)
+        {
+            return;
+        }
+
 
         public virtual void OnPostPipelineToRepoResult(PostPipelineToRepoResultMessage message)
         {

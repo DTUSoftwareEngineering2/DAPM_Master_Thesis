@@ -100,5 +100,14 @@ namespace DAPM.ClientApi.Controllers
             return Ok(new ApiResponse { RequestName = "GetAllAvailablePipelinesOfRepository", TicketId = id });
         }
 
+
+        [HttpGet("{organizationId}/repositories/{repositoryId}/{pipelineId}/visibility")]
+        [SwaggerOperation(Description = "Gets all the pipelines of a repository that are available. " +
+            "You need to have a collaboration agreement to retrieve this information.")]
+        public async Task<ActionResult<Guid>> GetPipelineVisibility(Guid organizationId, Guid repositoryId, Guid pipelineId)
+        {
+            Guid id = _repositoryService.GetPipelineVisibility(organizationId, repositoryId, pipelineId);
+            return Ok(new ApiResponse { RequestName = "GetPipelineVisibility", TicketId = id });
+        }
     }
 }

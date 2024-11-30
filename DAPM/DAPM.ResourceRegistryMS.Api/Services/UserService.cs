@@ -45,7 +45,7 @@ namespace DAPM.ResourceRegistryMS.Api.Services
             User changedUser = await _userRepository.GetUserById(userId);
 
 
-            if (manager.UserRole >= changedUser.UserRole)
+            if (manager.UserRole >= changedUser.UserRole || role < manager.UserRole)
             {
                 return null;
             }
