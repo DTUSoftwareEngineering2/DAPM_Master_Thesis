@@ -35,7 +35,7 @@ namespace DAPM.ResourceRegistryMS.Api.Services
             }
 
             List<User> users = await _userRepository.GetAllUsers();
-            users.RemoveAll(user => user.Id == managerId);
+            users.RemoveAll(user => user.Id == managerId || user.UserRole <= manager.UserRole);
             return users;
         }
 
