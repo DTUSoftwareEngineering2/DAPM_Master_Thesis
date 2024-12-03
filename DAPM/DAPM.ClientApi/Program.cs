@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromPipelineOrchestrator;
 using DAPM.ClientApi.Controllers;
 using RabbitMQLibrary.Models;
+using RabbitMQLibrary.Messages.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
