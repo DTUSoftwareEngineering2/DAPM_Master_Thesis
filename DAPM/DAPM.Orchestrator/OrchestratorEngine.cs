@@ -137,8 +137,8 @@ namespace DAPM.Orchestrator
 
         public void StartPostPipelineProcess(Guid apiTicketId, Guid organizationId, Guid repositoryId, Pipeline pipeline, string name, Guid? pipelineId)
         {
-            pipeline.userId = Guid.Empty;
-            pipeline.visibility = 1;
+            // pipeline.userId = Guid.Empty;
+            // pipeline.visibility = 1;
             var processId = Guid.NewGuid();
             var postPipelineProcess = new PostPipelineProcess(this, _serviceProvider, apiTicketId, processId, organizationId, repositoryId, pipeline, name, pipelineId);
             _processes[processId] = postPipelineProcess;
