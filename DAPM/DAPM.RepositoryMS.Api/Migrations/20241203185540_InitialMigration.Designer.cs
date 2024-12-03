@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DAPM.RepositoryMS.Api.Migrations
 {
     [DbContext(typeof(RepositoryDbContext))]
-    [Migration("20241202172514_ListExecDateTime")]
-    partial class ListExecDateTime
+    [Migration("20241203185540_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -103,6 +103,12 @@ namespace DAPM.RepositoryMS.Api.Migrations
 
                     b.Property<Guid>("RepositoryId")
                         .HasColumnType("uuid");
+
+                    b.Property<Guid>("userId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("visibility")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

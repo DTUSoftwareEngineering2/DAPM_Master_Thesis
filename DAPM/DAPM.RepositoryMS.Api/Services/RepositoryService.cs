@@ -49,6 +49,7 @@ namespace DAPM.RepositoryMS.Api.Services
                 PipelineJson = pipelineJsonString,
                 visibility = pipeline.visibility,
                 userId = pipeline.userId,
+                ExecutionDate = new List<DateTime>()
             };
 
             var createdPipeline = await _pipelineRepository.AddPipeline(pipelineObject);
