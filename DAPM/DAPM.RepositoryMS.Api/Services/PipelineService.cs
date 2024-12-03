@@ -2,6 +2,7 @@
 using DAPM.RepositoryMS.Api.Repositories.Interfaces;
 using DAPM.RepositoryMS.Api.Services.Interfaces;
 
+
 namespace DAPM.RepositoryMS.Api.Services
 {
     public class PipelineService : IPipelineService
@@ -14,7 +15,7 @@ namespace DAPM.RepositoryMS.Api.Services
             _pipelineRepository = pipelineRepository;
             _logger = logger;
         }
-        
+
         public Task<Pipeline> GetPipelineById(Guid repositoryId, Guid pipelineId)
         {
             return _pipelineRepository.GetPipelineById(repositoryId, pipelineId);
@@ -34,7 +35,15 @@ namespace DAPM.RepositoryMS.Api.Services
                 _logger.LogError("Pipeline with id {PipelineId} not found", pipelineId);
                 return new List<DateTime>();
             }
-            return pipeline.ExecutionDate;  
+            return pipeline.ExecutionDate;
         }
+
+        public Task<Pipeline> ModifyPipelineById(Guid repositoryId, Guid pipelineId, Pipeline newPipeline, string name)
+        {
+
+            return _pipelineRepository.ModifyPipelineById
+                (repositoryId, pipelineId, newPipeline);
+        }
+
     }
 }

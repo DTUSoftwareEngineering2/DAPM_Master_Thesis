@@ -57,6 +57,10 @@ builder.Services.AddQueueMessageConsumer<PostOperatorRequestConsumer, PostOperat
 builder.Services.AddQueueMessageConsumer<PostRepositoryRequestConsumer, PostRepositoryRequest>();
 builder.Services.AddQueueMessageConsumer<PostPipelineRequestConsumer, PostPipelineRequest>();
 builder.Services.AddQueueMessageConsumer<GetResourceFilesRequestConsumer, GetResourceFilesRequest>();
+builder.Services.AddQueueMessageConsumer<GetAvailablePipelinesFromRepoResultConsumer, GetAvailablesPipelinesFromRepoResultMessage>();
+builder.Services.AddQueueMessageConsumer<PostPipelineDeleteRequestConsumer, PostPipelineDeleteRequest>();
+builder.Services.AddQueueMessageConsumer<GetAvailablePipelinesRequestConsumer, GetAvailablePipelinesRequest>();
+builder.Services.AddQueueMessageConsumer<GetPipelineVisibilityRequestConsumer, GetPipelineVisibilityRequest>();
 
 //Handshake
 builder.Services.AddQueueMessageConsumer<CollabHandshakeRequestConsumer, CollabHandshakeRequest>();
@@ -91,6 +95,7 @@ builder.Services.AddQueueMessageConsumer<GetOperatorFilesFromRepoResultConsumer,
 builder.Services.AddQueueMessageConsumer<GetResourceFilesFromOperatorResultConsumer, GetExecutionOutputResultMessage>();
 builder.Services.AddQueueMessageConsumer<SendResourceToPeerResultConsumer, SendResourceToPeerResultMessage>();
 builder.Services.AddQueueMessageConsumer<ExecuteOperatorResultConsumer, ExecuteOperatorResultMessage>();
+builder.Services.AddQueueMessageConsumer<GetPipelineVisibilityFromRepoResultConsumer, GetPipelineVisibilityFromRepoResult>();
 
 
 

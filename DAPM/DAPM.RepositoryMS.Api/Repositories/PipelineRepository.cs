@@ -10,7 +10,7 @@ namespace DAPM.RepositoryMS.Api.Repositories
         private ILogger<PipelineRepository> _logger;
         private readonly RepositoryDbContext _repositoryDbContext;
 
-        public PipelineRepository(ILogger<PipelineRepository> logger,  RepositoryDbContext repositoryDbContext)
+        public PipelineRepository(ILogger<PipelineRepository> logger, RepositoryDbContext repositoryDbContext)
         {
             _logger = logger;
             _repositoryDbContext = repositoryDbContext;
@@ -57,6 +57,39 @@ namespace DAPM.RepositoryMS.Api.Repositories
             return await _repositoryDbContext.Pipelines.FirstOrDefaultAsync(p => p.Id == pipelineId && p.RepositoryId == repositoryId);
         }
 
-       
+        public async Task<Pipeline> DeletePipelineById(Guid repositoryId, Guid pipelineId, Guid userId)
+        {
+            Pipeline pipeline = await GetPipelineById(repositoryId, pipelineId);
+
+            if (pipeline.userId != userId)
+            {
+                return null;
+            }
+
+            _repositoryDbContext.Pipelines.Remove(pipeline);
+
+            return pipeline;
+        }
+
+
+        public async Task<Pipeline> ModifyPipelineById(Guid repositoryId, Guid pipelineId, Pipeline newPipeline)
+        {
+            var pipeline = await _repositoryDbContext.Pipelines.FirstOrDefaultAsync(p => p.Id == pipelineId && p.RepositoryId == repositoryId);
+            if (pipeline == null)
+            {
+                return null;
+            }
+            pipeline.Name = newPipeline.Name;
+            pipeline.PipelineJson = newPipeline.PipelineJson;
+            _repositoryDbContext.SaveChanges();
+            return pipeline;
+        }
+
+
+        public async Task<List<Pipeline>?> GetAvailablePipelines(Guid repositoryId)
+        {
+            return await _repositoryDbContext.Pipelines.Where(p => p.RepositoryId == repositoryId && p.visibility == 1).ToListAsync();
+        }
+
     }
 }

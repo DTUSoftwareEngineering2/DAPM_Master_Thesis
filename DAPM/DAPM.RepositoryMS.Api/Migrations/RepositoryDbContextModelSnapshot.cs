@@ -101,6 +101,12 @@ namespace DAPM.RepositoryMS.Api.Migrations
                     b.Property<Guid>("RepositoryId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("userId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("visibility")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RepositoryId");

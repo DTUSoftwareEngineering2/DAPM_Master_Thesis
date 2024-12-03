@@ -1,8 +1,9 @@
-﻿namespace DAPM.ClientApi.Models.DTOs
+namespace DAPM.ClientApi.Models.DTOs
 {
     public class ValidateForm
     {
         public Guid userId { get; set; }
         public int accept { get; set; }
+        public int role { get; set; }
     }
 }

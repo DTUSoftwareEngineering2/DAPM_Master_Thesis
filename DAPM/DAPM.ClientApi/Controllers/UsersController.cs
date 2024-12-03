@@ -53,7 +53,7 @@ namespace DAPM.ClientApi.Controllers
                 return BadRequest("The accept field of the request should be 0 or 1");
             }
 
-            var tId = _userService.AcceptUser(Guid.Parse(managerId), validateForm.userId, validateForm.accept);
+            var tId = _userService.AcceptUser(Guid.Parse(managerId), validateForm.userId, validateForm.accept, validateForm.role);
 
             return Ok(new { ticketId = tId });
         }

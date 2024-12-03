@@ -1,4 +1,4 @@
-﻿using DAPM.RepositoryMS.Api.Models.PostgreSQL;
+using DAPM.RepositoryMS.Api.Models.PostgreSQL;
 using DAPM.RepositoryMS.Api.Services.Interfaces;
 using Newtonsoft.Json;
 using RabbitMQLibrary.Interfaces;
@@ -12,22 +12,39 @@ namespace DAPM.RepositoryMS.Api.Consumers
     {
         private ILogger<PostPipelineToRepoConsumer> _logger;
         private IRepositoryService _repositoryService;
+        private IPipelineService _pipelineService;
         IQueueProducer<PostPipelineToRepoResultMessage> _postPipelineToRepoResultProducer;
 
         public PostPipelineToRepoConsumer(ILogger<PostPipelineToRepoConsumer> logger,
             IRepositoryService repositoryService,
+            IPipelineService pipelineService,
             IQueueProducer<PostPipelineToRepoResultMessage> postPipelineToRepoResultProducer)
         {
             _logger = logger;
             _repositoryService = repositoryService;
             _postPipelineToRepoResultProducer = postPipelineToRepoResultProducer;
+            _pipelineService = pipelineService;
         }
 
         public async Task ConsumeAsync(PostPipelineToRepoMessage message)
         {
             _logger.LogInformation("PostPipelineToRepoMessage received");
+            Models.PostgreSQL.Pipeline pipeline;
+            if (message.pipelineId == null)
+            {
+                pipeline = await _repositoryService.CreateNewPipeline(message.RepositoryId, message.Name, message.Pipeline);
+            }
+            else
+            {
+                pipeline = await _pipelineService.GetPipelineById(message.RepositoryId, message.pipelineId.Value);
+                if (pipeline == null)
+                {
+                    pipeline = await _repositoryService.CreateNewPipeline(message.RepositoryId, message.Name, message.Pipeline);
+                }
+                pipeline = await _pipelineService.ModifyPipelineById(message.RepositoryId, message.pipelineId.Value
+                    , pipeline, message.Name);
+            }
 
-            Models.PostgreSQL.Pipeline pipeline = await _repositoryService.CreateNewPipeline(message.RepositoryId, message.Name, message.Pipeline);
 
             if (pipeline != null)
             {

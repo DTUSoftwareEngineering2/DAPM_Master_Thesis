@@ -1,4 +1,4 @@
-﻿using RabbitMQLibrary.Interfaces;
+using RabbitMQLibrary.Interfaces;
 using RabbitMQLibrary.Models;
 using System;
 using System.Collections.Generic;
@@ -17,5 +17,7 @@ namespace RabbitMQLibrary.Messages.Orchestrator.ProcessRequests
         public Guid RepositoryId { get; set; }
         public string Name { get; set; }
         public Pipeline Pipeline { get; set; }
+        public Guid? pipelineId { get; set; }
+
     }
 }

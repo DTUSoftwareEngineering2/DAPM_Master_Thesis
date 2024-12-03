@@ -1,4 +1,4 @@
-﻿using DAPM.ResourceRegistryMS.Api.Models;
+using DAPM.ResourceRegistryMS.Api.Models;
 using DAPM.ResourceRegistryMS.Api.Repositories.Interfaces;
 using DAPM.ResourceRegistryMS.Api.Services.Interfaces;
 using RabbitMQLibrary.Models;
@@ -29,25 +29,28 @@ namespace DAPM.ResourceRegistryMS.Api.Services
         public async Task<List<User>?> GetAllUsers(Guid managerId)
         {
             User manager = await _userRepository.GetUserById(managerId);
-            if (manager.UserRole != (int)UserRole.Admin)
+            if (manager.UserRole > (int)UserRole.Manager)
             {
                 return null;
             }
 
             List<User> users = await _userRepository.GetAllUsers();
-            users.RemoveAll(user => user.Id == managerId);
+            users.RemoveAll(user => user.Id == managerId || user.UserRole <= manager.UserRole);
             return users;
         }
 
-        public async Task<User?> UpdateAcceptStatus(Guid managerId, Guid userId, int newStatus)
+        public async Task<User?> UpdateAcceptStatus(Guid managerId, Guid userId, int newStatus, int role)
         {
             User manager = await _userRepository.GetUserById(managerId);
-            if (manager.UserRole != (int)UserRole.Admin)
+            User changedUser = await _userRepository.GetUserById(userId);
+
+
+            if (manager.UserRole >= changedUser.UserRole || role < manager.UserRole)
             {
                 return null;
             }
 
-            User? user = await _userRepository.UpdateAcceptStatus(userId, newStatus);
+            User? user = await _userRepository.UpdateAcceptStatus(userId, newStatus, role);
 
             return user;
         }

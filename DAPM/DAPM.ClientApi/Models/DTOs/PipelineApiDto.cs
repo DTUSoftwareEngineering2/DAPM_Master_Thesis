@@ -1,4 +1,4 @@
-﻿using RabbitMQLibrary.Models;
+using RabbitMQLibrary.Models;
 
 namespace DAPM.ClientApi.Models.DTOs
 {
@@ -6,5 +6,6 @@ namespace DAPM.ClientApi.Models.DTOs
     {
         public string Name { get; set; }
         public Pipeline Pipeline { get; set; }
+        public Guid? pipelineId { get; set; }
     }
 }

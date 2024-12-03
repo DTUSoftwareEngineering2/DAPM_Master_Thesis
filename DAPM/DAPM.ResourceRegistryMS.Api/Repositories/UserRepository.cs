@@ -1,4 +1,4 @@
-﻿using DAPM.ResourceRegistryMS.Api.Models;
+using DAPM.ResourceRegistryMS.Api.Models;
 using DAPM.ResourceRegistryMS.Api.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -62,16 +62,18 @@ namespace DAPM.ResourceRegistryMS.Api.Repositories
             return user;
         }
 
-        public async Task<User?> UpdateAcceptStatus(Guid id, int newStatus)
+        public async Task<User?> UpdateAcceptStatus(Guid id, int newStatus, int role)
         {
 
             var user = await _context.Users.FindAsync(id);
+
             if (user == null)
             {
                 return null;
             }
 
             user.accepted = newStatus;
+            user.UserRole = role;
             await _context.SaveChangesAsync();
 
             return user;

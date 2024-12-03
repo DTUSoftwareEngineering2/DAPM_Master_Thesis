@@ -1,4 +1,4 @@
-﻿using RabbitMQLibrary.Interfaces;
+using RabbitMQLibrary.Interfaces;
 using RabbitMQLibrary.Messages.ClientApi;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromPeerApi;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromRegistry;
@@ -24,9 +24,10 @@ namespace DAPM.Orchestrator.Processes
         private int _registryUpdatesNotCompletedCounter;
 
         private Guid _ticketId;
+        private Guid? _pipelineId;
 
         public PostPipelineProcess(OrchestratorEngine engine, IServiceProvider serviceProvider, Guid ticketId, Guid processId,
-            Guid organizationId, Guid repositoryId, Pipeline pipeline, string name)
+            Guid organizationId, Guid repositoryId, Pipeline pipeline, string name, Guid? pipelineId)
             : base(engine, serviceProvider, processId)
         {
             _organizationId = organizationId;
@@ -38,7 +39,8 @@ namespace DAPM.Orchestrator.Processes
             _isRegistryUpdateCompleted = new Dictionary<Guid, bool>();
 
             _ticketId = ticketId;
-        }   
+            _pipelineId = pipelineId;
+        }
         public override void StartProcess()
         {
             var postPipelineToRepoProducer = _serviceScope.ServiceProvider.GetRequiredService<IQueueProducer<PostPipelineToRepoMessage>>();
@@ -51,6 +53,7 @@ namespace DAPM.Orchestrator.Processes
                 RepositoryId = _repositoryId,
                 Name = _pipelineName,
                 Pipeline = _pipeline,
+                pipelineId = _pipelineId,
             };
 
             postPipelineToRepoProducer.PublishMessage(message);
