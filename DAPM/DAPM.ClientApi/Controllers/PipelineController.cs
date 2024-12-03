@@ -56,5 +56,21 @@ namespace DAPM.ClientApi.Controllers
             Guid id = _pipelineService.GetExecutionStatus(organizationId, repositoryId, pipelineId, executionId);
             return Ok(new ApiResponse { RequestName = "GetExecutionStatus", TicketId = id });
         }
+
+        [HttpGet("{organizationId}/repositories/{repositoryId}/pipelines/{pipelineId}/execution-date")]
+        [SwaggerOperation(Description = "Requests the execution date of a pipeline.")]
+        public async Task<ActionResult<Guid>> RequestPipelineExecutionDate(Guid organizationId, Guid repositoryId, Guid pipelineId)
+        {
+            Guid ticketId = _pipelineService.RequestPipelineExecutionDate(organizationId, repositoryId, pipelineId);
+            return Ok(new ApiResponse { RequestName = "RequestPipelineExecutionDate", TicketId = ticketId });
+        }
+
+        [HttpPost("{organizationId}/repositories/{repositoryId}/pipelines/{pipelineId}/set-execution-date")]
+        [SwaggerOperation(Description = "Sets the execution date for a pipeline.")]
+        public async Task<ActionResult<Guid>> SetPipelineExecutionDate(Guid organizationId, Guid repositoryId, Guid pipelineId, String executionDate)
+        {
+            Guid ticketId = _pipelineService.SetPipelineExecutionDate(organizationId, repositoryId, pipelineId, executionDate);
+            return Ok(new ApiResponse { RequestName = "SetPipelineExecutionDate", TicketId = ticketId });
+        }
     }
 }
