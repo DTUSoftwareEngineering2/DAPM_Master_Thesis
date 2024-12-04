@@ -11,6 +11,7 @@ using DAPM.RepositoryMS.Api.Consumers;
 using RabbitMQLibrary.Messages.Repository;
 using Microsoft.EntityFrameworkCore;
 using DAPM.RepositoryMS.Api.Data;
+using RabbitMQLibrary.Messages.ClientApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,7 +55,11 @@ builder.Services.AddQueueMessageConsumer<PostPipelineToRepoConsumer, PostPipelin
 builder.Services.AddQueueMessageConsumer<GetPipelinesFromRepoConsumer, GetPipelinesFromRepoMessage>();
 builder.Services.AddQueueMessageConsumer<GetResourceFilesFromRepoConsumer, GetResourceFilesFromRepoMessage>();
 builder.Services.AddQueueMessageConsumer<GetOperatorFilesFromRepoConsumer, GetOperatorFilesFromRepoMessage>();
-
+builder.Services.AddQueueMessageConsumer<GetPipelineExecutionDateConsumer, GetPipelineExecutionDateRequest>();
+builder.Services.AddQueueMessageConsumer<SetPipelineExecutionDateConsumer, SetPipelineExecutionDateRequest>();
+builder.Services.AddQueueMessageConsumer<GetAvailablePipelinesFromRepoProducer, GetAvailablePipelinesFromRepoMessage>();
+builder.Services.AddQueueMessageConsumer<GetPipelineVisibilityFromRepoConsumer, GetPipelineVisibilityFromRepoMessage>();
+builder.Services.AddQueueMessageConsumer<PostPipelineDeleteToRepoMessageConsumer, PostPipelineDeleteToRepoMessage>();
 
 
 builder.Services.AddDbContext<RepositoryDbContext>(options =>

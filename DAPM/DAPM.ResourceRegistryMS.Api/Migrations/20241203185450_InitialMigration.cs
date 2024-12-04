@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DAPM.ResourceRegistryMS.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -46,7 +46,9 @@ namespace DAPM.ResourceRegistryMS.Api.Migrations
                     LastName = table.Column<string>(type: "text", nullable: false),
                     Mail = table.Column<string>(type: "text", nullable: false),
                     Organization = table.Column<Guid>(type: "uuid", nullable: false),
-                    HashPassword = table.Column<string>(type: "text", nullable: false)
+                    HashPassword = table.Column<string>(type: "text", nullable: false),
+                    UserRole = table.Column<int>(type: "integer", nullable: false),
+                    accepted = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -124,6 +126,11 @@ namespace DAPM.ResourceRegistryMS.Api.Migrations
                         principalColumns: new[] { "PeerId", "Id" },
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "FirstName", "HashPassword", "LastName", "Mail", "Organization", "UserRole", "accepted" },
+                values: new object[] { new Guid("11d98331-792a-45b8-85f8-0b273810d7cb"), "admin", "$2a$12$Jligef.ByeRACdblRiMuDejgNYXlUBZWfCSD3wTZ029g5MF/x8cDa", "admin", "admin@email.ch", new Guid("c756cd4d-7d1b-49df-a206-6296d361c46c"), 1, 1 });
         }
 
         /// <inheritdoc />

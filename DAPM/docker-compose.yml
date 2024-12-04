@@ -22,7 +22,7 @@ services:
       rabbitmq:
         condition: service_healthy
     ports:
-        - "5001:8080"
+        - "5002:8080"
     networks:
     - DAPM
 
@@ -57,7 +57,7 @@ services:
       rabbitmq:
           condition: service_healthy
     ports:
-      - "7000:8080"
+      - "7001:8080"
     networks:
     - DAPM
 

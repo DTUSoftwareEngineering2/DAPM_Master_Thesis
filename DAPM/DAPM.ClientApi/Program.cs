@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromPipelineOrchestrator;
 using DAPM.ClientApi.Controllers;
 using RabbitMQLibrary.Models;
+using RabbitMQLibrary.Messages.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -82,7 +83,12 @@ builder.Services.AddQueueMessageConsumer<CollabHandshakeProcessResultConsumer, C
 builder.Services.AddQueueMessageConsumer<PostPipelineCommandProcessResultConsumer, PostPipelineCommandProcessResult>();
 builder.Services.AddQueueMessageConsumer<GetPipelineExecutionStatusProcessResultConsumer, GetPipelineExecutionStatusRequestResult>();
 builder.Services.AddQueueMessageConsumer<GetUserResultConsumer, GetUserResult>();
+builder.Services.AddQueueMessageConsumer<GetPipelineVisibilityResultConsumer, GetPipelineVisibilityResult>();
 builder.Services.AddQueueMessageConsumer<GetAllUserResultConsumer, GetAllUserResult>();
+builder.Services.AddQueueMessageConsumer<GetAvailablePipelinesProcessResultConsumer, GetAvailablePipelinesProcessResult>();
+builder.Services.AddQueueMessageConsumer<GetPipelineExecutionDateResultConsumer, GetPipelineExecutionDateResultMessage>();
+builder.Services.AddQueueMessageConsumer<SetPipelineExecutionDateResultConsumer, SetPipelineExecutionDateResultMessage>();
+
 
 // Add services to the container.
 

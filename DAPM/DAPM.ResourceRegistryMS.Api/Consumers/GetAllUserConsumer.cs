@@ -1,4 +1,4 @@
-﻿using DAPM.ResourceRegistryMS.Api.Services.Interfaces;
+using DAPM.ResourceRegistryMS.Api.Services.Interfaces;
 using RabbitMQLibrary.Interfaces;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromRegistry;
@@ -33,7 +33,6 @@ namespace DAPM.ResourceRegistryMS.Api.Consumers
             // var t = await _userService.GetUserByMail("test@gmail.com");
             List<User>? u;
             u = await _userService.GetAllUsers(message.managerId);
-
 
             List<UserDTO>? userDTO = null;
             if (u != null)

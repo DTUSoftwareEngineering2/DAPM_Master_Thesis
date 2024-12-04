@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DAPM.ResourceRegistryMS.Api.Migrations
 {
     [DbContext(typeof(ResourceRegistryDbContext))]
-    [Migration("20241005094026_Initial")]
-    partial class Initial
+    [Migration("20241203185450_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -148,9 +148,28 @@ namespace DAPM.ResourceRegistryMS.Api.Migrations
                     b.Property<Guid>("Organization")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("UserRole")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("accepted")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("11d98331-792a-45b8-85f8-0b273810d7cb"),
+                            FirstName = "admin",
+                            HashPassword = "$2a$12$Jligef.ByeRACdblRiMuDejgNYXlUBZWfCSD3wTZ029g5MF/x8cDa",
+                            LastName = "admin",
+                            Mail = "admin@email.ch",
+                            Organization = new Guid("c756cd4d-7d1b-49df-a206-6296d361c46c"),
+                            UserRole = 1,
+                            accepted = 1
+                        });
                 });
 
             modelBuilder.Entity("DAPM.ResourceRegistryMS.Api.Models.Pipeline", b =>

@@ -1,4 +1,4 @@
-﻿using DAPM.RepositoryMS.Api.Models;
+using DAPM.RepositoryMS.Api.Models;
 using DAPM.RepositoryMS.Api.Models.MongoDB;
 using DAPM.RepositoryMS.Api.Models.PostgreSQL;
 using DAPM.RepositoryMS.Api.Repositories.Interfaces;
@@ -32,6 +32,12 @@ namespace DAPM.RepositoryMS.Api.Services
             _operatorRepository = operatorRepository;
         }
 
+        public async Task<Models.PostgreSQL.Pipeline> DeletePipelineById(Guid repositoryId, Guid pipelineId, Guid userId)
+        {
+            return await _pipelineRepository.DeletePipelineById(repositoryId, pipelineId, userId);
+        }
+
+
         public async Task<Models.PostgreSQL.Pipeline> CreateNewPipeline(Guid repositoryId, string name, RabbitMQLibrary.Models.Pipeline pipeline)
         {
             var pipelineJsonString = Newtonsoft.Json.JsonConvert.SerializeObject(pipeline);
@@ -40,7 +46,10 @@ namespace DAPM.RepositoryMS.Api.Services
             {
                 Name = name,
                 RepositoryId = repositoryId,
-                PipelineJson = pipelineJsonString
+                PipelineJson = pipelineJsonString,
+                visibility = pipeline.visibility,
+                userId = pipeline.userId,
+                ExecutionDate = new List<DateTime>()
             };
 
             var createdPipeline = await _pipelineRepository.AddPipeline(pipelineObject);
@@ -49,16 +58,22 @@ namespace DAPM.RepositoryMS.Api.Services
 
         }
 
+        public async Task<List<Models.PostgreSQL.Pipeline>?> GetAllAvailablePipelines(Guid repositoryId)
+        {
+            return await _pipelineRepository.GetAvailablePipelines(repositoryId);
+        }
+
+
         public async Task<Models.PostgreSQL.Resource> CreateNewResource(Guid repositoryId, string name, string resourceType, FileDTO fileDto)
         {
             _logger.LogInformation($"THE REPO ID IS {repositoryId}");
             var repository = await _repositoryRepository.GetRepositoryById(repositoryId);
 
-            if(repository != null)
+            if (repository != null)
             {
                 string objectId = await _fileRepository.AddFile(new MongoFile { Name = fileDto.Name, File = fileDto.Content });
 
-                if(objectId != null)
+                if (objectId != null)
                 {
                     var file = new Models.PostgreSQL.File
                     {

@@ -1,4 +1,4 @@
-﻿using DAPM.Orchestrator.Processes;
+using DAPM.Orchestrator.Processes;
 using DAPM.Orchestrator.Processes.PipelineActions;
 using DAPM.Orchestrator.Processes.PipelineCommands;
 using DAPM.Orchestrator.Services.Models;
@@ -8,7 +8,8 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DAPM.Orchestrator
 {
-    public class OrchestratorEngine : IOrchestratorEngine
+    public class OrchestratorEngine :
+        IOrchestratorEngine
     {
         private ILogger<OrchestratorEngine> _logger;
         private Dictionary<Guid, OrchestratorProcess> _processes;
@@ -75,12 +76,39 @@ namespace DAPM.Orchestrator
             getPipelinesProcess.StartProcess();
         }
 
+        public void StartGetAvailablePipelinesProcess(Guid ticketId, Guid organizationId, Guid repositoryId, Guid? userId)
+        {
+            var processId = Guid.NewGuid();
+            var getPipelinesProcess = new GetAvailablePipelinesProcess(this, _serviceProvider, ticketId, processId, organizationId, repositoryId, userId);
+            _processes[processId] = getPipelinesProcess;
+            getPipelinesProcess.StartProcess();
+        }
+
         public void StartGetRepositoriesProcess(Guid apiTicketId, Guid organizationId, Guid? repositoryId)
         {
             var processId = Guid.NewGuid();
             var getRepositoriesProcess = new GetRepositoriesProcess(this, _serviceProvider, apiTicketId, processId, organizationId, repositoryId);
             _processes[processId] = getRepositoriesProcess;
             getRepositoriesProcess.StartProcess();
+        }
+
+        public void StartGetPipelineVisibility(Guid ticketId, Guid organizationId, Guid repositoryId, Guid pipelineId)
+        {
+            var processId = Guid.NewGuid();
+            var getPipelineVisibilityProcess = new GetPipelineVisibilityProcess(this, _serviceProvider, ticketId, processId,
+                    organizationId, repositoryId, pipelineId);
+            _processes[processId] = getPipelineVisibilityProcess;
+            getPipelineVisibilityProcess.StartProcess();
+
+        }
+
+
+        public void StartPostPipelineDeleteProcess(Guid ticketId, Guid organizationId, Guid repositoryId, Guid pipelineId, Guid userId)
+        {
+            var processId = Guid.NewGuid();
+            var postPipelineDeleteProcess = new PostPipelineDeleteProcess(this, _serviceProvider, ticketId, processId, organizationId, repositoryId, pipelineId, userId);
+            _processes[processId] = postPipelineDeleteProcess;
+            postPipelineDeleteProcess.StartProcess();
         }
 
         public void StartGetResourceFilesProcess(Guid apiTicketId, Guid organizationId, Guid repositoryId, Guid resourceId)
@@ -107,10 +135,12 @@ namespace DAPM.Orchestrator
             pipelineStartCommandProcess.StartProcess();
         }
 
-        public void StartPostPipelineProcess(Guid apiTicketId, Guid organizationId, Guid repositoryId, Pipeline pipeline, string name)
+        public void StartPostPipelineProcess(Guid apiTicketId, Guid organizationId, Guid repositoryId, Pipeline pipeline, string name, Guid? pipelineId)
         {
+            // pipeline.userId = Guid.Empty;
+            // pipeline.visibility = 1;
             var processId = Guid.NewGuid();
-            var postPipelineProcess = new PostPipelineProcess(this, _serviceProvider, apiTicketId, processId, organizationId, repositoryId, pipeline, name);
+            var postPipelineProcess = new PostPipelineProcess(this, _serviceProvider, apiTicketId, processId, organizationId, repositoryId, pipeline, name, pipelineId);
             _processes[processId] = postPipelineProcess;
             postPipelineProcess.StartProcess();
         }
@@ -153,7 +183,7 @@ namespace DAPM.Orchestrator
             registerPeerProcess.StartProcess();
         }
 
-        
+
 
         public void StartExecuteOperatorActionProcess(Guid? senderProcessId, IdentityDTO orchestratorIdentity, ExecuteOperatorActionDTO data)
         {
@@ -163,7 +193,7 @@ namespace DAPM.Orchestrator
             executeOperatorActionProcess.StartProcess();
         }
 
-        
+
 
         public void StartTransferDataActionProcess(Guid? senderProcessId, IdentityDTO orchestratorIdentity, TransferDataActionDTO data)
         {
@@ -183,7 +213,7 @@ namespace DAPM.Orchestrator
 
         public void StartPostResourceFromPeerProcess(Guid senderProcessId, ResourceDTO resource, int storageMode, Guid executionId, IdentityDTO senderIdentity)
         {
-            var processId = Guid.NewGuid(); 
+            var processId = Guid.NewGuid();
             var postResourceProcess = new PostResourceFromPeerProcess(this, _serviceProvider, processId, senderProcessId, resource, storageMode, executionId, senderIdentity);
             _processes[processId] = postResourceProcess;
             postResourceProcess.StartProcess();

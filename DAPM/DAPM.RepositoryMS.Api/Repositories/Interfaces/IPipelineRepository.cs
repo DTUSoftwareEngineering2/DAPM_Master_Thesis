@@ -6,5 +6,9 @@ namespace DAPM.RepositoryMS.Api.Repositories.Interfaces
     {
         Task<Pipeline> AddPipeline(Pipeline pipeline);
         Task<Pipeline> GetPipelineById(Guid repositoryId, Guid pipelineId);
+        Task SetPipelineExecutionDate(Guid pipelineId, String executionDate, Guid repositoryId);
+        Task<Pipeline> ModifyPipelineById(Guid repositoryId, Guid pipelineId, Pipeline newPipeline);
+        Task<Pipeline> DeletePipelineById(Guid repositoryId, Guid pipelineId, Guid userId);
+        Task<List<Pipeline>?> GetAvailablePipelines(Guid repositoryId);
     }
 }

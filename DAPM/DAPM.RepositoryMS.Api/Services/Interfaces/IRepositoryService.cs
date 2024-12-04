@@ -1,4 +1,4 @@
-﻿using DAPM.RepositoryMS.Api.Models.PostgreSQL;
+using DAPM.RepositoryMS.Api.Models.PostgreSQL;
 using RabbitMQLibrary.Models;
 
 namespace DAPM.RepositoryMS.Api.Services.Interfaces
@@ -8,6 +8,8 @@ namespace DAPM.RepositoryMS.Api.Services.Interfaces
         Task<Models.PostgreSQL.Resource> CreateNewResource(Guid repositoryId, string name, string resourceType, FileDTO file);
         Task<Models.PostgreSQL.Operator> CreateNewOperator(Guid repositoryId, string name, string resourceType, FileDTO sourceCode, FileDTO dockerfile);
         Task<Models.PostgreSQL.Pipeline> CreateNewPipeline(Guid repositoryId, string name, RabbitMQLibrary.Models.Pipeline pipeline);
+        Task<Models.PostgreSQL.Pipeline> DeletePipelineById(Guid repositoryId, Guid pipelineId, Guid userId);
+        Task<List<Models.PostgreSQL.Pipeline>?> GetAllAvailablePipelines(Guid repositoryId);
         Task<Repository> CreateNewRepository(string name);
         Task<IEnumerable<Models.PostgreSQL.Pipeline>> GetPipelinesFromRepository(Guid repositoryId);
     }

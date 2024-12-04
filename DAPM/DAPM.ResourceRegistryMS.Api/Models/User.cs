@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace DAPM.ResourceRegistryMS.Api.Models
 {
@@ -27,6 +27,7 @@ namespace DAPM.ResourceRegistryMS.Api.Models
     {
         Custom = 0,
         Admin,
-        User
+        Manager,
+        User,
     }
 }

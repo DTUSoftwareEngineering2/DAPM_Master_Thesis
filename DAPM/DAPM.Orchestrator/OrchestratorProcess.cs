@@ -1,4 +1,4 @@
-﻿using DAPM.Orchestrator.Processes;
+using DAPM.Orchestrator.Processes;
 using DAPM.Orchestrator.Services;
 using DAPM.Orchestrator.Services.Models;
 using RabbitMQLibrary.Messages.Orchestrator.Other;
@@ -7,6 +7,7 @@ using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromPeerApi;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromPipelineOrchestrator;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromRegistry;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromRepo;
+
 
 namespace DAPM.Orchestrator
 {
@@ -66,6 +67,12 @@ namespace DAPM.Orchestrator
             return;
         }
 
+        public virtual void OnGetPipelineVisibilityFromRepoResult(GetPipelineVisibilityFromRepoResult message)
+        {
+            return;
+        }
+
+
         public virtual void OnPostPipelineToRepoResult(PostPipelineToRepoResultMessage message)
         {
             return;
@@ -87,6 +94,11 @@ namespace DAPM.Orchestrator
         }
 
         public virtual void OnGetPipelinesFromRepoResult(GetPipelinesFromRepoResultMessage message)
+        {
+            return;
+        }
+
+        public virtual void OnGetAvailablePipelinesFromRepoResult(GetAvailablesPipelinesFromRepoResultMessage message)
         {
             return;
         }

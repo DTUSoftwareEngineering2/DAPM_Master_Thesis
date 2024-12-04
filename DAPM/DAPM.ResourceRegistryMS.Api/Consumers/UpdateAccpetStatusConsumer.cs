@@ -1,4 +1,4 @@
-﻿using DAPM.ResourceRegistryMS.Api.Services.Interfaces;
+using DAPM.ResourceRegistryMS.Api.Services.Interfaces;
 using RabbitMQLibrary.Interfaces;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromRegistry;
@@ -31,7 +31,7 @@ namespace DAPM.ResourceRegistryMS.Api.Consumers
             _logger.LogInformation("UpdateAcceptStatusMessage received");
 
             // var t = await _userService.GetUserByMail("test@gmail.com");
-            var u = await _userService.UpdateAcceptStatus(message.managerId, message.userId, message.accept);
+            var u = await _userService.UpdateAcceptStatus(message.managerId, message.userId, message.accept, message.role);
 
             UserDTO? user = null;
             if (u != null)

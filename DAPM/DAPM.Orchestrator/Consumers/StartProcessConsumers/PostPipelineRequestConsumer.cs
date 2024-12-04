@@ -1,11 +1,11 @@
-﻿using RabbitMQLibrary.Interfaces;
+using RabbitMQLibrary.Interfaces;
 using RabbitMQLibrary.Messages.Orchestrator.ProcessRequests;
 
 namespace DAPM.Orchestrator.Consumers.StartProcessConsumers
 {
     public class PostPipelineRequestConsumer : IQueueConsumer<PostPipelineRequest>
     {
-        
+
         private IOrchestratorEngine _engine;
 
         public PostPipelineRequestConsumer(IOrchestratorEngine engine)
@@ -15,7 +15,7 @@ namespace DAPM.Orchestrator.Consumers.StartProcessConsumers
 
         public Task ConsumeAsync(PostPipelineRequest message)
         {
-            _engine.StartPostPipelineProcess(message.TicketId, message.OrganizationId, message.RepositoryId, message.Pipeline, message.Name);
+            _engine.StartPostPipelineProcess(message.TicketId, message.OrganizationId, message.RepositoryId, message.Pipeline, message.Name, message.pipelineId);
             return Task.CompletedTask;
         }
     }

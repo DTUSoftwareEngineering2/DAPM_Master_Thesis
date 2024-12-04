@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,12 +13,12 @@ namespace RabbitMQLibrary.Models
         public Guid? ResourceId { get; set; }
         public string? Name { get; set; }
     }
-   
+
     public class Handle
     {
         public string Id { get; set; }
     }
-    
+
     public class InstantiationData
     {
         public Resource Resource { get; set; }
@@ -50,7 +50,7 @@ namespace RabbitMQLibrary.Models
 
     public class Node
     {
-        public string Id { get; set;}
+        public string Id { get; set; }
         public string Type { get; set; }
         public NodePosition? Position { get; set; }
         public NodeData Data { get; set; }
@@ -61,6 +61,8 @@ namespace RabbitMQLibrary.Models
     {
         public IEnumerable<Node> Nodes { get; set; }
         public IEnumerable<Edge> Edges { get; set; }
+        public int visibility { get; set; }
+        public Guid userId { get; set; }
     }
 
     public class PipelineDTO

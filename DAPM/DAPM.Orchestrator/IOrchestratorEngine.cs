@@ -1,4 +1,4 @@
-﻿using DAPM.Orchestrator.Services.Models;
+using DAPM.Orchestrator.Services.Models;
 using RabbitMQLibrary.Models;
 
 namespace DAPM.Orchestrator
@@ -9,6 +9,8 @@ namespace DAPM.Orchestrator
         public void DeleteProcess(Guid processId);
         public void StartGetOrganizationProcess(Guid ticketId, Guid? organizationId);
         public void StartGetRepositoriesProcess(Guid ticketId, Guid organizationId, Guid? repositoryId);
+        public void StartGetPipelineVisibility(Guid ticketId, Guid organizationId, Guid repositoryId, Guid pipelineId);
+        public void StartPostPipelineDeleteProcess(Guid ticketId, Guid organizationId, Guid repositoryId, Guid pipelineId, Guid userId);
         public void StartCreateRepositoryProcess(Guid ticketId, Guid organizationId, string name);
         public void StartGetResourcesProcess(Guid ticketId, Guid organizationId, Guid repositoryId, Guid? resourceId);
         public void StartGetResourceFilesProcess(Guid ticketId, Guid organizationId, Guid repositoryId, Guid resourceId);
@@ -21,8 +23,9 @@ namespace DAPM.Orchestrator
         public void StartRegistryUpdateProcess(Guid senderProcessId, RegistryUpdateDTO registryUpdate, IdentityDTO senderIdentity);
 
         // Pipeline Processes
-        public void StartPostPipelineProcess(Guid ticketId, Guid organizationId, Guid repositoryId, Pipeline pipeline, string name);
+        public void StartPostPipelineProcess(Guid ticketId, Guid organizationId, Guid repositoryId, Pipeline pipeline, string name, Guid? pipelineId);
         public void StartGetPipelinesProcess(Guid ticketId, Guid organizationId, Guid repositoryId, Guid? pipelineId);
+        public void StartGetAvailablePipelinesProcess(Guid ticketId, Guid organizationId, Guid repositoryId, Guid? userId);
         public void StartCreatePipelineExecutionProcess(Guid ticketId, Guid organizationId, Guid repositoryId, Guid pipelineId);
         public void StartTransferDataActionProcess(Guid? senderProcessId, IdentityDTO orchestratorIdentity, TransferDataActionDTO data);
         public void StartSendTransferDataActionProcess(TransferDataActionDTO data);

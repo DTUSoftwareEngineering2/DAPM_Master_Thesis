@@ -1,4 +1,3 @@
-
 # Base image with .NET 8.0 runtime
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
@@ -25,12 +24,6 @@ RUN dotnet publish "DAPM.ResourceRegistryMS.Api.csproj" -c Release -o /app/publi
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-
-# Install dockerize (using root permissions)
-USER root
-RUN apt-get update && apt-get install -y wget && \
-	wget https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz && \
-	tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.6.1.tar.gz
 
 # Start the application
 ENTRYPOINT ["dotnet", "DAPM.ResourceRegistryMS.Api.dll"]

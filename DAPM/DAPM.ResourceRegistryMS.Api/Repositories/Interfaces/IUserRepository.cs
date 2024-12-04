@@ -1,4 +1,4 @@
-﻿using DAPM.ResourceRegistryMS.Api.Models;
+using DAPM.ResourceRegistryMS.Api.Models;
 
 namespace DAPM.ResourceRegistryMS.Api.Repositories.Interfaces
 {
@@ -8,7 +8,7 @@ namespace DAPM.ResourceRegistryMS.Api.Repositories.Interfaces
         public Task<User> GetUserById(Guid id);
         public Task<User> AddUser(User user);
         public Task<List<User>> GetAllUsers();
-        public Task<User?> UpdateAcceptStatus(Guid id, int newStatus);
+        public Task<User?> UpdateAcceptStatus(Guid id, int newStatus, int role);
         public Task<User?> DeleteUser(Guid id);
     }
 }

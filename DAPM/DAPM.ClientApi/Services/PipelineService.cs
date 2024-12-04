@@ -3,6 +3,7 @@ using RabbitMQLibrary.Interfaces;
 using RabbitMQLibrary.Messages.Orchestrator.ProcessRequests;
 using RabbitMQLibrary.Messages.PipelineOrchestrator;
 using RabbitMQLibrary.Messages.ResourceRegistry;
+using RabbitMQLibrary.Messages.ClientApi;
 
 namespace DAPM.ClientApi.Services
 {
@@ -14,13 +15,20 @@ namespace DAPM.ClientApi.Services
         private readonly IQueueProducer<CreatePipelineExecutionRequest> _createInstanceProducer;
         private readonly IQueueProducer<PipelineStartCommandRequest> _pipelineStartCommandProducer;
         private readonly IQueueProducer<GetPipelineExecutionStatusRequest> _getPipelineExecutionStatusProducer;
+        private readonly IQueueProducer<GetPipelineExecutionDateRequest> _executionDateProducer;
+
+        private readonly IQueueProducer<SetPipelineExecutionDateRequest> _setExecutionDateProducer;
+
+
         public PipelineService(
             ILogger<PipelineService> logger,
             ITicketService ticketService,
             IQueueProducer<GetPipelinesRequest> getPipelinesRequestProducer,
             IQueueProducer<CreatePipelineExecutionRequest> createInstanceProducer,
             IQueueProducer<PipelineStartCommandRequest> pipelineStartCommandProducer,
-            IQueueProducer<GetPipelineExecutionStatusRequest> getPipelineExecutionStatusProducer)
+            IQueueProducer<GetPipelineExecutionStatusRequest> getPipelineExecutionStatusProducer,
+            IQueueProducer<GetPipelineExecutionDateRequest> executionDateProducer,
+            IQueueProducer<SetPipelineExecutionDateRequest> setexecutionDateProducer)
         {
             _logger = logger;
             _ticketService = ticketService;
@@ -28,6 +36,8 @@ namespace DAPM.ClientApi.Services
             _createInstanceProducer = createInstanceProducer;
             _pipelineStartCommandProducer = pipelineStartCommandProducer;
             _getPipelineExecutionStatusProducer = getPipelineExecutionStatusProducer;
+            _executionDateProducer = executionDateProducer;
+            _setExecutionDateProducer = setexecutionDateProducer;
         }
 
         public Guid CreatePipelineExecution(Guid organizationId, Guid repositoryId, Guid pipelineId)
@@ -108,5 +118,55 @@ namespace DAPM.ClientApi.Services
 
             return ticketId;
         }
+
+        public Guid RequestPipelineExecutionDate(Guid organizationId, Guid repositoryId, Guid pipelineId)
+        {
+            // Create a new ticket for tracking the request
+            Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
+
+            // Create the message for requesting the pipeline execution date
+            var message = new GetPipelineExecutionDateRequest
+            {
+                TimeToLive = TimeSpan.FromMinutes(1),
+                TicketId = ticketId,
+                PipelineId = pipelineId,
+                RepoId = repositoryId,
+                OrganizationId = organizationId
+            };
+
+            // Publish the message to RabbitMQ
+            _executionDateProducer.PublishMessage(message);
+
+            // Log that the request has been enqueued
+            _logger.LogDebug("GetPipelineExecutionDateRequest Enqueued");
+
+            return ticketId;
+        }
+
+        public Guid SetPipelineExecutionDate(Guid organizationId, Guid repositoryId, Guid pipelineId, String executionDate)
+        {
+            // Create a new ticket for tracking the request
+            Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
+
+            // Create the message for setting the pipeline execution date
+            var message = new SetPipelineExecutionDateRequest
+            {
+                TimeToLive = TimeSpan.FromMinutes(1),
+                TicketId = ticketId,
+                PipelineId = pipelineId,
+                ExecutionDate = executionDate,
+                RepositoryId = repositoryId,
+                OrganizationId = organizationId
+            };
+
+            // Publish the message to RabbitMQ
+            _setExecutionDateProducer.PublishMessage(message);
+
+            // Log that the request has been enqueued
+            _logger.LogDebug("SetPipelineExecutionDateRequest Enqueued");
+
+            return ticketId;
+        }
+
     }
 }
