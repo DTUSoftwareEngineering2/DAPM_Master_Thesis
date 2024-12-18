@@ -8,6 +8,7 @@ using RabbitMQLibrary.Models;
 
 namespace RabbitMQLibrary.Messages.ClientApi
 {
+    // Author: Maxime Rochat - s241741
     public class GetAvailablePipelinesProcessResult : IQueueMessage
     {
         public Guid MessageId { get; set; }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace RabbitMQLibrary.Messages.Repository
 {
+    // Author: Maxime Rochat - s241741
     public class GetPipelinesFromRepoMessage : IQueueMessage
     {
         public Guid MessageId { get; set; }

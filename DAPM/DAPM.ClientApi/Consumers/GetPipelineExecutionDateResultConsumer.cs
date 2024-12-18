@@ -6,6 +6,7 @@ using RabbitMQLibrary.Interfaces;
 using RabbitMQLibrary.Messages.Repository;
 using RabbitMQLibrary.Models;
 
+// Authors: s242147 and s241747 : Consumer for the GetPipelineExecutionDateResultMessage
 namespace DAPM.ClientApi.Consumers
 {
     public class GetPipelineExecutionDateResultConsumer : IQueueConsumer<GetPipelineExecutionDateResultMessage>

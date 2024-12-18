@@ -4,6 +4,7 @@ using RabbitMQLibrary.Messages.ResourceRegistry;
 
 namespace DAPM.ResourceRegistryMS.Api.Consumers
 {
+    // Author: Maxime Rochat - s241741
     public class PostUserConsumer : IQueueConsumer<PostUserMessage>
     {
         private IUserService _userService;

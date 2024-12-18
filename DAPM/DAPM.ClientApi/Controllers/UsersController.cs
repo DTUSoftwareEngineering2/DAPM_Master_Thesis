@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Cors;
 using Swashbuckle.AspNetCore.Annotations;
 
+// Author: Maxime Rochat - s241741
 namespace DAPM.ClientApi.Controllers
 {
 

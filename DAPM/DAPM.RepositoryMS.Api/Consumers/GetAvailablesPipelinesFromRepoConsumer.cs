@@ -8,6 +8,7 @@ using RabbitMQLibrary.Models;
 
 namespace DAPM.RepositoryMS.Api.Consumers
 {
+    // Author: Maxime Rochat - s241741
     public class GetAvailablePipelinesFromRepoProducer : IQueueConsumer<GetAvailablePipelinesFromRepoMessage>
     {
         private ILogger<GetAvailablePipelinesFromRepoProducer> _logger;

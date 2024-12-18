@@ -41,6 +41,7 @@ namespace DAPM.Orchestrator.Processes
             _ticketId = ticketId;
             _pipelineId = pipelineId;
         }
+        // Author: Maxime Rochat - s241741
         public override void StartProcess()
         {
             var postPipelineToRepoProducer = _serviceScope.ServiceProvider.GetRequiredService<IQueueProducer<PostPipelineToRepoMessage>>();
@@ -59,6 +60,7 @@ namespace DAPM.Orchestrator.Processes
             postPipelineToRepoProducer.PublishMessage(message);
         }
 
+        // Author: Maxime Rochat - s241741
         public override void OnPostPipelineToRepoResult(PostPipelineToRepoResultMessage message)
         {
             var postPipelineToRegistryProducer = _serviceScope.ServiceProvider.GetRequiredService<IQueueProducer<PostPipelineToRegistryMessage>>();

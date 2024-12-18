@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace RabbitMQLibrary.Messages.ResourceRegistry
 {
+    // Author: Maxime Rochat - s241741
     public class PostUserMessage : IQueueMessage
     {
         public Guid MessageId { get; set; }

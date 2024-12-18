@@ -3,6 +3,7 @@ using RabbitMQLibrary.Models;
 
 namespace DAPM.ResourceRegistryMS.Api.Services.Interfaces
 {
+    // Author: Maxime Rochat - s241741
     public interface IUserService
     {
         Task<User> GetUserById(Guid id);

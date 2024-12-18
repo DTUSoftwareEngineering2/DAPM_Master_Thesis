@@ -38,6 +38,7 @@ namespace DAPM.RepositoryMS.Api.Services
             return pipeline.ExecutionDate;
         }
 
+        // Author: Maxime Rochat - s241741
         public Task<Pipeline> ModifyPipelineById(Guid repositoryId, Guid pipelineId, Pipeline newPipeline, string name)
         {
 

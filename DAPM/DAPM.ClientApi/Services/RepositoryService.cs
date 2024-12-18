@@ -105,6 +105,7 @@ namespace DAPM.ClientApi.Services
                                     return ticketId;
                         }
 
+                        // Author: Maxime Rochat - s241741
                         public Guid GetAllPipelinesOfRepository
                             (Guid organizationId, Guid repositoryId)
                         {
@@ -127,6 +128,7 @@ namespace DAPM.ClientApi.Services
                                     return ticketId;
                         }
 
+                        // Author: Maxime Rochat - s241741
                         public Guid GetPipelineVisibility(Guid organizationId, Guid repositoryId, Guid pipelineId)
                         {
                                     Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);
@@ -149,6 +151,7 @@ namespace DAPM.ClientApi.Services
 
                         }
 
+                        // Author: Maxime Rochat - s241741
                         public Guid PostDeletePipeline(Guid organizationId, Guid repositoryId, Guid pipelineId, Guid userId)
                         {
                                     Guid ticketId = _ticketService.CreateNewTicket(TicketResolutionType.Json);

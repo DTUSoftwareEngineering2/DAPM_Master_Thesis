@@ -57,6 +57,7 @@ namespace DAPM.ClientApi.Controllers
             return Ok(new ApiResponse { RequestName = "GetExecutionStatus", TicketId = id });
         }
 
+        // Authors: s242147 and s241747 : Endpoint to get the execution date of a pipeline
         [HttpGet("{organizationId}/repositories/{repositoryId}/pipelines/{pipelineId}/execution-date")]
         [SwaggerOperation(Description = "Requests the execution date of a pipeline.")]
         public async Task<ActionResult<Guid>> RequestPipelineExecutionDate(Guid organizationId, Guid repositoryId, Guid pipelineId)
@@ -65,6 +66,7 @@ namespace DAPM.ClientApi.Controllers
             return Ok(new ApiResponse { RequestName = "RequestPipelineExecutionDate", TicketId = ticketId });
         }
 
+        // Authors: s242147 and s241747 : Endpoint to set the execution date of a pipeline
         [HttpPost("{organizationId}/repositories/{repositoryId}/pipelines/{pipelineId}/set-execution-date")]
         [SwaggerOperation(Description = "Sets the execution date for a pipeline.")]
         public async Task<ActionResult<Guid>> SetPipelineExecutionDate(Guid organizationId, Guid repositoryId, Guid pipelineId, String executionDate)

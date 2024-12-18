@@ -28,7 +28,7 @@ namespace DAPM.Orchestrator.Processes
         public override void StartProcess()
         {
 
-            if(_pipelineId != null)
+            if (_pipelineId != null)
             {
                 var getPipelinesFromRepoProducer = _serviceScope.ServiceProvider.GetRequiredService<IQueueProducer<GetPipelinesFromRepoMessage>>();
 
@@ -57,15 +57,16 @@ namespace DAPM.Orchestrator.Processes
 
                 getPipelinesFromRegistryProducer.PublishMessage(message);
             }
-            
+
         }
 
+        // Author: Maxime Rochat - s241741
         public override void OnGetPipelinesFromRepoResult(GetPipelinesFromRepoResultMessage message)
         {
 
             var getPipelinesProcessResultProducer = _serviceScope.ServiceProvider.GetRequiredService<IQueueProducer<GetPipelinesProcessResult>>();
 
-            foreach(var pipeline in message.Pipelines)
+            foreach (var pipeline in message.Pipelines)
             {
                 pipeline.OrganizationId = _organizationId;
             }

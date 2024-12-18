@@ -8,6 +8,7 @@ using RabbitMQLibrary.Models;
 
 namespace DAPM.ClientApi.Consumers
 {
+    // Author: Maxime Rochat - s241741
     public class GetAllUserResultConsumer : IQueueConsumer<GetAllUserResult>
     {
         private ILogger<GetAllUserResultConsumer> _logger;

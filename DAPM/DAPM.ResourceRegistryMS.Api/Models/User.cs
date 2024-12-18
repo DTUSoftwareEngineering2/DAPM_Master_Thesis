@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DAPM.ResourceRegistryMS.Api.Models
 {
+    // Author: Maxime Rochat - s241741
     public class User
     {
         [Key]
@@ -23,6 +24,7 @@ namespace DAPM.ResourceRegistryMS.Api.Models
         public int accepted { get; set; }
     }
 
+    // Author: Maxime Rochat - s241741
     enum UserRole
     {
         Custom = 0,

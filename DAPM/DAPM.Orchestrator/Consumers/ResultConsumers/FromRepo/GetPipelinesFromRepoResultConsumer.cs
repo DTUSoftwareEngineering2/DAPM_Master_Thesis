@@ -2,6 +2,7 @@
 using RabbitMQLibrary.Interfaces;
 using RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromRepo;
 
+// Author: Maxime Rochat - s241741
 namespace DAPM.Orchestrator.Consumers.ResultConsumers.FromRepo
 {
     public class GetPipelinesFromRepoResultConsumer : IQueueConsumer<GetPipelinesFromRepoResultMessage>

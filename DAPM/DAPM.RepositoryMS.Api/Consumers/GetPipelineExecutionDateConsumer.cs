@@ -5,6 +5,8 @@ using Microsoft.Extensions.Logging;
 using RabbitMQLibrary.Messages.Orchestrator.ProcessRequests;
 using RabbitMQLibrary.Messages.Repository;
 
+
+// Authors: s242147 and s241747 : Consumer for the GetPipelineExecutionDateRequest
 namespace DAPM.RepositoryMS.Api.Consumers
 {
     public class GetPipelineExecutionDateConsumer : IQueueConsumer<GetPipelineExecutionDateRequest>

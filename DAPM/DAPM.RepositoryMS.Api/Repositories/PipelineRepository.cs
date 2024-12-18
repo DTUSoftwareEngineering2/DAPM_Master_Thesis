@@ -57,6 +57,7 @@ namespace DAPM.RepositoryMS.Api.Repositories
             return await _repositoryDbContext.Pipelines.FirstOrDefaultAsync(p => p.Id == pipelineId && p.RepositoryId == repositoryId);
         }
 
+        // Author: Maxime Rochat - s241741
         public async Task<Pipeline> DeletePipelineById(Guid repositoryId, Guid pipelineId, Guid userId)
         {
             Pipeline pipeline = await GetPipelineById(repositoryId, pipelineId);
@@ -72,6 +73,7 @@ namespace DAPM.RepositoryMS.Api.Repositories
         }
 
 
+        // Author: Maxime Rochat - s241741
         public async Task<Pipeline> ModifyPipelineById(Guid repositoryId, Guid pipelineId, Pipeline newPipeline)
         {
             var pipeline = await _repositoryDbContext.Pipelines.FirstOrDefaultAsync(p => p.Id == pipelineId && p.RepositoryId == repositoryId);
@@ -86,6 +88,7 @@ namespace DAPM.RepositoryMS.Api.Repositories
         }
 
 
+        // Author: Maxime Rochat - s241741
         public async Task<List<Pipeline>?> GetAvailablePipelines(Guid repositoryId)
         {
             return await _repositoryDbContext.Pipelines.Where(p => p.RepositoryId == repositoryId && p.visibility == 1).ToListAsync();

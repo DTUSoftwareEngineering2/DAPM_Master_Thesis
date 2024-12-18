@@ -17,6 +17,7 @@ namespace RabbitMQLibrary.Messages.Repository
         public Guid RepositoryId { get; set; }
         public string Name { get; set; }
         public Pipeline Pipeline { get; set; }
+        // Author: Maxime Rochat - s241741
         public Guid? pipelineId { get; set; }
     }
 }

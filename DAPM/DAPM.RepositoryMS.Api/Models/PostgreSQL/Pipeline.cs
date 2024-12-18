@@ -18,11 +18,14 @@ namespace DAPM.RepositoryMS.Api.Models.PostgreSQL
                 [Required]
                 public string PipelineJson { get; set; }
 
+                // Authors: s242147 and s241747 : List Attribute to store the execution dates of the pipeline
                 public List<DateTime> ExecutionDate { get; set; } = new List<DateTime>();
 
+                // Author: Maxime Rochat - s241741
                 [Required]
                 public int visibility { get; set; }
 
+                // Author: Maxime Rochat - s241741
                 [Required]
                 public Guid userId { get; set; }
 
