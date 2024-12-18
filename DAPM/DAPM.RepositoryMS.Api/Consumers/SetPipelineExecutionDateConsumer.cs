@@ -6,6 +6,7 @@ using RabbitMQLibrary.Messages.ClientApi;
 using Microsoft.Extensions.Logging;
 using DAPM.RepositoryMS.Api.Models.PostgreSQL;
 
+// Authors: s242147 and s241747 : Consumer for the SetPipelineExecutionDateRequest
 namespace DAPM.RepositoryMS.Api.Consumers
 {
     public class SetPipelineExecutionDateConsumer : IQueueConsumer<SetPipelineExecutionDateRequest>

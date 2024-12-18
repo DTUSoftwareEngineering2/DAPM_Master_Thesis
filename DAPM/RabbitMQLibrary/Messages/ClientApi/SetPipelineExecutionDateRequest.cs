@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// Authors: s242147 and s241747 : Message for setting the execution date of a pipeline
 namespace RabbitMQLibrary.Messages.ClientApi
 {
     public class SetPipelineExecutionDateRequest : IQueueMessage
