@@ -1,6 +1,7 @@
 using RabbitMQLibrary.Interfaces;
 using System;
 
+// Authors: s242147 and s241747 : Message for requesting the execution dates of a pipeline
 namespace RabbitMQLibrary.Messages.ClientApi
 {
     public class GetPipelineExecutionDateRequest : IQueueMessage

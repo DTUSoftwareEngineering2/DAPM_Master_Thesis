@@ -119,6 +119,7 @@ namespace DAPM.ClientApi.Services
             return ticketId;
         }
 
+        // Authors: s242147 and s241747 : Method to request the execution dates of a pipeline
         public Guid RequestPipelineExecutionDate(Guid organizationId, Guid repositoryId, Guid pipelineId)
         {
             // Create a new ticket for tracking the request
@@ -143,6 +144,7 @@ namespace DAPM.ClientApi.Services
             return ticketId;
         }
 
+        // Authors: s242147 and s241747 : Method to set the execution date of a pipeline
         public Guid SetPipelineExecutionDate(Guid organizationId, Guid repositoryId, Guid pipelineId, String executionDate)
         {
             // Create a new ticket for tracking the request
