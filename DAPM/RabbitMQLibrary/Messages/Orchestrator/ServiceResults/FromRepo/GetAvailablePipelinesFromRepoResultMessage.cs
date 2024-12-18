@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace RabbitMQLibrary.Messages.Orchestrator.ServiceResults.FromRepo
 {
+    // Author: Maxime Rochat - s241741
     public class GetAvailablesPipelinesFromRepoResultMessage : IQueueMessage
     {
         public Guid MessageId { get; set; }

@@ -5,6 +5,7 @@ using RabbitMQLibrary.Models;
 
 namespace DAPM.ResourceRegistryMS.Api.Services
 {
+    // Author: Maxime Rochat - s241741
     public class UserService : IUserService
     {
         private IUserRepository _userRepository;

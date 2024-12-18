@@ -51,6 +51,7 @@ namespace DAPM.ClientApi.Controllers
             return Ok(new ApiResponse { RequestName = "GetPipelinesOfRepository", TicketId = id });
         }
 
+        // Author: Maxime Rochat - s241741
         [HttpGet("{organizationId}/repositories/{repositoryId}/all_pipelines")]
         [SwaggerOperation(Description = "Gets all the pipelines of a repository that are available. " +
             "You need to have a collaboration agreement to retrieve this information.")]
@@ -89,6 +90,7 @@ namespace DAPM.ClientApi.Controllers
             " we agreed on.")]
         public async Task<ActionResult<Guid>> PostPipelineToRepository(Guid organizationId, Guid repositoryId, [FromBody] PipelineApiDto pipelineApiDto)
         {
+            // Author: Maxime Rochat - s241741
             Guid id = _repositoryService.PostPipelineToRepository(organizationId, repositoryId, pipelineApiDto);
             return Ok(new ApiResponse { RequestName = "PostPipelineToRepository", TicketId = id });
         }
@@ -103,6 +105,7 @@ namespace DAPM.ClientApi.Controllers
         }
 
 
+        // Author: Maxime Rochat - s241741
         [HttpGet("{organizationId}/repositories/{repositoryId}/{pipelineId}/visibility")]
         [SwaggerOperation(Description = "Gets the visibility field of a pipeline ")]
         public async Task<ActionResult<Guid>> GetPipelineVisibility(Guid organizationId, Guid repositoryId, Guid pipelineId)
@@ -111,6 +114,7 @@ namespace DAPM.ClientApi.Controllers
             return Ok(new ApiResponse { RequestName = "GetPipelineVisibility", TicketId = id });
         }
 
+        // Author: Maxime Rochat - s241741
         [Authorize]
         [HttpGet("{organizationId}/repositories/{repositoryId}/{pipelineId}/delete")]
         [SwaggerOperation(Description = "Delete a pipeline from the repository")]

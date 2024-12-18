@@ -8,6 +8,7 @@ using RabbitMQLibrary.Models;
 
 namespace DAPM.ClientApi.Consumers
 {
+    // Author: Maxime Rochat - s241741
     public class GetPipelineVisibilityResultConsumer : IQueueConsumer<GetPipelineVisibilityResult>
     {
         private ILogger<GetPipelineVisibilityResultConsumer> _logger;

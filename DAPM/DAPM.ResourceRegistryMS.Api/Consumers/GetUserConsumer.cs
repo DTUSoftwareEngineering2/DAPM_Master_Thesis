@@ -12,6 +12,7 @@ using RabbitMQLibrary.Models;
 
 namespace DAPM.ResourceRegistryMS.Api.Consumers
 {
+    // Author: Maxime Rochat - s241741
     public class GetUserConsumer : IQueueConsumer<GetUserMessage>
     {
         private ILogger<GetUserConsumer> _logger;

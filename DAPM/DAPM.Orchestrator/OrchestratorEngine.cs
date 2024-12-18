@@ -76,6 +76,7 @@ namespace DAPM.Orchestrator
             getPipelinesProcess.StartProcess();
         }
 
+        // Author: Maxime Rochat - s241741
         public void StartGetAvailablePipelinesProcess(Guid ticketId, Guid organizationId, Guid repositoryId, Guid? userId)
         {
             var processId = Guid.NewGuid();
@@ -92,6 +93,7 @@ namespace DAPM.Orchestrator
             getRepositoriesProcess.StartProcess();
         }
 
+        // Author: Maxime Rochat - s241741
         public void StartGetPipelineVisibility(Guid ticketId, Guid organizationId, Guid repositoryId, Guid pipelineId)
         {
             var processId = Guid.NewGuid();
@@ -103,6 +105,7 @@ namespace DAPM.Orchestrator
         }
 
 
+        // Author: Maxime Rochat - s241741
         public void StartPostPipelineDeleteProcess(Guid ticketId, Guid organizationId, Guid repositoryId, Guid pipelineId, Guid userId)
         {
             var processId = Guid.NewGuid();

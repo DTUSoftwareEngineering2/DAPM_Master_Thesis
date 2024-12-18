@@ -6,6 +6,7 @@ using RabbitMQLibrary.Models;
 
 namespace DAPM.ClientApi.Services
 {
+    // Author: Maxime Rochat - s241741
     public class UsersService : IUsersService
     {
         private readonly ILogger<UsersService> _logger;

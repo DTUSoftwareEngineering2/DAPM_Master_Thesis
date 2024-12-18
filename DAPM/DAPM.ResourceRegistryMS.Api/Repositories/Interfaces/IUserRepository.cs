@@ -2,6 +2,7 @@ using DAPM.ResourceRegistryMS.Api.Models;
 
 namespace DAPM.ResourceRegistryMS.Api.Repositories.Interfaces
 {
+    // Author: Maxime Rochat - s241741
     public interface IUserRepository
     {
         public Task<User> GetUserByMail(String mail);

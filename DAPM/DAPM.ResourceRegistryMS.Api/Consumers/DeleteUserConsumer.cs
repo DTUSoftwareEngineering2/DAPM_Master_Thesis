@@ -12,6 +12,7 @@ using RabbitMQLibrary.Models;
 
 namespace DAPM.ResourceRegistryMS.Api.Consumers
 {
+    // Author: Maxime Rochat - s241741
     public class DeleteUserConsumer : IQueueConsumer<DeleteUserMessage>
     {
         private ILogger<DeleteUserConsumer> _logger;

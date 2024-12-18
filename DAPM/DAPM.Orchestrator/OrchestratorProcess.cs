@@ -93,16 +93,19 @@ namespace DAPM.Orchestrator
             return;
         }
 
+        // Author: Maxime Rochat - s241741
         public virtual void OnGetPipelinesFromRepoResult(GetPipelinesFromRepoResultMessage message)
         {
             return;
         }
 
+        // Author: Maxime Rochat - s241741
         public virtual void OnGetAvailablePipelinesFromRepoResult(GetAvailablesPipelinesFromRepoResultMessage message)
         {
             return;
         }
 
+        // Author: Maxime Rochat - s241741
         public virtual void OnGetPipelinesFromRegistryResult(GetPipelinesResultMessage message)
         {
             return;

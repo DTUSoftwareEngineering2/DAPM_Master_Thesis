@@ -7,6 +7,7 @@ using RabbitMQLibrary.Models;
 
 namespace DAPM.RepositoryMS.Api.Consumers
 {
+    // Author: Maxime Rochat - s241741
     public class PostPipelineDeleteToRepoMessageConsumer : IQueueConsumer<PostPipelineDeleteToRepoMessage>
     {
         private ILogger<PostPipelineDeleteToRepoMessageConsumer> _logger;

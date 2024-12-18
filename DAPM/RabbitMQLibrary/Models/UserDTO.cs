@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 
 namespace RabbitMQLibrary.Models
 {
+    // Author: Maxime Rochat - s241741
     public class UserDTO
     {
         public Guid Id { get; set; }

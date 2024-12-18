@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace RabbitMQLibrary.Messages.Orchestrator.ProcessRequests
 {
+    // Author: Maxime Rochat - s241741
     public class GetAvailablePipelinesRequest : IQueueMessage
     {
         public Guid MessageId { get; set; }

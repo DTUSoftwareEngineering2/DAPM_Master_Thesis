@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAPM.ResourceRegistryMS.Api.Repositories
 {
+    // Author: Maxime Rochat - s241741
     public class UserRepository : IUserRepository
     {
 

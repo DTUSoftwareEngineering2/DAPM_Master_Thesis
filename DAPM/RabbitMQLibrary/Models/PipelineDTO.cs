@@ -61,7 +61,9 @@ namespace RabbitMQLibrary.Models
     {
         public IEnumerable<Node> Nodes { get; set; }
         public IEnumerable<Edge> Edges { get; set; }
+        // Author: Maxime Rochat - s241741
         public int visibility { get; set; }
+        // Author: Maxime Rochat - s241741
         public Guid userId { get; set; }
     }
 

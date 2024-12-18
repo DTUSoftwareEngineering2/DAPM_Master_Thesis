@@ -7,6 +7,7 @@ using RabbitMQLibrary.Messages.ResourceRegistry;
 
 namespace DAPM.Orchestrator.Processes
 {
+    // Author: Maxime Rochat - s241741
     public class PostPipelineDeleteProcess : OrchestratorProcess
     {
         private Guid _organizationId;
